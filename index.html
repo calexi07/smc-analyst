@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMC Analyst — EUR/USD</title>
+<title>SMC Analyst</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -18,11 +19,11 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
-/* HEADER */
 .header{background:var(--bg2);border-bottom:2px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);}
 .hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
 .logo{font-weight:800;font-size:16px;}.logo span{color:var(--bull);}
-.pair-badge{background:var(--bull-bg);border:1px solid var(--bull-b);color:var(--bull);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.pair-selector{background:var(--bg2);border:2px solid var(--bull-b);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;min-width:120px;}
+.pair-selector:focus{border-color:var(--bull);}
 .mode-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .mode-btn{padding:6px 14px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;}
 .mode-btn.active{background:var(--text);color:#fff;}
@@ -37,18 +38,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .price-input{border:2px solid var(--border2);background:var(--bg2);color:var(--bull);padding:5px 8px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;width:95px;outline:none;}
 .price-input:focus{border-color:var(--bull);}
 .date-disp{font-size:10px;color:var(--text3);}
-.pair-selector{background:var(--bg2);border:2px solid var(--bull-b);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;min-width:120px;}
-.pair-selector:focus{border-color:var(--bull);}
-.zone-age{font-size:9px;color:var(--text3);white-space:nowrap;font-style:italic;}
-.zone-age.fresh{color:var(--bull);}
-.zone-age.old{color:var(--text3);}
-.zone-age.ancient{color:var(--bear-b);}
+.sync-indicator{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;}
+.sync-indicator.syncing{background:var(--sweep-bg);color:var(--sweep);}
+.sync-indicator.synced{background:var(--bull-bg);color:var(--bull);}
+.sync-indicator.error{background:var(--bear-bg);color:var(--bear);}
 .btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
 .btn-green{background:var(--bull);color:#fff;}.btn-green:hover{background:#096644;}
 .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}.btn-ghost:hover{border-color:var(--neutral);color:var(--neutral);}
 .btn-red{background:transparent;color:var(--text3);border:1px solid var(--border);}.btn-red:hover{border-color:var(--bear);color:var(--bear);}
 .btn-sm{padding:4px 10px;font-size:11px;border-radius:5px;}
-/* MAIN */
 .main{max-width:1600px;margin:0 auto;padding:16px;}
 .tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .tf-panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
@@ -83,14 +81,16 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .zone-item.bear-fvg{border-left:4px solid var(--bear);}
 .zone-item.near{background:var(--near-bg);border-color:var(--near-b);}
 .zone-item.inside{background:var(--in-bg);border-color:var(--in-b);}
-.zone-row-compact{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;background:var(--bg2);user-select:none;}
+.zone-row-compact{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;background:var(--bg2);user-select:none;flex-wrap:wrap;}
 .zone-item.near   .zone-row-compact{background:var(--near-bg);}
 .zone-item.inside .zone-row-compact{background:var(--in-bg);}
 .zone-compact-type{font-size:10px;font-weight:700;min-width:64px;}
-.zone-compact-label{font-weight:600;font-size:12px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.zone-compact-label{font-weight:600;font-size:12px;flex:1;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .zone-compact-prices{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);white-space:nowrap;}
 .zone-compact-dist{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;white-space:nowrap;min-width:58px;text-align:right;}
 .zone-compact-status{min-width:58px;text-align:center;}
+.zone-age{font-size:9px;color:var(--text3);white-space:nowrap;font-style:italic;min-width:50px;text-align:right;}
+.zone-age.fresh{color:var(--bull);}.zone-age.old{color:var(--text3);}.zone-age.ancient{color:var(--bear-b);}
 .zone-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0;}
 .zone-chevron.open{transform:rotate(90deg);}
 .status-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
@@ -144,7 +144,6 @@ select{cursor:pointer;}
 .notes-area:focus{border-color:var(--neutral);background:var(--bg2);}
 .entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .entry-item{display:flex;flex-direction:column;gap:3px;}
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.active{display:flex;}
 .modal{background:var(--bg2);border-radius:12px;padding:22px;width:520px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.2);border:1px solid var(--border);}
@@ -161,7 +160,7 @@ select{cursor:pointer;}
 .ai-sub{font-size:12px;margin-bottom:20px;}
 .analysis-header{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
 .analysis-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;}
-.analysis-title{font-size:20px;font-weight:800;color:var(--text);}
+.analysis-title{font-size:20px;font-weight:800;}
 .analysis-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .analysis-meta-badge{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
 .session-note{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--sweep);font-weight:500;}
@@ -282,16 +281,16 @@ select{cursor:pointer;}
       <span class="price-label">Price</span>
       <input class="price-input" type="number" step="0.00001" placeholder="1.16500" id="currentPrice" oninput="refreshAllDist()">
     </div>
+    <span class="sync-indicator synced" id="syncIndicator">✓ Synced</span>
     <span class="date-disp" id="dateDisp"></span>
     <button class="btn btn-ghost" onclick="openImport()">⬆ Import</button>
     <button class="btn btn-red"   onclick="clearAll()">✕ Clear</button>
-    <button class="btn btn-green" onclick="exportData()">⬇ Export JSON</button>
+    <button class="btn btn-green" onclick="exportData()">⬇ Export</button>
   </div>
 </div>
 
 <div class="main" id="mainContent"></div>
 
-<!-- ZONE/CONTEXT IMPORT MODAL -->
 <div class="modal-overlay" id="importModal">
   <div class="modal">
     <h3>Import Context JSON</h3>
@@ -303,7 +302,6 @@ select{cursor:pointer;}
   </div>
 </div>
 
-<!-- ANALYSIS IMPORT MODAL -->
 <div class="modal-overlay" id="analysisImportModal">
   <div class="modal">
     <h3>Import Analiza JSON</h3>
@@ -318,636 +316,576 @@ select{cursor:pointer;}
 <div class="toast" id="toast"></div>
 
 <script>
+// ── SUPABASE ───────────────────────────────────────────────
+const SUPABASE_URL = 'https://caenefhnwfyzhmneuyjb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZW5lZmhud2Z5emhtbmV1eWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NDIxMjcsImV4cCI6MjA5NTAxODEyN30.b42SdHt6UY04ip7iVxGy7SsjxUfb5NHPaAi72AcVr20';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ── CONSTANTS ──────────────────────────────────────────────
-var TFS = ['weekly','daily','h4','h1'];
-var TAGS_OB  = ['post-BOS','pre-sweep','1x tested','2x tested','fresh','news near','institutional'];
-var TAGS_FVG = ['post-BOS','impulse','1x tested','2x tested','fresh','news near'];
-var NEAR = 25;
+const TFS   = ['weekly','daily','h4','h1'];
+const PAIRS = ['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
+const TAGS_OB  = ['post-BOS','pre-sweep','1x tested','2x tested','fresh','news near','institutional'];
+const TAGS_FVG = ['post-BOS','impulse','1x tested','2x tested','fresh','news near'];
+const NEAR = 25;
 
 // ── STATE ──────────────────────────────────────────────────
 var appMode = 'edit';
 var analysisData = null;
-var currentPair = 'EURUSD';
-
-var PAIRS = ['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
-
-// Store per pair
-var pairStates = {};
+var currentPair  = 'EURUSD';
+var pairStates   = {};
 PAIRS.forEach(function(p) {
-  pairStates[p] = { current_price:'', weekly:emptyTF(), daily:emptyTF(), h4:emptyTFExtra('h4'), h1:emptyTFExtra('h1') };
+  pairStates[p] = { current_price:'', weekly:emptyTF(), daily:emptyTF(), h4:emptyTFX('h4'), h1:emptyTFX('h1') };
 });
-
-// Active state = current pair
 var state = pairStates['EURUSD'];
 
-function switchPair(p) {
-  currentPair = p;
-  state = pairStates[p];
-  analysisData = null;
-  renderAll();
+function emptyTF() { return {bias:'',obs:[],fvgs:[],events:[],notes:''}; }
+function emptyTFX(tf) {
+  var b = emptyTF(); b.eqh=''; b.eql='';
+  if (tf==='h1'){b.entry='';b.sl='';b.tp1='';b.tp2='';b.direction='';}
+  return b;
 }
-
-function emptyTF() {
-  return { bias:'', obs:[], fvgs:[], events:[], notes:'' };
-}
-function emptyTFExtra(tf) {
-  var base = emptyTF();
-  base.eqh = ''; base.eql = '';
-  if (tf === 'h1') { base.entry=''; base.sl=''; base.tp1=''; base.tp2=''; base.direction=''; }
-  return base;
-}
-
-function uid() { return 'z' + Date.now() + Math.random().toString(36).slice(2,6); }
+function uid() { return 'z'+Date.now()+Math.random().toString(36).slice(2,6); }
 
 // ── DATE ───────────────────────────────────────────────────
 function updateDate() {
-  var n = new Date();
+  var n=new Date();
   document.getElementById('dateDisp').textContent =
-    n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'}) + ' ' +
-    n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})+' '+
+    n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
 }
-updateDate(); setInterval(updateDate, 30000);
+updateDate(); setInterval(updateDate,30000);
+
+// ── ZONE AGE ───────────────────────────────────────────────
+function zoneAge(formed_date, formed_time) {
+  if (!formed_date) return '';
+  var ds = formed_date + (formed_time ? 'T'+formed_time : 'T00:00');
+  var formed = new Date(ds);
+  if (isNaN(formed.getTime())) return '';
+  var diffH = Math.floor((new Date()-formed)/3600000);
+  var diffD = Math.floor(diffH/24);
+  var diffW = Math.floor(diffD/7);
+  var diffM = Math.floor(diffD/30);
+  var cls = diffD<7?'fresh':diffD<30?'old':'ancient';
+  var txt = diffH<24?(diffH+'h ago'):diffD<7?(diffD+'d ago'):diffW<8?(diffW+'w ago'):(diffM+'mo ago');
+  return '<span class="zone-age '+cls+'">'+txt+'</span>';
+}
 
 // ── MODE ───────────────────────────────────────────────────
 function setMode(m) {
-  appMode = m;
-  ['edit','update','analysis'].forEach(function(n) {
-    document.getElementById('mode' + n.charAt(0).toUpperCase() + n.slice(1) + 'Btn').classList.toggle('active', n === m);
+  appMode=m;
+  ['edit','update','analysis'].forEach(function(n){
+    document.getElementById('mode'+n.charAt(0).toUpperCase()+n.slice(1)+'Btn').classList.toggle('active',n===m);
   });
   renderAll();
+}
+
+// ── PAIR ───────────────────────────────────────────────────
+function switchPair(p) {
+  currentPair=p; state=pairStates[p]; analysisData=null;
+  loadFromSupabase(p);
 }
 
 // ── PRICE / DIST ───────────────────────────────────────────
-function getPrice() {
-  var v = parseFloat(document.getElementById('currentPrice').value);
-  return isNaN(v) ? null : v;
+function getPrice() { var v=parseFloat(document.getElementById('currentPrice').value); return isNaN(v)?null:v; }
+function calcDist(top,btm) {
+  var price=getPrice();
+  if(!price||!top||!btm)return null;
+  var rTop=Math.max(+top,+btm),rBtm=Math.min(+top,+btm);
+  if(price>=rBtm&&price<=rTop)return{type:'inside',pips:0};
+  if(price>rTop)return{type:'below',pips:Math.round((price-rTop)*10000)};
+  return{type:'above',pips:Math.round((rBtm-price)*10000)};
 }
-function calcDist(top, btm) {
-  var price = getPrice();
-  if (!price || !top || !btm) return null;
-  var rTop = Math.max(+top, +btm), rBtm = Math.min(+top, +btm);
-  if (price >= rBtm && price <= rTop) return {type:'inside', pips:0};
-  if (price > rTop) return {type:'below', pips:Math.round((price - rTop)*10000)};
-  return {type:'above', pips:Math.round((rBtm - price)*10000)};
+function distHTML(top,btm) {
+  var d=calcDist(top,btm); if(!d)return'';
+  if(d.type==='inside')return'<span class="dist-badge inside">● IN ZONE</span>';
+  var cls=d.pips<=NEAR?'near':d.type;
+  return'<span class="dist-badge '+cls+'">'+(d.type==='above'?'▲':'▼')+' '+d.pips+'p</span>';
 }
-function distHTML(top, btm) {
-  var d = calcDist(top, btm);
-  if (!d) return '';
-  if (d.type === 'inside') return '<span class="dist-badge inside">● IN ZONE</span>';
-  var cls = d.pips <= NEAR ? 'near' : d.type;
-  var arrow = d.type === 'above' ? '▲' : '▼';
-  return '<span class="dist-badge ' + cls + '">' + arrow + ' ' + d.pips + 'p</span>';
+function zoneExCls(top,btm) {
+  var d=calcDist(top,btm); if(!d)return'';
+  return d.type==='inside'?'inside':d.pips<=NEAR?'near':'';
 }
-function zoneExtraClass(top, btm) {
-  var d = calcDist(top, btm);
-  if (!d) return '';
-  if (d.type === 'inside') return 'inside';
-  if (d.pips <= NEAR) return 'near';
-  return '';
-}
-function refreshAllDist() {
-  state.current_price = document.getElementById('currentPrice').value;
-  renderAll();
-}
+function refreshAllDist() { state.current_price=document.getElementById('currentPrice').value; schedulSync(); renderAll(); }
 
 // ── BIAS ───────────────────────────────────────────────────
-function setBias(tf, val) {
-  state[tf].bias = val;
-  updateBiasBar();
-  renderTF(tf);
-}
+function setBias(tf,val) { state[tf].bias=val; updateBiasBar(); renderTF(tf); schedulSync(); }
 function updateBiasBar() {
-  var map = {bull:'↑', bear:'↓', neutral:'—', '':'—'};
-  var cls  = {bull:'bull', bear:'bear', neutral:'neutral', '':'neutral'};
-  TFS.forEach(function(tf) {
-    var el = document.getElementById('ba-' + tf);
-    if (el) { el.textContent = map[state[tf].bias] || '—'; el.className = 'bias-arrow ' + (cls[state[tf].bias] || 'neutral'); }
+  var map={bull:'↑',bear:'↓',neutral:'—',''  :'—'};
+  var cls={bull:'bull',bear:'bear',neutral:'neutral',''  :'neutral'};
+  TFS.forEach(function(tf){
+    var el=document.getElementById('ba-'+tf);
+    if(el){el.textContent=map[state[tf].bias]||'—';el.className='bias-arrow '+(cls[state[tf].bias]||'neutral');}
   });
 }
 
-// ── RENDER ALL ─────────────────────────────────────────────
-function zoneAge(formed_date, formed_time) {
-  if (!formed_date) return '';
-  var dateStr = formed_date + (formed_time ? 'T' + formed_time : 'T00:00');
-  var formed = new Date(dateStr);
-  if (isNaN(formed.getTime())) return '';
-  var now = new Date();
-  var diffMs = now - formed;
-  var diffH = Math.floor(diffMs / 3600000);
-  var diffD = Math.floor(diffMs / 86400000);
-  var diffW = Math.floor(diffD / 7);
-  var diffM = Math.floor(diffD / 30);
-  var cls = diffD < 7 ? 'fresh' : diffD < 30 ? 'old' : 'ancient';
-  var txt = '';
-  if (diffH < 24) txt = diffH + 'h ago';
-  else if (diffD < 7) txt = diffD + 'd ago';
-  else if (diffW < 8) txt = diffW + 'w ago';
-  else txt = diffM + 'mo ago';
-  return '<span class="zone-age ' + cls + '">' + txt + '</span>';
-}
-
+// ── RENDER ─────────────────────────────────────────────────
 function renderAll() {
-  var main = document.getElementById('mainContent');
-  if (appMode === 'analysis') {
-    main.innerHTML = renderAnalysisPage();
-  } else {
-    main.innerHTML = '<div class="tf-grid">' + TFS.map(function(tf) {
-      return '<div id="panel-' + tf + '">' + renderTFHTML(tf) + '</div>';
-    }).join('') + '</div>';
-    updateBiasBar();
-  }
-}
-
-function renderTF(tf) {
-  var el = document.getElementById('panel-' + tf);
-  if (el) el.innerHTML = renderTFHTML(tf);
+  var main=document.getElementById('mainContent');
+  if(appMode==='analysis'){main.innerHTML=renderAnalysisPage();return;}
+  main.innerHTML='<div class="tf-grid">'+TFS.map(function(tf){return'<div id="panel-'+tf+'">'+renderTFHTML(tf)+'</div>';}).join('')+'</div>';
   updateBiasBar();
 }
+function renderTF(tf) { var el=document.getElementById('panel-'+tf); if(el)el.innerHTML=renderTFHTML(tf); updateBiasBar(); }
 
-// ── RENDER TF ──────────────────────────────────────────────
 function renderTFHTML(tf) {
-  var d = state[tf];
-  var names = {weekly:'Weekly', daily:'Daily', h4:'4H', h1:'1H'};
-  var biasOpts = ['bull','bear','neutral'].map(function(v) {
-    var lbl = v === 'bull' ? '↑ Bull' : v === 'bear' ? '↓ Bear' : '— Range';
-    return '<button class="bias-btn ' + v + (d.bias === v ? ' active' : '') + '" onclick="setBias(\'' + tf + '\',\'' + v + '\')">' + lbl + '</button>';
+  var d=state[tf];
+  var names={weekly:'Weekly',daily:'Daily',h4:'4H',h1:'1H'};
+  var biasOpts=['bull','bear','neutral'].map(function(v){
+    var lbl=v==='bull'?'↑ Bull':v==='bear'?'↓ Bear':'— Range';
+    return'<button class="bias-btn '+v+(d.bias===v?' active':'')+'" onclick="setBias(\''+tf+'\',\''+v+'\')">'+lbl+'</button>';
   }).join('');
-  var isUpdate = appMode === 'update';
+  var isU=appMode==='update';
+  var eqHtml=(tf==='h4'||tf==='h1')?
+    '<div class="section"><span class="sec-title">EQL / EQH</span><div class="entry-grid" style="margin-top:7px;">'+
+    '<div class="entry-item"><span class="field-lbl">EQH</span><input type="number" step="0.00001" placeholder="0" value="'+(d.eqh||'')+'" onchange="state[\''+tf+'\'].eqh=this.value;schedulSync()"></div>'+
+    '<div class="entry-item"><span class="field-lbl">EQL</span><input type="number" step="0.00001" placeholder="0" value="'+(d.eql||'')+'" onchange="state[\''+tf+'\'].eql=this.value;schedulSync()"></div>'+
+    '</div></div>':'';
+  var entryHtml=(tf==='h1')?
+    '<div class="section"><span class="sec-title">Entry Setup</span><div class="entry-grid" style="margin-top:7px;">'+
+    '<div class="entry-item"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" value="'+(d.entry||'')+'" onchange="state.h1.entry=this.value;schedulSync()"></div>'+
+    '<div class="entry-item"><span class="field-lbl">STOP LOSS</span><input type="number" step="0.00001" value="'+(d.sl||'')+'" onchange="state.h1.sl=this.value;schedulSync()"></div>'+
+    '<div class="entry-item"><span class="field-lbl">TP1</span><input type="number" step="0.00001" value="'+(d.tp1||'')+'" onchange="state.h1.tp1=this.value;schedulSync()"></div>'+
+    '<div class="entry-item"><span class="field-lbl">TP2</span><input type="number" step="0.00001" value="'+(d.tp2||'')+'" onchange="state.h1.tp2=this.value;schedulSync()"></div>'+
+    '</div><div style="margin-top:8px;"><span class="field-lbl">DIRECTION</span>'+
+    '<select style="margin-top:4px;" onchange="state.h1.direction=this.value;schedulSync()">'+
+    '<option value=""'+(!d.direction?' selected':'')+'>-- select --</option>'+
+    '<option value="long"'+(d.direction==='long'?' selected':'')+'>↑ LONG</option>'+
+    '<option value="short"'+(d.direction==='short'?' selected':'')+'>↓ SHORT</option>'+
+    '<option value="wait"'+(d.direction==='wait'?' selected':'')+'>⏳ WAIT</option>'+
+    '</select></div></div>':'';
 
-  var eqlHtml = (tf === 'h4' || tf === 'h1') ? (
-    '<div class="section"><span class="sec-title">EQL / EQH</span>' +
-    '<div class="entry-grid" style="margin-top:7px;">' +
-    '<div class="entry-item"><span class="field-lbl">EQH</span><input type="number" step="0.00001" placeholder="1.08500" value="' + (d.eqh||'') + '" onchange="state[\'' + tf + '\'].eqh=this.value"></div>' +
-    '<div class="entry-item"><span class="field-lbl">EQL</span><input type="number" step="0.00001" placeholder="1.07800" value="' + (d.eql||'') + '" onchange="state[\'' + tf + '\'].eql=this.value"></div>' +
-    '</div></div>'
-  ) : '';
-
-  var entryHtml = (tf === 'h1') ? (
-    '<div class="section"><span class="sec-title">Entry Setup</span>' +
-    '<div class="entry-grid" style="margin-top:7px;">' +
-    '<div class="entry-item"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" value="' + (d.entry||'') + '" onchange="state.h1.entry=this.value"></div>' +
-    '<div class="entry-item"><span class="field-lbl">STOP LOSS</span><input type="number" step="0.00001" value="' + (d.sl||'') + '" onchange="state.h1.sl=this.value"></div>' +
-    '<div class="entry-item"><span class="field-lbl">TP1</span><input type="number" step="0.00001" value="' + (d.tp1||'') + '" onchange="state.h1.tp1=this.value"></div>' +
-    '<div class="entry-item"><span class="field-lbl">TP2</span><input type="number" step="0.00001" value="' + (d.tp2||'') + '" onchange="state.h1.tp2=this.value"></div>' +
-    '</div>' +
-    '<div style="margin-top:8px;"><span class="field-lbl">DIRECTION</span>' +
-    '<select style="margin-top:4px;" onchange="state.h1.direction=this.value">' +
-    '<option value=""' + (!d.direction?' selected':'') + '>-- select --</option>' +
-    '<option value="long"' + (d.direction==='long'?' selected':'') + '>↑ LONG</option>' +
-    '<option value="short"' + (d.direction==='short'?' selected':'') + '>↓ SHORT</option>' +
-    '<option value="wait"' + (d.direction==='wait'?' selected':'') + '>⏳ WAIT</option>' +
-    '</select></div></div>'
-  ) : '';
-
-  return '<div class="tf-panel ' + tf + '">' +
-    '<div class="tf-hdr">' +
-    '<div class="tf-title"><span class="tf-badge">' + tf.toUpperCase() + '</span>' + names[tf] + ' Structure</div>' +
-    '<div class="bias-row">' + biasOpts + '</div>' +
-    '</div>' +
-    '<div class="tf-body">' +
-    '<div class="section">' +
-    '<div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">' + d.obs.length + '</span></span></div>' +
-    '<div class="zone-list">' + d.obs.map(function(ob) { return renderZoneHTML(tf, 'ob', ob, isUpdate); }).join('') + '</div>' +
-    renderAddZoneBtn(tf, 'ob') +
-    '</div>' +
-    '<div class="section">' +
-    '<div class="sec-hdr"><span class="sec-title">Fair Value Gaps <span class="sec-count">' + d.fvgs.length + '</span></span></div>' +
-    '<div class="zone-list">' + d.fvgs.map(function(fvg) { return renderZoneHTML(tf, 'fvg', fvg, isUpdate); }).join('') + '</div>' +
-    renderAddZoneBtn(tf, 'fvg') +
-    '</div>' +
-    '<div class="section">' +
-    '<div class="sec-hdr"><span class="sec-title">Sequence</span></div>' +
-    d.events.map(function(ev) { return renderEventHTML(tf, ev); }).join('') +
-    '<button class="add-btn" onclick="addEvent(\'' + tf + '\')">+ Add Event</button>' +
-    '<div class="seq-preview">' + d.events.map(function(ev, i) {
-      return (i > 0 ? '<span class="seq-arrow">→</span>' : '') +
-        '<span class="seq-chip ' + ev.type + '">' + ({choch:'CHoCH',bos:'BOS',sweep:'x',sfp:'SFP'}[ev.type] || ev.type) + '</span>';
-    }).join('') + '</div>' +
-    '</div>' +
-    eqlHtml + entryHtml +
-    '<div class="section"><span class="sec-title">Notes</span>' +
-    '<textarea class="notes-area" style="margin-top:7px;" onchange="state[\'' + tf + '\'].notes=this.value" placeholder="Context...">' + esc(d.notes||'') + '</textarea>' +
-    '</div>' +
-    '</div></div>';
+  return '<div class="tf-panel '+tf+'">'+
+    '<div class="tf-hdr"><div class="tf-title"><span class="tf-badge">'+tf.toUpperCase()+'</span>'+names[tf]+' Structure</div>'+
+    '<div class="bias-row">'+biasOpts+'</div></div>'+
+    '<div class="tf-body">'+
+    '<div class="section"><div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">'+d.obs.length+'</span></span></div>'+
+    '<div class="zone-list">'+d.obs.map(function(z){return renderZoneHTML(tf,'ob',z,isU);}).join('')+'</div>'+
+    renderAddBtn(tf,'ob')+'</div>'+
+    '<div class="section"><div class="sec-hdr"><span class="sec-title">Fair Value Gaps <span class="sec-count">'+d.fvgs.length+'</span></span></div>'+
+    '<div class="zone-list">'+d.fvgs.map(function(z){return renderZoneHTML(tf,'fvg',z,isU);}).join('')+'</div>'+
+    renderAddBtn(tf,'fvg')+'</div>'+
+    '<div class="section"><div class="sec-hdr"><span class="sec-title">Sequence</span></div>'+
+    d.events.map(function(ev){return renderEvHTML(tf,ev);}).join('')+
+    '<button class="add-btn" onclick="addEvent(\''+tf+'\')">+ Add Event</button>'+
+    '<div class="seq-preview">'+d.events.map(function(ev,i){
+      return(i>0?'<span class="seq-arrow">→</span>':'')+
+        '<span class="seq-chip '+ev.type+'">'+({choch:'CHoCH',bos:'BOS',sweep:'x',sfp:'SFP'}[ev.type]||ev.type)+'</span>';
+    }).join('')+'</div></div>'+
+    eqHtml+entryHtml+
+    '<div class="section"><span class="sec-title">Notes</span>'+
+    '<textarea class="notes-area" style="margin-top:7px;" onchange="state[\''+tf+'\'].notes=this.value;schedulSync()" placeholder="Context...">'+esc(d.notes||'')+'</textarea>'+
+    '</div></div></div>';
 }
 
-// ── ZONE RENDER ────────────────────────────────────────────
-function renderZoneHTML(tf, ztype, zone, isUpdate) {
-  if (!zone._id) zone._id = uid();
-  var id = zone._id;
-  var isOB = ztype === 'ob';
-  var top = isOB ? zone.top : zone.entry;
-  var btm = isOB ? zone.btm : zone.exit;
-  var dtype = zone.type;
-  var extra = zoneExtraClass(top, btm);
-  var cardCls = 'zone-item ' + dtype + '-' + ztype + (extra ? ' ' + extra : '');
-  var typeLabel = (dtype === 'bull' ? '🟢' : '🔴') + ' ' + dtype.toUpperCase() + ' ' + ztype.toUpperCase();
-  var label = zone.label || (isOB ? 'Unnamed OB' : 'Unnamed FVG');
-  var statusHtml = '<span class="status-badge ' + (zone.status||'active') + '">' + (zone.status||'active') + '</span>';
-  var expandContent = isUpdate ? renderUpdateExpand(tf, ztype, zone, id) : renderEditExpand(tf, ztype, zone, id);
-
-  return '<div class="' + cardCls + '" id="zi-' + id + '">' +
-    '<div class="zone-row-compact" onclick="toggleZone(\'' + id + '\')">' +
-    '<span class="zone-compact-type">' + typeLabel + '</span>' +
-    '<span class="zone-compact-label">' + esc(label) + '</span>' +
-    '<span class="zone-compact-prices">' + parseFloat(top||0).toFixed(5) + ' / ' + parseFloat(btm||0).toFixed(5) + '</span>' +
-    '<span class="zone-compact-dist">' + distHTML(top, btm) + '</span>' +
-    '<span class="zone-compact-status">' + statusHtml + '</span>' +
-    zoneAge(zone.formed_date, zone.formed_time) +
-    '<span class="zone-chevron" id="chv-' + id + '">▶</span>' +
-    '</div>' +
-    '<div class="zone-expand" id="ze-' + id + '">' + expandContent + '</div>' +
+function renderZoneHTML(tf,ztype,zone,isU) {
+  if(!zone._id)zone._id=uid();
+  var id=zone._id,isOB=ztype==='ob';
+  var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;
+  var ex=zoneExCls(top,btm);
+  var cCls='zone-item '+zone.type+'-'+ztype+(ex?' '+ex:'');
+  var lbl=zone.label||(isOB?'Unnamed OB':'Unnamed FVG');
+  var stBadge='<span class="status-badge '+(zone.status||'active')+'">'+(zone.status||'active')+'</span>';
+  var expand=isU?renderUpdateExp(tf,ztype,zone,id):renderEditExp(tf,ztype,zone,id);
+  return '<div class="'+cCls+'" id="zi-'+id+'">'+
+    '<div class="zone-row-compact" onclick="toggleZone(\''+id+'\')">'+
+    '<span class="zone-compact-type">'+(zone.type==='bull'?'🟢':'🔴')+' '+zone.type.toUpperCase()+' '+ztype.toUpperCase()+'</span>'+
+    '<span class="zone-compact-label">'+esc(lbl)+'</span>'+
+    '<span class="zone-compact-prices">'+parseFloat(top||0).toFixed(5)+' / '+parseFloat(btm||0).toFixed(5)+'</span>'+
+    '<span class="zone-compact-dist">'+distHTML(top,btm)+'</span>'+
+    '<span class="zone-compact-status">'+stBadge+'</span>'+
+    zoneAge(zone.formed_date,zone.formed_time)+
+    '<span class="zone-chevron" id="chv-'+id+'">▶</span>'+
+    '</div>'+
+    '<div class="zone-expand" id="ze-'+id+'">'+expand+'</div>'+
     '</div>';
 }
 
-function renderEditExpand(tf, ztype, zone, id) {
-  var isOB = ztype === 'ob';
-  var top = isOB ? zone.top : zone.entry;
-  var btm = isOB ? zone.btm : zone.exit;
-  var tags = zone.tags || [];
-  var tagList = isOB ? TAGS_OB : TAGS_FVG;
-  var sOpts = (isOB ? ['active','tested','broken','breaker'] : ['active','mitigated','breaker']).map(function(s) {
-    return '<option value="' + s + '"' + (zone.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+function renderEditExp(tf,ztype,zone,id) {
+  var isOB=ztype==='ob';
+  var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;
+  var tags=zone.tags||[];
+  var tagList=isOB?TAGS_OB:TAGS_FVG;
+  var sOpts=(isOB?['active','tested','broken','breaker']:['active','mitigated','breaker']).map(function(s){
+    return'<option value="'+s+'"'+(zone.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';
   }).join('');
-
-  return '<div class="form-row">' +
-    '<div class="form-col w100"><span class="field-lbl">TYPE</span>' +
-    '<select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'type\',this.value);renderTF(\'' + tf + '\')">' +
-    '<option value="bull"' + (zone.type==='bull'?' selected':'') + '>🟢 Bull</option>' +
-    '<option value="bear"' + (zone.type==='bear'?' selected':'') + '>🔴 Bear</option>' +
-    '</select></div>' +
-    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'status\',this.value);renderTF(\'' + tf + '\')">' + sOpts + '</select></div>' +
-    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="' + (top||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'top\',this.value)"></div>' +
-    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="' + (btm||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'btm\',this.value)"></div>' +
-    '</div>' +
-    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="' + esc(zone.label||'') + '" placeholder="Ex: Tavan principal" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'label\',this.value)"></div></div>' +
-    '<div class="form-row">' +
-    '<div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="' + (zone.formed_date||'') + '" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'formed_date\',this.value)"></div>' +
-    '<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="' + (zone.formed_time||'') + '" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'formed_time\',this.value)"></div>' +
-    '<div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="' + esc(isOB?(zone.ob_note||''):(zone.fvg_note||'')) + '" placeholder="Context" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'' + (isOB?'ob_note':'fvg_note') + '\',this.value)"></div>' +
-    '</div>' +
-    '<div class="tags-wrap">' + tagList.map(function(t) {
-      return '<button class="tag-btn' + (tags.indexOf(t) >= 0 ? ' active' : '') + '" onclick="toggleTag(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'' + t + '\',this)">' + t + '</button>';
-    }).join('') + '</div>' +
-    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">🗑 Delete</button></div>';
+  return '<div class="form-row">'+
+    '<div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')"><option value="bull"'+(zone.type==='bull'?' selected':'')+'>🟢 Bull</option><option value="bear"'+(zone.type==='bear'?' selected':'')+'>🔴 Bear</option></select></div>'+
+    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'status\',this.value);renderTF(\''+tf+'\');schedulSync()">'+sOpts+'</select></div>'+
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div>'+
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div>'+
+    '</div>'+
+    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="'+esc(zone.label||'')+'" placeholder="Ex: Tavan principal" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'label\',this.value);schedulSync()"></div></div>'+
+    '<div class="form-row">'+
+    '<div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="'+(zone.formed_date||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_date\',this.value);schedulSync()"></div>'+
+    '<div class="form-col w80"><span class="field-lbl">TIME (24h)</span><input type="time" value="'+(zone.formed_time||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_time\',this.value);schedulSync()"></div>'+
+    '<div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="'+esc(isOB?(zone.ob_note||''):(zone.fvg_note||''))+'" placeholder="Context" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\''+(isOB?'ob_note':'fvg_note')+'\',this.value);schedulSync()"></div>'+
+    '</div>'+
+    '<div class="tags-wrap">'+tagList.map(function(t){return'<button class="tag-btn'+(tags.indexOf(t)>=0?' active':'')+'" onclick="toggleTag(\''+tf+'\',\''+ztype+'\',\''+id+'\',\''+t+'\',this)">'+t+'</button>';}).join('')+'</div>'+
+    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\''+tf+'\',\''+ztype+'\',\''+id+'\')">🗑 Delete</button></div>';
 }
 
-function renderUpdateExpand(tf, ztype, zone, id) {
-  var isOB = ztype === 'ob';
-  var top = isOB ? zone.top : zone.entry;
-  var btm = isOB ? zone.btm : zone.exit;
-  var sOpts = (isOB ? ['active','tested','broken','breaker'] : ['active','mitigated','breaker']).map(function(s) {
-    return '<option value="' + s + '"' + (zone.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+function renderUpdateExp(tf,ztype,zone,id) {
+  var isOB=ztype==='ob';
+  var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;
+  var sOpts=(isOB?['active','tested','broken','breaker']:['active','mitigated','breaker']).map(function(s){
+    return'<option value="'+s+'"'+(zone.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';
   }).join('');
-  var history = zone.update_history || [];
-
-  return '<div class="form-row">' +
-    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'status\',this.value);renderTF(\'' + tf + '\')">' + sOpts + '</select></div>' +
-    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="' + (top||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'top\',this.value)"></div>' +
-    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="' + (btm||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'btm\',this.value)"></div>' +
-    '</div>' +
-    '<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span>' +
-    '<div style="display:flex;gap:6px;margin-top:3px;">' +
-    '<input type="text" id="upd-' + id + '" placeholder="Ce s-a schimbat...">' +
-    '<button class="btn btn-green btn-sm" onclick="saveNote(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">Save</button>' +
-    '</div></div>' +
-    (history.length > 0 ?
-      '<div class="update-history"><span class="field-lbl">HISTORY</span>' +
-      history.slice().reverse().map(function(h) {
-        return '<div class="update-entry"><div class="update-entry-date">' + h.date + ' ' + h.time + '</div><div class="update-entry-text">' + esc(h.note) + '</div></div>';
-      }).join('') + '</div>'
-    : '') +
-    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">🗑 Delete</button></div>';
+  var hist=zone.update_history||[];
+  return '<div class="form-row">'+
+    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'status\',this.value);renderTF(\''+tf+'\');schedulSync()">'+sOpts+'</select></div>'+
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div>'+
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div>'+
+    '</div>'+
+    '<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span>'+
+    '<div style="display:flex;gap:6px;margin-top:3px;"><input type="text" id="upd-'+id+'" placeholder="Ce s-a schimbat...">'+
+    '<button class="btn btn-green btn-sm" onclick="saveNote(\''+tf+'\',\''+ztype+'\',\''+id+'\')">Save</button></div></div>'+
+    (hist.length>0?'<div class="update-history"><span class="field-lbl">HISTORY</span>'+hist.slice().reverse().map(function(h){
+      return'<div class="update-entry"><div class="update-entry-date">'+h.date+' '+h.time+'</div><div class="update-entry-text">'+esc(h.note)+'</div></div>';
+    }).join('')+'</div>':'')+
+    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\''+tf+'\',\''+ztype+'\',\''+id+'\')">🗑 Delete</button></div>';
 }
 
-function renderAddZoneBtn(tf, ztype) {
-  return '<button class="add-btn" onclick="showAddForm(\'' + tf + '\',\'' + ztype + '\')">+ Add ' + ztype.toUpperCase() + '</button>' +
-    '<div class="add-zone-form" id="addform-' + tf + '-' + ztype + '">' +
-    '<div class="form-row">' +
-    '<div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-' + tf + '-' + ztype + '"><option value="bear">🔴 Bear</option><option value="bull">🟢 Bull</option></select></div>' +
-    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-' + tf + '-' + ztype + '" placeholder="1.16500"></div>' +
-    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" id="nf-btm-' + tf + '-' + ztype + '" placeholder="1.16350"></div>' +
-    '</div>' +
-    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-' + tf + '-' + ztype + '" placeholder="Ex: Tavan principal"></div></div>' +
-    '<div class="form-row">' +
-    '<div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-' + tf + '-' + ztype + '"></div>' +
-    '<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" id="nf-time-' + tf + '-' + ztype + '"></div>' +
-    '</div>' +
-    '<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;">' +
-    '<button class="btn btn-red btn-sm" onclick="hideAddForm(\'' + tf + '\',\'' + ztype + '\')">Cancel</button>' +
-    '<button class="btn btn-green btn-sm" onclick="commitAdd(\'' + tf + '\',\'' + ztype + '\')">Add</button>' +
+function renderAddBtn(tf,ztype) {
+  return '<button class="add-btn" onclick="showAddForm(\''+tf+'\',\''+ztype+'\')">+ Add '+ztype.toUpperCase()+'</button>'+
+    '<div class="add-zone-form" id="addform-'+tf+'-'+ztype+'">'+
+    '<div class="form-row">'+
+    '<div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-'+tf+'-'+ztype+'"><option value="bear">🔴 Bear</option><option value="bull">🟢 Bull</option></select></div>'+
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-'+tf+'-'+ztype+'" placeholder="1.16500"></div>'+
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" id="nf-btm-'+tf+'-'+ztype+'" placeholder="1.16350"></div>'+
+    '</div>'+
+    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-'+tf+'-'+ztype+'" placeholder="Ex: Tavan principal"></div></div>'+
+    '<div class="form-row">'+
+    '<div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-'+tf+'-'+ztype+'"></div>'+
+    '<div class="form-col w80"><span class="field-lbl">TIME (24h)</span><input type="time" id="nf-time-'+tf+'-'+ztype+'"></div>'+
+    '</div>'+
+    '<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;">'+
+    '<button class="btn btn-red btn-sm" onclick="hideAddForm(\''+tf+'\',\''+ztype+'\')">Cancel</button>'+
+    '<button class="btn btn-green btn-sm" onclick="commitAdd(\''+tf+'\',\''+ztype+'\')">Add</button>'+
     '</div></div>';
 }
 
-function renderEventHTML(tf, ev) {
-  if (!ev._id) ev._id = uid();
-  var id = ev._id;
-  var tOpts = ['choch','bos','sweep','sfp'].map(function(t) {
-    var labels = {choch:'CHoCH',bos:'BOS',sweep:'SWEEP (x)',sfp:'SFP'};
-    return '<option value="' + t + '"' + (ev.type === t ? ' selected' : '') + '>' + labels[t] + '</option>';
+function renderEvHTML(tf,ev) {
+  if(!ev._id)ev._id=uid();
+  var id=ev._id;
+  var tOpts=['choch','bos','sweep','sfp'].map(function(t){
+    return'<option value="'+t+'"'+(ev.type===t?' selected':'')+'>'+{choch:'CHoCH',bos:'BOS',sweep:'SWEEP (x)',sfp:'SFP'}[t]+'</option>';
   }).join('');
-  return '<div class="event-row ' + ev.type + '" id="ev-' + id + '">' +
-    '<select style="width:88px;flex-shrink:0;font-weight:600;" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'type\',this.value);renderTF(\'' + tf + '\')">' + tOpts + '</select>' +
-    '<select style="width:72px;flex-shrink:0;" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'dir\',this.value)">' +
-    '<option value="bull"' + (ev.dir==='bull'?' selected':'') + '>↑ Bull</option>' +
-    '<option value="bear"' + (ev.dir==='bear'?' selected':'') + '>↓ Bear</option>' +
-    '</select>' +
-    '<input style="width:88px;flex-shrink:0;" type="number" step="0.00001" value="' + (ev.price||'') + '" placeholder="Price" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'price\',this.value)">' +
-    '<input style="width:72px;flex-shrink:0;" type="time" value="' + (ev.time||'') + '" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'time\',this.value)">' +
-    '<button class="btn btn-red btn-sm" onclick="removeEvent(\'' + tf + '\',\'' + id + '\')">×</button>' +
+  return'<div class="event-row '+ev.type+'" id="ev-'+id+'">'+
+    '<select style="width:88px;flex-shrink:0;font-weight:600;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')">'+tOpts+'</select>'+
+    '<select style="width:72px;flex-shrink:0;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'dir\',this.value)">'+
+    '<option value="bull"'+(ev.dir==='bull'?' selected':'')+'>↑ Bull</option>'+
+    '<option value="bear"'+(ev.dir==='bear'?' selected':'')+'>↓ Bear</option>'+
+    '</select>'+
+    '<input style="width:88px;flex-shrink:0;" type="number" step="0.00001" value="'+(ev.price||'')+'" placeholder="Price" onchange="updateEF(\''+tf+'\',\''+id+'\',\'price\',this.value)">'+
+    '<input style="width:72px;flex-shrink:0;" type="time" value="'+(ev.time||'')+'" onchange="updateEF(\''+tf+'\',\''+id+'\',\'time\',this.value)">'+
+    '<button class="btn btn-red btn-sm" onclick="removeEvent(\''+tf+'\',\''+id+'\')">×</button>'+
     '</div>';
 }
 
-// ── ANALYSIS RENDER ────────────────────────────────────────
+// ── ANALYSIS PAGE ──────────────────────────────────────────
 function renderAnalysisPage() {
-  if (!analysisData) {
-    return '<div class="analysis-page">' +
-      '<div class="analysis-import-zone">' +
-      '<div class="ai-icon">📊</div>' +
-      '<div class="ai-text">Nicio analiza incarcata</div>' +
-      '<div class="ai-sub">Importa un JSON de analiza pentru a vedea brief-ul</div>' +
-      '<button class="btn btn-green" onclick="openAnalysisImport()">⬆ Import Analiza JSON</button>' +
+  if(!analysisData){
+    return'<div class="analysis-page"><div class="analysis-import-zone">'+
+      '<div class="ai-icon">📊</div>'+
+      '<div class="ai-text">Nicio analiza incarcata</div>'+
+      '<div class="ai-sub">Importa un JSON de analiza pentru a vedea brief-ul</div>'+
+      '<button class="btn btn-green" onclick="openAnalysisImport()">⬆ Import Analiza JSON</button>'+
       '</div></div>';
   }
-
-  var a = analysisData;
-  var biasDirs = {bull:'↑ BULL', bear:'↓ BEAR', neutral:'— RANGE'};
-
-  var biasRows = [
-    {tf:'WEEKLY', d:a.bias.weekly},
-    {tf:'DAILY',  d:a.bias.daily},
-    {tf:'H4',     d:a.bias.h4},
-  ].map(function(r) {
-    return '<tr><td><b>' + r.tf + '</b></td><td><span class="bias-dir ' + r.d.direction + '">' + (biasDirs[r.d.direction]||r.d.direction) + '</span></td><td style="color:var(--text2)">' + (r.d.summary||'') + '</td></tr>';
+  var a=analysisData;
+  var bDirs={bull:'↑ BULL',bear:'↓ BEAR',neutral:'— RANGE'};
+  var biasRows=[{tf:'WEEKLY',d:a.bias.weekly},{tf:'DAILY',d:a.bias.daily},{tf:'H4',d:a.bias.h4}].map(function(r){
+    return'<tr><td><b>'+r.tf+'</b></td><td><span class="bias-dir '+r.d.direction+'">'+( bDirs[r.d.direction]||r.d.direction)+'</span></td><td style="color:var(--text2)">'+( r.d.summary||'')+'</td></tr>';
   }).join('');
-
-  var levelRows = (a.key_levels||[]).map(function(l) {
-    var tfBadge = l.tf ? '<span class="level-tf ' + l.tf + '">' + l.tf.toUpperCase() + '</span>' : '';
-    return '<div class="level-row ' + l.type + '"><span class="level-price">' + l.price + '</span><span class="level-label">' + l.label + '</span>' + tfBadge + '</div>';
+  var levelRows=(a.key_levels||[]).map(function(l){
+    return'<div class="level-row '+l.type+'"><span class="level-price">'+l.price+'</span><span class="level-label">'+l.label+'</span>'+(l.tf?'<span class="level-tf '+l.tf+'">'+l.tf.toUpperCase()+'</span>':'')+'</div>';
   }).join('');
-
-  function renderSetup(s, prefix) {
-    var tgts = (s.targets||[]).map(function(t) {
-      return '<div class="target-row ' + t.tp.toLowerCase() + '">' +
-        '<span class="target-label">' + t.tp + '</span>' +
-        '<span class="target-price">' + t.price + '</span>' +
-        '<span class="target-pips">' + t.pips + 'p</span>' +
-        '<span class="target-rr">' + t.rr + '</span>' +
-        '<span class="target-size">' + t.size_pct + '%</span>' +
-        '</div>';
+  function rSetup(s,pfx){
+    var tgts=(s.targets||[]).map(function(t){
+      return'<div class="target-row '+t.tp.toLowerCase()+'"><span class="target-label">'+t.tp+'</span><span class="target-price">'+t.price+'</span><span class="target-pips">'+t.pips+'p</span><span class="target-rr">'+t.rr+'</span><span class="target-size">'+t.size_pct+'%</span></div>';
     }).join('');
-    return '<div class="setup-card ' + (s.priority||'secondary') + '">' +
-      '<div class="setup-hdr" onclick="toggleSetup(\'' + prefix + '-' + s.id + '\')">' +
-      '<span class="setup-id ' + prefix + '">' + s.id + '</span>' +
-      '<span class="setup-title">' + s.label + '</span>' +
-      '<span class="setup-dir ' + s.direction + '">' + (s.direction==='short'?'↓ SHORT':'↑ LONG') + '</span>' +
-      '<span class="setup-chevron" id="schv-' + prefix + '-' + s.id + '">▶</span>' +
-      '</div>' +
-      '<div class="setup-body" id="sbody-' + prefix + '-' + s.id + '">' +
-      '<div class="setup-logic">' + (s.logic||'') + '</div>' +
-      '<div class="setup-condition"><strong>Conditie:</strong> ' + (s.condition||'') + '</div>' +
-      (s.warning ? '<div class="setup-warning">⚠ ' + s.warning + '</div>' : '') +
-      '<div class="setup-params">' +
-      '<div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">' + s.entry + '</div></div>' +
-      '<div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">' + s.sl + '</div></div>' +
-      '<div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">' + s.risk_pips + ' pips</div></div>' +
-      (s.session ? '<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">' + s.session + '</div></div>' : '') +
-      (s.duration ? '<div class="setup-param"><div class="setup-param-lbl">DURATA</div><div class="setup-param-val">' + s.duration + '</div></div>' : '') +
-      '</div>' +
-      '<div class="setup-targets">' + tgts + '</div>' +
-      (s.management ? '<div class="setup-management">📋 ' + s.management + '</div>' : '') +
-      (s.invalidation ? '<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> ' + s.invalidation + '</div>' : '') +
+    return'<div class="setup-card '+(s.priority||'secondary')+'">'+
+      '<div class="setup-hdr" onclick="toggleSetup(\''+pfx+'-'+s.id+'\')">'+
+      '<span class="setup-id '+pfx+'">'+s.id+'</span>'+
+      '<span class="setup-title">'+s.label+'</span>'+
+      '<span class="setup-dir '+s.direction+'">'+(s.direction==='short'?'↓ SHORT':'↑ LONG')+'</span>'+
+      '<span class="setup-chevron" id="schv-'+pfx+'-'+s.id+'">▶</span>'+
+      '</div>'+
+      '<div class="setup-body" id="sbody-'+pfx+'-'+s.id+'">'+
+      '<div class="setup-logic">'+(s.logic||'')+'</div>'+
+      '<div class="setup-condition"><strong>Conditie:</strong> '+(s.condition||'')+'</div>'+
+      (s.warning?'<div class="setup-warning">⚠ '+s.warning+'</div>':'')+
+      '<div class="setup-params">'+
+      '<div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+s.entry+'</div></div>'+
+      '<div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">'+s.sl+'</div></div>'+
+      '<div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">'+s.risk_pips+' pips</div></div>'+
+      (s.session?'<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">'+s.session+'</div></div>':'')+
+      (s.duration?'<div class="setup-param"><div class="setup-param-lbl">DURATA</div><div class="setup-param-val">'+s.duration+'</div></div>':'')+
+      '</div><div class="setup-targets">'+tgts+'</div>'+
+      (s.management?'<div class="setup-management">📋 '+s.management+'</div>':'')+
+      (s.invalidation?'<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> '+s.invalidation+'</div>':'')+
       '</div></div>';
   }
-
-  var dtHTML = (a.day_trades||[]).map(function(s) { return renderSetup(s, 'dt'); }).join('');
-  var swHTML = (a.swing_trades||[]).map(function(s) { return renderSetup(s, 'sw'); }).join('');
-  var avoidHTML = (a.avoid||[]).map(function(x) { return '<li>' + x + '</li>'; }).join('');
-  var scenHTML = (a.scenarios||[]).map(function(s) {
-    return '<div class="scenario-row"><span class="scenario-cond">' + s.condition + '</span><span class="scenario-arrow">→</span><span class="scenario-action">' + s.action + '</span></div>';
+  var dtHTML=(a.day_trades||[]).map(function(s){return rSetup(s,'dt');}).join('');
+  var swHTML=(a.swing_trades||[]).map(function(s){return rSetup(s,'sw');}).join('');
+  var avoidHTML=(a.avoid||[]).map(function(x){return'<li>'+x+'</li>';}).join('');
+  var scenHTML=(a.scenarios||[]).map(function(s){
+    return'<div class="scenario-row"><span class="scenario-cond">'+s.condition+'</span><span class="scenario-arrow">→</span><span class="scenario-action">'+s.action+'</span></div>';
   }).join('');
-
-  return '<div class="analysis-page">' +
-    '<div class="analysis-header">' +
-    '<div class="analysis-header-top">' +
-    '<div class="analysis-title">📊 ' + (a.pair||currentPair).replace(/([A-Z]{3})([A-Z]{3}|[0-9]{2,3})/,'$1/$2') + ' — ' + (a.day||'') + ' ' + (a.date||'') + '</div>' +
-    '<div class="analysis-meta">' +
-    '<span class="analysis-meta-badge">💱 ' + (a.pair||currentPair) + '</span>' +
-    '<span class="analysis-meta-badge">📍 ' + (a.current_price||'N/A') + '</span>' +
-    '<span class="analysis-meta-badge">🕐 ' + (a.session||a.day||'') + '</span>' +
-    '<button class="btn btn-ghost btn-sm" onclick="openAnalysisImport()">↻ Schimba analiza</button>' +
-    '</div></div>' +
-    (a.session_note ? '<div class="session-note">⚠ ' + a.session_note + '</div>' : '') +
-    '</div>' +
-    '<div class="analysis-grid">' +
-    '<div class="analysis-card"><div class="analysis-card-title">Bias Multi-TF</div>' +
-    '<table class="bias-table"><tr><th>TF</th><th>Bias</th><th>Motiv</th></tr>' + biasRows + '</table>' +
-    '<div class="bias-conclusion">' + (a.bias.conclusion||'') + '</div>' +
-    '</div>' +
-    '<div class="analysis-card"><div class="analysis-card-title">Nivele Cheie</div>' +
-    '<div class="levels-list">' + levelRows + '</div></div>' +
-    (a.critical_observation ? '<div class="analysis-card full"><div class="analysis-card-title">⚠ Observatie critica</div><div class="setup-warning"><strong>' + a.critical_observation.title + '</strong><br>' + a.critical_observation.text + '</div></div>' : '') +
-    '<div class="analysis-card"><div class="analysis-card-title">🎯 Day Trade</div><div class="setups-grid">' + (dtHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de day trade.</span>') + '</div></div>' +
-    '<div class="analysis-card"><div class="analysis-card-title">📈 Swing Trade</div><div class="setups-grid">' + (swHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de swing trade.</span>') + '</div></div>' +
-    '<div class="analysis-card"><div class="analysis-card-title">✕ Zone de evitat</div><ul class="avoid-list">' + avoidHTML + '</ul></div>' +
-    '<div class="analysis-card"><div class="analysis-card-title">🔑 Scenariile zilei</div>' + scenHTML + '</div>' +
+  return'<div class="analysis-page">'+
+    '<div class="analysis-header"><div class="analysis-header-top">'+
+    '<div class="analysis-title">📊 '+(a.pair||currentPair)+' — '+(a.day||'')+' '+(a.date||'')+'</div>'+
+    '<div class="analysis-meta">'+
+    '<span class="analysis-meta-badge">📍 '+(a.current_price||'N/A')+'</span>'+
+    '<span class="analysis-meta-badge">🕐 '+(a.session||'')+'</span>'+
+    '<button class="btn btn-ghost btn-sm" onclick="openAnalysisImport()">↻ Schimba</button>'+
+    '</div></div>'+(a.session_note?'<div class="session-note">⚠ '+a.session_note+'</div>':'')+
+    '</div><div class="analysis-grid">'+
+    '<div class="analysis-card"><div class="analysis-card-title">Bias Multi-TF</div>'+
+    '<table class="bias-table"><tr><th>TF</th><th>Bias</th><th>Motiv</th></tr>'+biasRows+'</table>'+
+    '<div class="bias-conclusion">'+(a.bias.conclusion||'')+'</div></div>'+
+    '<div class="analysis-card"><div class="analysis-card-title">Nivele Cheie</div><div class="levels-list">'+levelRows+'</div></div>'+
+    (a.critical_observation?'<div class="analysis-card full"><div class="analysis-card-title">⚠ Observatie critica</div><div class="setup-warning"><strong>'+a.critical_observation.title+'</strong><br>'+a.critical_observation.text+'</div></div>':'')+
+    '<div class="analysis-card"><div class="analysis-card-title">🎯 Day Trade</div><div class="setups-grid">'+(dtHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de day trade.</span>')+'</div></div>'+
+    '<div class="analysis-card"><div class="analysis-card-title">📈 Swing Trade</div><div class="setups-grid">'+(swHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de swing trade.</span>')+'</div></div>'+
+    '<div class="analysis-card"><div class="analysis-card-title">✕ Zone de evitat</div><ul class="avoid-list">'+avoidHTML+'</ul></div>'+
+    '<div class="analysis-card"><div class="analysis-card-title">🔑 Scenariile zilei</div>'+scenHTML+'</div>'+
     '</div></div>';
 }
 
-function toggleSetup(id) {
-  var body = document.getElementById('sbody-' + id);
-  var chv  = document.getElementById('schv-' + id);
-  if (body) body.classList.toggle('open');
-  if (chv)  chv.classList.toggle('open');
+function toggleSetup(id){
+  var b=document.getElementById('sbody-'+id),c=document.getElementById('schv-'+id);
+  if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');
+}
+
+// ── SUPABASE SYNC ──────────────────────────────────────────
+function setSyncStatus(s) {
+  var el=document.getElementById('syncIndicator');
+  if(!el)return;
+  if(s==='syncing'){el.className='sync-indicator syncing';el.textContent='⟳ Saving...';}
+  else if(s==='synced'){el.className='sync-indicator synced';el.textContent='✓ Synced';}
+  else{el.className='sync-indicator error';el.textContent='⚠ Sync error';}
+}
+
+var _syncTimer=null;
+function schedulSync(){
+  clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(syncToSupabase,1500);
+}
+
+async function syncToSupabase(){
+  setSyncStatus('syncing');
+  try{
+    var now=new Date().toISOString();
+    for(var i=0;i<TFS.length;i++){
+      var tf=TFS[i],d=state[tf];
+      await sb.from('smc_context').upsert({
+        pair:currentPair,tf:tf,bias:d.bias,notes:d.notes||'',
+        eqh:d.eqh?parseFloat(d.eqh):null,eql:d.eql?parseFloat(d.eql):null,
+        current_price:state.current_price?parseFloat(state.current_price):null,
+        updated_at:now
+      },{onConflict:'pair,tf'});
+      var allZones=[
+        ...d.obs.map(function(z){return Object.assign({},z,{zone_type:'ob'});}),
+        ...d.fvgs.map(function(z){return Object.assign({},z,{zone_type:'fvg'});})
+      ];
+      for(var j=0;j<allZones.length;j++){
+        var z=allZones[j];
+        await sb.from('smc_zones').upsert({
+          id:z._id,pair:currentPair,tf:tf,zone_type:z.zone_type,direction:z.type,
+          top_price:parseFloat(z.zone_type==='ob'?z.top:z.entry)||null,
+          btm_price:parseFloat(z.zone_type==='ob'?z.btm:z.exit)||null,
+          label:z.label||'',status:z.status||'active',
+          formed_date:z.formed_date||null,formed_time:z.formed_time||null,
+          context_note:z.ob_note||z.fvg_note||'',
+          tags:z.tags||[],update_history:z.update_history||[],updated_at:now
+        },{onConflict:'id'});
+      }
+      for(var k=0;k<d.events.length;k++){
+        var ev=d.events[k];
+        await sb.from('smc_events').upsert({
+          id:ev._id,pair:currentPair,tf:tf,event_type:ev.type,
+          direction:ev.dir,price:parseFloat(ev.price)||null,event_time:ev.time||null
+        },{onConflict:'id'});
+      }
+    }
+    setSyncStatus('synced');
+  }catch(e){console.error(e);setSyncStatus('error');}
+}
+
+async function loadFromSupabase(pair){
+  setSyncStatus('syncing');
+  try{
+    var s=pairStates[pair];
+    var {data:contexts}=await sb.from('smc_context').select('*').eq('pair',pair);
+    if(contexts&&contexts.length>0){
+      contexts.forEach(function(ctx){
+        if(!s[ctx.tf])return;
+        s[ctx.tf].bias=ctx.bias||'';s[ctx.tf].notes=ctx.notes||'';
+        if(ctx.tf==='h4'||ctx.tf==='h1'){s[ctx.tf].eqh=ctx.eqh?ctx.eqh.toString():'';s[ctx.tf].eql=ctx.eql?ctx.eql.toString():'';}
+        if(ctx.current_price){s.current_price=ctx.current_price.toString();document.getElementById('currentPrice').value=ctx.current_price;}
+      });
+    }
+    var {data:zones}=await sb.from('smc_zones').select('*').eq('pair',pair).neq('status','broken').neq('status','mitigated');
+    if(zones&&zones.length>0){
+      TFS.forEach(function(tf){s[tf].obs=[];s[tf].fvgs=[];});
+      zones.forEach(function(z){
+        if(!s[z.tf])return;
+        var zone={_id:z.id,type:z.direction,status:z.status,label:z.label||'',
+          formed_date:z.formed_date||'',formed_time:z.formed_time||'',
+          tags:z.tags||[],update_history:z.update_history||[]};
+        if(z.zone_type==='ob'){zone.top=z.top_price?.toString()||'';zone.btm=z.btm_price?.toString()||'';zone.ob_note=z.context_note||'';s[z.tf].obs.push(zone);}
+        else{zone.entry=z.top_price?.toString()||'';zone.exit=z.btm_price?.toString()||'';zone.fvg_note=z.context_note||'';s[z.tf].fvgs.push(zone);}
+      });
+    }
+    var {data:events}=await sb.from('smc_events').select('*').eq('pair',pair);
+    if(events&&events.length>0){
+      TFS.forEach(function(tf){s[tf].events=[];});
+      events.forEach(function(ev){
+        if(!s[ev.tf])return;
+        s[ev.tf].events.push({_id:ev.id,type:ev.event_type,dir:ev.direction,price:ev.price?.toString()||'',time:ev.event_time||''});
+      });
+    }
+    setSyncStatus('synced');renderAll();showToast('✓ '+pair+' incarcat');
+  }catch(e){console.error(e);setSyncStatus('error');renderAll();}
 }
 
 // ── ZONE ACTIONS ───────────────────────────────────────────
-function toggleZone(id) {
-  var ze  = document.getElementById('ze-' + id);
-  var chv = document.getElementById('chv-' + id);
-  if (ze)  ze.classList.toggle('open');
-  if (chv) chv.classList.toggle('open');
+function toggleZone(id){
+  var ze=document.getElementById('ze-'+id),chv=document.getElementById('chv-'+id);
+  if(ze)ze.classList.toggle('open');if(chv)chv.classList.toggle('open');
 }
-function showAddForm(tf, ztype) { document.getElementById('addform-' + tf + '-' + ztype).classList.add('open'); }
-function hideAddForm(tf, ztype) { document.getElementById('addform-' + tf + '-' + ztype).classList.remove('open'); }
-
-function commitAdd(tf, ztype) {
-  var isOB = ztype === 'ob';
-  var top = document.getElementById('nf-top-' + tf + '-' + ztype).value;
-  var btm = document.getElementById('nf-btm-' + tf + '-' + ztype).value;
-  if (!top || !btm) { showToast('⚠ Completeaza Top si Bottom'); return; }
-  var zone = {
-    _id: uid(), type: document.getElementById('nf-type-' + tf + '-' + ztype).value,
-    status: 'active', label: document.getElementById('nf-lbl-' + tf + '-' + ztype).value,
-    formed_date: document.getElementById('nf-date-' + tf + '-' + ztype).value,
-    formed_time: document.getElementById('nf-time-' + tf + '-' + ztype).value,
-    tags: [], update_history: [],
-  };
-  if (isOB) { zone.top = top; zone.btm = btm; zone.ob_note = ''; }
-  else       { zone.entry = top; zone.exit = btm; zone.fvg_note = ''; }
-  state[tf][isOB ? 'obs' : 'fvgs'].push(zone);
-  renderTF(tf);
-  showToast('✓ Zona adaugata');
+function showAddForm(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.add('open');}
+function hideAddForm(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.remove('open');}
+function commitAdd(tf,zt){
+  var isOB=zt==='ob';
+  var top=document.getElementById('nf-top-'+tf+'-'+zt).value;
+  var btm=document.getElementById('nf-btm-'+tf+'-'+zt).value;
+  if(!top||!btm){showToast('⚠ Completeaza Top si Bottom');return;}
+  var zone={_id:uid(),type:document.getElementById('nf-type-'+tf+'-'+zt).value,status:'active',
+    label:document.getElementById('nf-lbl-'+tf+'-'+zt).value,
+    formed_date:document.getElementById('nf-date-'+tf+'-'+zt).value,
+    formed_time:document.getElementById('nf-time-'+tf+'-'+zt).value,
+    tags:[],update_history:[]};
+  if(isOB){zone.top=top;zone.btm=btm;zone.ob_note='';}
+  else{zone.entry=top;zone.exit=btm;zone.fvg_note='';}
+  state[tf][isOB?'obs':'fvgs'].push(zone);
+  renderTF(tf);schedulSync();showToast('✓ Zona adaugata');
 }
-
-function removeZone(tf, ztype, id) {
-  var arr = state[tf][ztype === 'ob' ? 'obs' : 'fvgs'];
-  var i = arr.findIndex(function(z) { return z._id === id; });
-  if (i >= 0) arr.splice(i, 1);
-  renderTF(tf);
-  showToast('✓ Zona stearsa');
+function removeZone(tf,zt,id){
+  var arr=state[tf][zt==='ob'?'obs':'fvgs'];
+  var i=arr.findIndex(function(z){return z._id===id;});
+  if(i>=0)arr.splice(i,1);
+  // delete from supabase
+  sb.from('smc_zones').delete().eq('id',id);
+  renderTF(tf);showToast('✓ Zona stearsa');
 }
-
-function findZone(tf, ztype, id) {
-  return state[tf][ztype === 'ob' ? 'obs' : 'fvgs'].find(function(z) { return z._id === id; });
+function findZone(tf,zt,id){return state[tf][zt==='ob'?'obs':'fvgs'].find(function(z){return z._id===id;});}
+function updateZF(tf,zt,id,f,v){var z=findZone(tf,zt,id);if(z)z[f]=v;}
+function updateZP(tf,zt,id,side,v){
+  var z=findZone(tf,zt,id);if(!z)return;
+  if(zt==='ob'){if(side==='top')z.top=v;else z.btm=v;}
+  else{if(side==='top')z.entry=v;else z.exit=v;}
+  schedulSync();
 }
-
-function updateZF(tf, ztype, id, field, val) {
-  var z = findZone(tf, ztype, id); if (z) z[field] = val;
+function saveNote(tf,zt,id){
+  var inp=document.getElementById('upd-'+id);
+  if(!inp||!inp.value.trim())return;
+  var z=findZone(tf,zt,id);if(!z)return;
+  if(!z.update_history)z.update_history=[];
+  var n=new Date();
+  z.update_history.push({date:n.toLocaleDateString('en-GB'),time:n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),note:inp.value.trim()});
+  inp.value='';renderTF(tf);schedulSync();showToast('✓ Nota salvata');
 }
-function updateZP(tf, ztype, id, side, val) {
-  var z = findZone(tf, ztype, id); if (!z) return;
-  if (ztype === 'ob') { if (side === 'top') z.top = val; else z.btm = val; }
-  else                { if (side === 'top') z.entry = val; else z.exit = val; }
-}
-
-function saveNote(tf, ztype, id) {
-  var input = document.getElementById('upd-' + id);
-  if (!input || !input.value.trim()) return;
-  var z = findZone(tf, ztype, id); if (!z) return;
-  if (!z.update_history) z.update_history = [];
-  var n = new Date();
-  z.update_history.push({
-    date: n.toLocaleDateString('en-GB'),
-    time: n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
-    note: input.value.trim()
-  });
-  input.value = '';
-  renderTF(tf);
-  showToast('✓ Nota salvata');
-}
-
-function toggleTag(tf, ztype, id, tag, btn) {
-  var z = findZone(tf, ztype, id); if (!z) return;
-  if (!z.tags) z.tags = [];
+function toggleTag(tf,zt,id,tag,btn){
+  var z=findZone(tf,zt,id);if(!z)return;
+  if(!z.tags)z.tags=[];
   btn.classList.toggle('active');
-  if (btn.classList.contains('active')) z.tags.push(tag);
-  else z.tags = z.tags.filter(function(t) { return t !== tag; });
+  if(btn.classList.contains('active'))z.tags.push(tag);
+  else z.tags=z.tags.filter(function(t){return t!==tag;});
+  schedulSync();
 }
 
 // ── EVENT ACTIONS ──────────────────────────────────────────
-function addEvent(tf) {
-  state[tf].events.push({_id:uid(), type:'choch', dir:'bear', price:'', time:''});
-  renderTF(tf);
-}
-function updateEF(tf, id, field, val) {
-  var ev = state[tf].events.find(function(e) { return e._id === id; });
-  if (ev) ev[field] = val;
-}
-function removeEvent(tf, id) {
-  state[tf].events = state[tf].events.filter(function(e) { return e._id !== id; });
+function addEvent(tf){state[tf].events.push({_id:uid(),type:'choch',dir:'bear',price:'',time:''});renderTF(tf);schedulSync();}
+function updateEF(tf,id,f,v){var ev=state[tf].events.find(function(e){return e._id===id;});if(ev)ev[f]=v;schedulSync();}
+function removeEvent(tf,id){
+  state[tf].events=state[tf].events.filter(function(e){return e._id!==id;});
+  sb.from('smc_events').delete().eq('id',id);
   renderTF(tf);
 }
 
-// ── EXPORT ─────────────────────────────────────────────────
-function exportData() {
-  var now = new Date();
-  var h = now.getHours();
-  var session = h>=10&&h<13?'London':h>=16&&h<20?'NY':h>=9&&h<10?'PreLondon':'OutOfSession';
-  var payload = {
-    pair:currentPair, exported_at:now.toISOString(),
+// ── EXPORT / IMPORT ────────────────────────────────────────
+function exportData(){
+  var now=new Date(),h=now.getHours();
+  var session=h>=10&&h<13?'London':h>=16&&h<20?'NY':h>=9&&h<10?'PreLondon':'OutOfSession';
+  var payload={pair:currentPair,exported_at:now.toISOString(),
     date:now.toLocaleDateString('en-GB'),
-    time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
-    session:session, current_price:state.current_price||'',
-    weekly:cleanTF('weekly'), daily:cleanTF('daily'), h4:cleanTF('h4'), h1:cleanTF('h1'),
-  };
-  var blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  var ds = now.toISOString().slice(0,10);
-  var ts = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}).replace(':','-');
-  a.href=url; a.download=currentPair+'_SMC_'+ds+'_'+ts+'_'+session+'.json'; a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ Exported — '+session);
+    time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),
+    session:session,current_price:state.current_price||''};
+  TFS.forEach(function(tf){
+    var d=state[tf];
+    var out={bias:d.bias,notes:d.notes,
+      obs:d.obs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
+      fvgs:d.fvgs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
+      events:d.events.map(function(e){var c=Object.assign({},e);delete c._id;return c;})};
+    if(tf==='h4'||tf==='h1'){out.eqh=d.eqh;out.eql=d.eql;}
+    if(tf==='h1'){out.entry=d.entry;out.sl=d.sl;out.tp1=d.tp1;out.tp2=d.tp2;out.direction=d.direction;}
+    payload[tf]=out;
+  });
+  var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  var ds=now.toISOString().slice(0,10);
+  var ts=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}).replace(':','-');
+  a.href=url;a.download=currentPair+'_SMC_'+ds+'_'+ts+'_'+session+'.json';a.click();
+  URL.revokeObjectURL(url);showToast('✓ Exported — '+session);
 }
-
-function cleanTF(tf) {
-  var d = state[tf];
-  var out = {
-    bias:d.bias, notes:d.notes,
-    obs:d.obs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
-    fvgs:d.fvgs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
-    events:d.events.map(function(e){var c=Object.assign({},e);delete c._id;return c;}),
-  };
-  if (tf==='h4'||tf==='h1'){out.eqh=d.eqh;out.eql=d.eql;}
-  if (tf==='h1'){out.entry=d.entry;out.sl=d.sl;out.tp1=d.tp1;out.tp2=d.tp2;out.direction=d.direction;}
-  return out;
-}
-
-// ── IMPORT CONTEXT ─────────────────────────────────────────
-function openImport() { document.getElementById('importModal').classList.add('active'); }
-function closeImport() { document.getElementById('importModal').classList.remove('active'); }
-function doImport() {
-  try {
-    var data = JSON.parse(document.getElementById('importText').value.trim());
-    if (data.current_price) { state.current_price=data.current_price; document.getElementById('currentPrice').value=data.current_price; }
-    TFS.forEach(function(tf) {
-      if (!data[tf]) return;
-      var d = data[tf];
-      state[tf] = {
-        bias:d.bias||'', notes:d.notes||'',
+function openImport(){document.getElementById('importModal').classList.add('active');}
+function closeImport(){document.getElementById('importModal').classList.remove('active');}
+function doImport(){
+  try{
+    var data=JSON.parse(document.getElementById('importText').value.trim());
+    if(data.current_price){state.current_price=data.current_price;document.getElementById('currentPrice').value=data.current_price;}
+    TFS.forEach(function(tf){
+      if(!data[tf])return;var d=data[tf];
+      state[tf]={bias:d.bias||'',notes:d.notes||'',
         obs:(d.obs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
         fvgs:(d.fvgs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
-        events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);}),
-      };
-      if (tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}
-      if (tf==='h1'){state[tf].entry=d.entry||'';state[tf].sl=d.sl||'';state[tf].tp1=d.tp1||'';state[tf].tp2=d.tp2||'';state[tf].direction=d.direction||'';}
+        events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);})};
+      if(tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}
+      if(tf==='h1'){state[tf].entry=d.entry||'';state[tf].sl=d.sl||'';state[tf].tp1=d.tp1||'';state[tf].tp2=d.tp2||'';state[tf].direction=d.direction||'';}
     });
-    if (data.pair && PAIRS.indexOf(data.pair) >= 0) {
-      currentPair = data.pair;
-      pairStates[currentPair] = state;
-      document.getElementById('pairSelector').value = currentPair;
-    }
-    closeImport(); renderAll();
-    showToast('✓ JSON loaded — ' + currentPair);
-  } catch(e) { alert('JSON invalid: '+e.message); }
+    closeImport();renderAll();schedulSync();showToast('✓ JSON loaded');
+  }catch(e){alert('JSON invalid: '+e.message);}
 }
-
-// ── IMPORT ANALYSIS ────────────────────────────────────────
-function openAnalysisImport() { document.getElementById('analysisImportModal').classList.add('active'); }
-function closeAnalysisImport() { document.getElementById('analysisImportModal').classList.remove('active'); }
-function doAnalysisImport() {
-  try {
-    analysisData = JSON.parse(document.getElementById('analysisImportText').value.trim());
+function openAnalysisImport(){document.getElementById('analysisImportModal').classList.add('active');}
+function closeAnalysisImport(){document.getElementById('analysisImportModal').classList.remove('active');}
+function doAnalysisImport(){
+  try{
+    analysisData=JSON.parse(document.getElementById('analysisImportText').value.trim());
     closeAnalysisImport();
-    if (appMode !== 'analysis') setMode('analysis');
-    else renderAll();
+    if(appMode!=='analysis')setMode('analysis');else renderAll();
     showToast('✓ Analiza incarcata');
-  } catch(e) { alert('JSON invalid: '+e.message); }
+  }catch(e){alert('JSON invalid: '+e.message);}
 }
-
-// ── CLEAR ──────────────────────────────────────────────────
-function clearAll() {
-  if (!confirm('Clear all data?')) return;
-  TFS.forEach(function(tf) {
-    state[tf] = (tf==='h4'||tf==='h1') ? emptyTFExtra(tf) : emptyTF();
-  });
-  state.current_price='';
-  document.getElementById('currentPrice').value='';
-  renderAll();
-  showToast('✓ Cleared');
+function clearAll(){
+  if(!confirm('Clear all data for '+currentPair+'?'))return;
+  TFS.forEach(function(tf){state[tf]=(tf==='h4'||tf==='h1')?emptyTFX(tf):emptyTF();});
+  state.current_price='';document.getElementById('currentPrice').value='';
+  // delete from supabase
+  sb.from('smc_zones').delete().eq('pair',currentPair);
+  sb.from('smc_events').delete().eq('pair',currentPair);
+  sb.from('smc_context').delete().eq('pair',currentPair);
+  renderAll();showToast('✓ Cleared — '+currentPair);
 }
 
 // ── UTILS ──────────────────────────────────────────────────
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function showToast(msg) {
-  var t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2200);
-}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
 
 // ── INIT ───────────────────────────────────────────────────
-renderAll();
+loadFromSupabase(currentPair);
 </script>
 </body>
 </html>
