@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMC Analyst — EUR/USD</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4f6f9;--bg2:#fff;--bg3:#f0f2f6;--border:#e2e6ed;--border2:#c8cdd8;
+  --bull:#0a7a54;--bull-bg:#e8f6f0;--bull-b:#9ed4bc;
+  --bear:#b83030;--bear-bg:#fdf0f0;--bear-b:#e8aaaa;
+  --sweep:#c07010;--sweep-bg:#fef6e6;
+  --weekly:#6030b0;--weekly-bg:#f0eafa;
+  --neutral:#2060b0;--neutral-bg:#eaf2fc;
+  --text:#1a2030;--text2:#5a6478;--text3:#9aa0b0;
+  --near-bg:#fffbee;--near-b:#e8a820;--in-bg:#edfaf4;--in-b:#0a7a54;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
+/* HEADER */
+.header{background:var(--bg2);border-bottom:2px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.logo{font-weight:800;font-size:16px;}.logo span{color:var(--bull);}
+.pair-badge{background:var(--bull-bg);border:1px solid var(--bull-b);color:var(--bull);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.mode-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.mode-btn{padding:6px 14px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;}
+.mode-btn.active{background:var(--text);color:#fff;}
+.bias-bar{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 10px;}
+.bias-item{display:flex;align-items:center;gap:4px;padding:0 3px;}
+.bias-tf{font-size:9px;font-weight:700;color:var(--text3);}
+.bias-arrow{font-size:13px;font-weight:700;}
+.bias-arrow.bull{color:var(--bull);}.bias-arrow.bear{color:var(--bear);}.bias-arrow.neutral{color:var(--text3);}
+.bias-sep{width:1px;height:14px;background:var(--border);}
+.price-bar{display:flex;align-items:center;gap:6px;}
+.price-label{font-size:11px;font-weight:600;color:var(--text2);}
+.price-input{border:2px solid var(--border2);background:var(--bg2);color:var(--bull);padding:5px 8px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;width:95px;outline:none;}
+.price-input:focus{border-color:var(--bull);}
+.date-disp{font-size:10px;color:var(--text3);}
+.pair-selector{background:var(--bg2);border:2px solid var(--bull-b);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;min-width:120px;}
+.pair-selector:focus{border-color:var(--bull);}
+.zone-age{font-size:9px;color:var(--text3);white-space:nowrap;font-style:italic;}
+.zone-age.fresh{color:var(--bull);}
+.zone-age.old{color:var(--text3);}
+.zone-age.ancient{color:var(--bear-b);}
+.btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.btn-green{background:var(--bull);color:#fff;}.btn-green:hover{background:#096644;}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}.btn-ghost:hover{border-color:var(--neutral);color:var(--neutral);}
+.btn-red{background:transparent;color:var(--text3);border:1px solid var(--border);}.btn-red:hover{border-color:var(--bear);color:var(--bear);}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px;}
+/* MAIN */
+.main{max-width:1600px;margin:0 auto;padding:16px;}
+.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.tf-panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.tf-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.tf-panel.weekly .tf-hdr{background:var(--weekly-bg);}
+.tf-panel.daily  .tf-hdr{background:var(--bear-bg);}
+.tf-panel.h4     .tf-hdr{background:var(--sweep-bg);}
+.tf-panel.h1     .tf-hdr{background:var(--neutral-bg);}
+.tf-title{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;}
+.tf-badge{padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:1px;}
+.weekly .tf-badge{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
+.daily  .tf-badge{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
+.h4     .tf-badge{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
+.h1     .tf-badge{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+.tf-body{padding:12px 14px;}
+.bias-row{display:flex;gap:4px;}
+.bias-btn{padding:3px 9px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all .12s;}
+.bias-btn.bull.active{background:var(--bull-bg);border-color:var(--bull);color:var(--bull);}
+.bias-btn.bear.active{background:var(--bear-bg);border-color:var(--bear);color:var(--bear);}
+.bias-btn.neutral.active{background:var(--neutral-bg);border-color:var(--neutral);color:var(--neutral);}
+.section{margin-bottom:14px;}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.sec-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:6px;}
+.sec-count{font-size:10px;background:var(--bg3);color:var(--text2);padding:1px 7px;border-radius:10px;font-weight:600;}
+.zone-list{display:flex;flex-direction:column;gap:4px;}
+.zone-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;transition:box-shadow .15s;}
+.zone-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.zone-item.bull-ob{border-left:4px solid var(--bull);}
+.zone-item.bear-ob{border-left:4px solid var(--bear);}
+.zone-item.bull-fvg{border-left:4px solid var(--bull);}
+.zone-item.bear-fvg{border-left:4px solid var(--bear);}
+.zone-item.near{background:var(--near-bg);border-color:var(--near-b);}
+.zone-item.inside{background:var(--in-bg);border-color:var(--in-b);}
+.zone-row-compact{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;background:var(--bg2);user-select:none;}
+.zone-item.near   .zone-row-compact{background:var(--near-bg);}
+.zone-item.inside .zone-row-compact{background:var(--in-bg);}
+.zone-compact-type{font-size:10px;font-weight:700;min-width:64px;}
+.zone-compact-label{font-weight:600;font-size:12px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.zone-compact-prices{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);white-space:nowrap;}
+.zone-compact-dist{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;white-space:nowrap;min-width:58px;text-align:right;}
+.zone-compact-status{min-width:58px;text-align:center;}
+.zone-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0;}
+.zone-chevron.open{transform:rotate(90deg);}
+.status-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+.status-badge.active{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
+.status-badge.tested{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
+.status-badge.broken{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
+.status-badge.breaker{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
+.status-badge.mitigated{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
+.dist-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+.dist-badge.above{background:var(--bear-bg);color:var(--bear);}
+.dist-badge.below{background:var(--bull-bg);color:var(--bull);}
+.dist-badge.inside{background:var(--in-bg);color:var(--bull);border:1px solid var(--in-b);}
+.dist-badge.near{background:var(--near-bg);color:var(--sweep);border:1px solid var(--near-b);}
+.zone-expand{display:none;padding:10px 12px;border-top:1px solid var(--border);background:var(--bg3);}
+.zone-expand.open{display:block;}
+input,select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border-color .15s;width:100%;}
+input:focus,select:focus,textarea:focus{border-color:var(--neutral);}
+select{cursor:pointer;}
+.field-lbl{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;letter-spacing:.3px;}
+.form-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;flex-wrap:wrap;}
+.form-col{display:flex;flex-direction:column;}
+.form-col.flex1{flex:1;min-width:80px;}
+.form-col.w80{width:80px;flex-shrink:0;}
+.form-col.w100{width:100px;flex-shrink:0;}
+.form-col.w120{width:120px;flex-shrink:0;}
+.update-history{margin-top:8px;}
+.update-entry{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 9px;margin-bottom:4px;}
+.update-entry-date{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:2px;}
+.update-entry-text{font-size:12px;color:var(--text);}
+.add-zone-form{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;padding:12px;margin-top:6px;display:none;}
+.add-zone-form.open{display:block;}
+.add-btn{background:transparent;border:1px dashed var(--border2);color:var(--text3);padding:6px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;width:100%;transition:all .15s;margin-top:4px;text-align:center;}
+.add-btn:hover{border-color:var(--bull);color:var(--bull);background:var(--bull-bg);}
+.event-row{display:flex;gap:6px;align-items:center;padding:6px 9px;background:var(--bg2);border-radius:6px;border:1px solid var(--border);margin-bottom:4px;flex-wrap:wrap;}
+.event-row.choch{border-left:3px solid var(--bear);}
+.event-row.bos{border-left:3px solid var(--bull);}
+.event-row.sweep{border-left:3px solid var(--sweep);}
+.event-row.sfp{border-left:3px solid var(--neutral);}
+.seq-preview{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px;align-items:center;}
+.seq-chip{padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700;}
+.seq-chip.choch{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
+.seq-chip.bos{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
+.seq-chip.sweep{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
+.seq-chip.sfp{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+.seq-arrow{color:var(--text3);font-size:11px;}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.tag-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:2px 8px;border-radius:10px;cursor:pointer;font-size:10px;font-weight:600;transition:all .12s;}
+.tag-btn:hover{border-color:var(--neutral);color:var(--neutral);}
+.tag-btn.active{background:var(--neutral-bg);border-color:var(--neutral);color:var(--neutral);}
+.notes-area{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 9px;border-radius:6px;font-size:12px;width:100%;resize:vertical;min-height:46px;outline:none;}
+.notes-area:focus{border-color:var(--neutral);background:var(--bg2);}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.entry-item{display:flex;flex-direction:column;gap:3px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--bg2);border-radius:12px;padding:22px;width:520px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.2);border:1px solid var(--border);}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:14px;}
+.modal textarea{width:100%;height:200px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:11px;resize:vertical;outline:none;margin-bottom:12px;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:#fff;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:300;opacity:0;transform:translateY(8px);transition:all .2s;}
+.toast.show{opacity:1;transform:translateY(0);}
+/* ANALYSIS */
+.analysis-page{max-width:1200px;margin:0 auto;padding:20px 16px;}
+.analysis-import-zone{border:2px dashed var(--border2);border-radius:12px;padding:60px 40px;text-align:center;color:var(--text3);}
+.ai-icon{font-size:36px;margin-bottom:12px;}
+.ai-text{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--text2);}
+.ai-sub{font-size:12px;margin-bottom:20px;}
+.analysis-header{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.analysis-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;}
+.analysis-title{font-size:20px;font-weight:800;color:var(--text);}
+.analysis-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.analysis-meta-badge{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.session-note{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--sweep);font-weight:500;}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.analysis-card{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.analysis-card.full{grid-column:1/-1;}
+.analysis-card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.analysis-card-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.bias-table{width:100%;border-collapse:collapse;}
+.bias-table th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.bias-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.bias-table tr:last-child td{border-bottom:none;}
+.bias-dir{font-weight:700;font-size:13px;}
+.bias-dir.bear{color:var(--bear);}.bias-dir.bull{color:var(--bull);}
+.bias-conclusion{background:var(--bg3);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.6;border-left:3px solid var(--bear);}
+.levels-list{display:flex;flex-direction:column;gap:3px;}
+.level-row{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;}
+.level-row.resistance{background:rgba(184,48,48,.04);border-left:3px solid var(--bear);}
+.level-row.support{background:rgba(10,122,84,.04);border-left:3px solid var(--bull);}
+.level-row.current{background:var(--sweep-bg);border-left:3px solid var(--sweep);font-weight:700;}
+.level-price{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;min-width:72px;}
+.level-label{font-size:12px;flex:1;}
+.level-tf{font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.level-tf.daily{background:var(--bear-bg);color:var(--bear);}
+.level-tf.h4{background:var(--sweep-bg);color:var(--sweep);}
+.level-tf.weekly{background:var(--weekly-bg);color:var(--weekly);}
+.level-tf.h1{background:var(--neutral-bg);color:var(--neutral);}
+.setups-grid{display:flex;flex-direction:column;gap:10px;}
+.setup-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.setup-card.primary{border-left:4px solid var(--bull);}
+.setup-card.secondary{border-left:4px solid var(--sweep);}
+.setup-card.optional{border-left:4px solid var(--neutral);}
+.setup-card.quality{border-left:4px solid var(--weekly);}
+.setup-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);cursor:pointer;user-select:none;}
+.setup-id{font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+.setup-id.dt{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+.setup-id.sw{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
+.setup-title{font-weight:700;font-size:13px;flex:1;}
+.setup-dir{font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;}
+.setup-dir.short{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
+.setup-dir.long{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
+.setup-chevron{color:var(--text3);font-size:10px;transition:transform .2s;}
+.setup-chevron.open{transform:rotate(90deg);}
+.setup-body{display:none;padding:14px 16px;border-top:1px solid var(--border);}
+.setup-body.open{display:block;}
+.setup-logic{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px;padding:8px 12px;background:var(--bg3);border-radius:6px;}
+.setup-params{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:12px;}
+.setup-param{background:var(--bg3);border-radius:6px;padding:8px 10px;}
+.setup-param-lbl{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;letter-spacing:.5px;}
+.setup-param-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text);}
+.setup-param-val.red{color:var(--bear);}.setup-param-val.green{color:var(--bull);}
+.setup-targets{margin-bottom:12px;}
+.target-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;margin-bottom:4px;font-size:12px;}
+.target-row.tp1{background:rgba(10,122,84,.05);}
+.target-row.tp2{background:rgba(10,122,84,.10);}
+.target-row.tp3{background:rgba(10,122,84,.15);}
+.target-label{font-weight:700;min-width:36px;color:var(--bull);}
+.target-price{font-family:'JetBrains Mono',monospace;font-weight:700;min-width:72px;}
+.target-pips{color:var(--bull);font-weight:600;min-width:52px;}
+.target-rr{color:var(--text2);min-width:52px;}
+.target-size{color:var(--text3);font-size:11px;}
+.setup-warning{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:6px;padding:8px 12px;font-size:11px;color:var(--sweep);margin-bottom:8px;}
+.setup-condition{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;margin-bottom:8px;}
+.setup-condition strong{color:var(--text);}
+.setup-management{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--neutral-bg);border-radius:6px;border-left:3px solid var(--neutral);}
+.avoid-list{list-style:none;}
+.avoid-list li{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.avoid-list li:last-child{border-bottom:none;}
+.avoid-list li::before{content:'✕';color:var(--bear);font-weight:700;flex-shrink:0;margin-top:1px;}
+.scenario-row{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;}
+.scenario-cond{flex:1;font-size:12px;font-weight:600;}
+.scenario-arrow{color:var(--text3);font-size:14px;flex-shrink:0;margin-top:2px;}
+.scenario-action{flex:1;font-size:12px;color:var(--text2);}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+@media(max-width:900px){.tf-grid,.analysis-grid{grid-template-columns:1fr;}.bias-bar{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hdr-left">
+    <div class="logo">SMC <span>Analyst</span></div>
+    <select class="pair-selector" id="pairSelector" onchange="switchPair(this.value)">
+      <option value="EURUSD">EUR/USD</option>
+      <option value="GBPUSD">GBP/USD</option>
+      <option value="USDJPY">USD/JPY</option>
+      <option value="USDCAD">USD/CAD</option>
+      <option value="AUDUSD">AUD/USD</option>
+      <option value="GBPJPY">GBP/JPY</option>
+      <option value="AUDCHF">AUD/CHF</option>
+      <option value="AUDNZD">AUD/NZD</option>
+      <option value="XAUUSD">XAU/USD</option>
+      <option value="NAS100">NAS100</option>
+      <option value="GER40">GER40</option>
+      <option value="EURAUD">EUR/AUD</option>
+      <option value="GBPAUD">GBP/AUD</option>
+      <option value="USDCHF">USD/CHF</option>
+    </select>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeEditBtn"     onclick="setMode('edit')">✏️ Edit</button>
+      <button class="mode-btn"        id="modeUpdateBtn"   onclick="setMode('update')">🔄 Update</button>
+      <button class="mode-btn"        id="modeAnalysisBtn" onclick="setMode('analysis')">📊 Analiza</button>
+    </div>
+    <div class="bias-bar">
+      <div class="bias-item"><span class="bias-tf">W</span><span class="bias-arrow neutral" id="ba-weekly">—</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">D</span><span class="bias-arrow neutral" id="ba-daily">—</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">H4</span><span class="bias-arrow neutral" id="ba-h4">—</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">H1</span><span class="bias-arrow neutral" id="ba-h1">—</span></div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="price-bar">
+      <span class="price-label">Price</span>
+      <input class="price-input" type="number" step="0.00001" placeholder="1.16500" id="currentPrice" oninput="refreshAllDist()">
+    </div>
+    <span class="date-disp" id="dateDisp"></span>
+    <button class="btn btn-ghost" onclick="openImport()">⬆ Import</button>
+    <button class="btn btn-red"   onclick="clearAll()">✕ Clear</button>
+    <button class="btn btn-green" onclick="exportData()">⬇ Export JSON</button>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<!-- ZONE/CONTEXT IMPORT MODAL -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <h3>Import Context JSON</h3>
+    <textarea id="importText" placeholder="Paste context JSON here..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-red"   onclick="closeImport()">Cancel</button>
+      <button class="btn btn-green" onclick="doImport()">Load</button>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYSIS IMPORT MODAL -->
+<div class="modal-overlay" id="analysisImportModal">
+  <div class="modal">
+    <h3>Import Analiza JSON</h3>
+    <textarea id="analysisImportText" placeholder="Paste analysis JSON here..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-red"   onclick="closeAnalysisImport()">Cancel</button>
+      <button class="btn btn-green" onclick="doAnalysisImport()">Load Analiza</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────
+var TFS = ['weekly','daily','h4','h1'];
+var TAGS_OB  = ['post-BOS','pre-sweep','1x tested','2x tested','fresh','news near','institutional'];
+var TAGS_FVG = ['post-BOS','impulse','1x tested','2x tested','fresh','news near'];
+var NEAR = 25;
+
+// ── STATE ──────────────────────────────────────────────────
+var appMode = 'edit';
+var analysisData = null;
+var currentPair = 'EURUSD';
+
+var PAIRS = ['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
+
+// Store per pair
+var pairStates = {};
+PAIRS.forEach(function(p) {
+  pairStates[p] = { current_price:'', weekly:emptyTF(), daily:emptyTF(), h4:emptyTFExtra('h4'), h1:emptyTFExtra('h1') };
+});
+
+// Active state = current pair
+var state = pairStates['EURUSD'];
+
+function switchPair(p) {
+  currentPair = p;
+  state = pairStates[p];
+  analysisData = null;
+  renderAll();
+}
+
+function emptyTF() {
+  return { bias:'', obs:[], fvgs:[], events:[], notes:'' };
+}
+function emptyTFExtra(tf) {
+  var base = emptyTF();
+  base.eqh = ''; base.eql = '';
+  if (tf === 'h1') { base.entry=''; base.sl=''; base.tp1=''; base.tp2=''; base.direction=''; }
+  return base;
+}
+
+function uid() { return 'z' + Date.now() + Math.random().toString(36).slice(2,6); }
+
+// ── DATE ───────────────────────────────────────────────────
+function updateDate() {
+  var n = new Date();
+  document.getElementById('dateDisp').textContent =
+    n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'}) + ' ' +
+    n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+updateDate(); setInterval(updateDate, 30000);
+
+// ── MODE ───────────────────────────────────────────────────
+function setMode(m) {
+  appMode = m;
+  ['edit','update','analysis'].forEach(function(n) {
+    document.getElementById('mode' + n.charAt(0).toUpperCase() + n.slice(1) + 'Btn').classList.toggle('active', n === m);
+  });
+  renderAll();
+}
+
+// ── PRICE / DIST ───────────────────────────────────────────
+function getPrice() {
+  var v = parseFloat(document.getElementById('currentPrice').value);
+  return isNaN(v) ? null : v;
+}
+function calcDist(top, btm) {
+  var price = getPrice();
+  if (!price || !top || !btm) return null;
+  var rTop = Math.max(+top, +btm), rBtm = Math.min(+top, +btm);
+  if (price >= rBtm && price <= rTop) return {type:'inside', pips:0};
+  if (price > rTop) return {type:'below', pips:Math.round((price - rTop)*10000)};
+  return {type:'above', pips:Math.round((rBtm - price)*10000)};
+}
+function distHTML(top, btm) {
+  var d = calcDist(top, btm);
+  if (!d) return '';
+  if (d.type === 'inside') return '<span class="dist-badge inside">● IN ZONE</span>';
+  var cls = d.pips <= NEAR ? 'near' : d.type;
+  var arrow = d.type === 'above' ? '▲' : '▼';
+  return '<span class="dist-badge ' + cls + '">' + arrow + ' ' + d.pips + 'p</span>';
+}
+function zoneExtraClass(top, btm) {
+  var d = calcDist(top, btm);
+  if (!d) return '';
+  if (d.type === 'inside') return 'inside';
+  if (d.pips <= NEAR) return 'near';
+  return '';
+}
+function refreshAllDist() {
+  state.current_price = document.getElementById('currentPrice').value;
+  renderAll();
+}
+
+// ── BIAS ───────────────────────────────────────────────────
+function setBias(tf, val) {
+  state[tf].bias = val;
+  updateBiasBar();
+  renderTF(tf);
+}
+function updateBiasBar() {
+  var map = {bull:'↑', bear:'↓', neutral:'—', '':'—'};
+  var cls  = {bull:'bull', bear:'bear', neutral:'neutral', '':'neutral'};
+  TFS.forEach(function(tf) {
+    var el = document.getElementById('ba-' + tf);
+    if (el) { el.textContent = map[state[tf].bias] || '—'; el.className = 'bias-arrow ' + (cls[state[tf].bias] || 'neutral'); }
+  });
+}
+
+// ── RENDER ALL ─────────────────────────────────────────────
+function zoneAge(formed_date, formed_time) {
+  if (!formed_date) return '';
+  var dateStr = formed_date + (formed_time ? 'T' + formed_time : 'T00:00');
+  var formed = new Date(dateStr);
+  if (isNaN(formed.getTime())) return '';
+  var now = new Date();
+  var diffMs = now - formed;
+  var diffH = Math.floor(diffMs / 3600000);
+  var diffD = Math.floor(diffMs / 86400000);
+  var diffW = Math.floor(diffD / 7);
+  var diffM = Math.floor(diffD / 30);
+  var cls = diffD < 7 ? 'fresh' : diffD < 30 ? 'old' : 'ancient';
+  var txt = '';
+  if (diffH < 24) txt = diffH + 'h ago';
+  else if (diffD < 7) txt = diffD + 'd ago';
+  else if (diffW < 8) txt = diffW + 'w ago';
+  else txt = diffM + 'mo ago';
+  return '<span class="zone-age ' + cls + '">' + txt + '</span>';
+}
+
+function renderAll() {
+  var main = document.getElementById('mainContent');
+  if (appMode === 'analysis') {
+    main.innerHTML = renderAnalysisPage();
+  } else {
+    main.innerHTML = '<div class="tf-grid">' + TFS.map(function(tf) {
+      return '<div id="panel-' + tf + '">' + renderTFHTML(tf) + '</div>';
+    }).join('') + '</div>';
+    updateBiasBar();
+  }
+}
+
+function renderTF(tf) {
+  var el = document.getElementById('panel-' + tf);
+  if (el) el.innerHTML = renderTFHTML(tf);
+  updateBiasBar();
+}
+
+// ── RENDER TF ──────────────────────────────────────────────
+function renderTFHTML(tf) {
+  var d = state[tf];
+  var names = {weekly:'Weekly', daily:'Daily', h4:'4H', h1:'1H'};
+  var biasOpts = ['bull','bear','neutral'].map(function(v) {
+    var lbl = v === 'bull' ? '↑ Bull' : v === 'bear' ? '↓ Bear' : '— Range';
+    return '<button class="bias-btn ' + v + (d.bias === v ? ' active' : '') + '" onclick="setBias(\'' + tf + '\',\'' + v + '\')">' + lbl + '</button>';
+  }).join('');
+  var isUpdate = appMode === 'update';
+
+  var eqlHtml = (tf === 'h4' || tf === 'h1') ? (
+    '<div class="section"><span class="sec-title">EQL / EQH</span>' +
+    '<div class="entry-grid" style="margin-top:7px;">' +
+    '<div class="entry-item"><span class="field-lbl">EQH</span><input type="number" step="0.00001" placeholder="1.08500" value="' + (d.eqh||'') + '" onchange="state[\'' + tf + '\'].eqh=this.value"></div>' +
+    '<div class="entry-item"><span class="field-lbl">EQL</span><input type="number" step="0.00001" placeholder="1.07800" value="' + (d.eql||'') + '" onchange="state[\'' + tf + '\'].eql=this.value"></div>' +
+    '</div></div>'
+  ) : '';
+
+  var entryHtml = (tf === 'h1') ? (
+    '<div class="section"><span class="sec-title">Entry Setup</span>' +
+    '<div class="entry-grid" style="margin-top:7px;">' +
+    '<div class="entry-item"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" value="' + (d.entry||'') + '" onchange="state.h1.entry=this.value"></div>' +
+    '<div class="entry-item"><span class="field-lbl">STOP LOSS</span><input type="number" step="0.00001" value="' + (d.sl||'') + '" onchange="state.h1.sl=this.value"></div>' +
+    '<div class="entry-item"><span class="field-lbl">TP1</span><input type="number" step="0.00001" value="' + (d.tp1||'') + '" onchange="state.h1.tp1=this.value"></div>' +
+    '<div class="entry-item"><span class="field-lbl">TP2</span><input type="number" step="0.00001" value="' + (d.tp2||'') + '" onchange="state.h1.tp2=this.value"></div>' +
+    '</div>' +
+    '<div style="margin-top:8px;"><span class="field-lbl">DIRECTION</span>' +
+    '<select style="margin-top:4px;" onchange="state.h1.direction=this.value">' +
+    '<option value=""' + (!d.direction?' selected':'') + '>-- select --</option>' +
+    '<option value="long"' + (d.direction==='long'?' selected':'') + '>↑ LONG</option>' +
+    '<option value="short"' + (d.direction==='short'?' selected':'') + '>↓ SHORT</option>' +
+    '<option value="wait"' + (d.direction==='wait'?' selected':'') + '>⏳ WAIT</option>' +
+    '</select></div></div>'
+  ) : '';
+
+  return '<div class="tf-panel ' + tf + '">' +
+    '<div class="tf-hdr">' +
+    '<div class="tf-title"><span class="tf-badge">' + tf.toUpperCase() + '</span>' + names[tf] + ' Structure</div>' +
+    '<div class="bias-row">' + biasOpts + '</div>' +
+    '</div>' +
+    '<div class="tf-body">' +
+    '<div class="section">' +
+    '<div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">' + d.obs.length + '</span></span></div>' +
+    '<div class="zone-list">' + d.obs.map(function(ob) { return renderZoneHTML(tf, 'ob', ob, isUpdate); }).join('') + '</div>' +
+    renderAddZoneBtn(tf, 'ob') +
+    '</div>' +
+    '<div class="section">' +
+    '<div class="sec-hdr"><span class="sec-title">Fair Value Gaps <span class="sec-count">' + d.fvgs.length + '</span></span></div>' +
+    '<div class="zone-list">' + d.fvgs.map(function(fvg) { return renderZoneHTML(tf, 'fvg', fvg, isUpdate); }).join('') + '</div>' +
+    renderAddZoneBtn(tf, 'fvg') +
+    '</div>' +
+    '<div class="section">' +
+    '<div class="sec-hdr"><span class="sec-title">Sequence</span></div>' +
+    d.events.map(function(ev) { return renderEventHTML(tf, ev); }).join('') +
+    '<button class="add-btn" onclick="addEvent(\'' + tf + '\')">+ Add Event</button>' +
+    '<div class="seq-preview">' + d.events.map(function(ev, i) {
+      return (i > 0 ? '<span class="seq-arrow">→</span>' : '') +
+        '<span class="seq-chip ' + ev.type + '">' + ({choch:'CHoCH',bos:'BOS',sweep:'x',sfp:'SFP'}[ev.type] || ev.type) + '</span>';
+    }).join('') + '</div>' +
+    '</div>' +
+    eqlHtml + entryHtml +
+    '<div class="section"><span class="sec-title">Notes</span>' +
+    '<textarea class="notes-area" style="margin-top:7px;" onchange="state[\'' + tf + '\'].notes=this.value" placeholder="Context...">' + esc(d.notes||'') + '</textarea>' +
+    '</div>' +
+    '</div></div>';
+}
+
+// ── ZONE RENDER ────────────────────────────────────────────
+function renderZoneHTML(tf, ztype, zone, isUpdate) {
+  if (!zone._id) zone._id = uid();
+  var id = zone._id;
+  var isOB = ztype === 'ob';
+  var top = isOB ? zone.top : zone.entry;
+  var btm = isOB ? zone.btm : zone.exit;
+  var dtype = zone.type;
+  var extra = zoneExtraClass(top, btm);
+  var cardCls = 'zone-item ' + dtype + '-' + ztype + (extra ? ' ' + extra : '');
+  var typeLabel = (dtype === 'bull' ? '🟢' : '🔴') + ' ' + dtype.toUpperCase() + ' ' + ztype.toUpperCase();
+  var label = zone.label || (isOB ? 'Unnamed OB' : 'Unnamed FVG');
+  var statusHtml = '<span class="status-badge ' + (zone.status||'active') + '">' + (zone.status||'active') + '</span>';
+  var expandContent = isUpdate ? renderUpdateExpand(tf, ztype, zone, id) : renderEditExpand(tf, ztype, zone, id);
+
+  return '<div class="' + cardCls + '" id="zi-' + id + '">' +
+    '<div class="zone-row-compact" onclick="toggleZone(\'' + id + '\')">' +
+    '<span class="zone-compact-type">' + typeLabel + '</span>' +
+    '<span class="zone-compact-label">' + esc(label) + '</span>' +
+    '<span class="zone-compact-prices">' + parseFloat(top||0).toFixed(5) + ' / ' + parseFloat(btm||0).toFixed(5) + '</span>' +
+    '<span class="zone-compact-dist">' + distHTML(top, btm) + '</span>' +
+    '<span class="zone-compact-status">' + statusHtml + '</span>' +
+    zoneAge(zone.formed_date, zone.formed_time) +
+    '<span class="zone-chevron" id="chv-' + id + '">▶</span>' +
+    '</div>' +
+    '<div class="zone-expand" id="ze-' + id + '">' + expandContent + '</div>' +
+    '</div>';
+}
+
+function renderEditExpand(tf, ztype, zone, id) {
+  var isOB = ztype === 'ob';
+  var top = isOB ? zone.top : zone.entry;
+  var btm = isOB ? zone.btm : zone.exit;
+  var tags = zone.tags || [];
+  var tagList = isOB ? TAGS_OB : TAGS_FVG;
+  var sOpts = (isOB ? ['active','tested','broken','breaker'] : ['active','mitigated','breaker']).map(function(s) {
+    return '<option value="' + s + '"' + (zone.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+  }).join('');
+
+  return '<div class="form-row">' +
+    '<div class="form-col w100"><span class="field-lbl">TYPE</span>' +
+    '<select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'type\',this.value);renderTF(\'' + tf + '\')">' +
+    '<option value="bull"' + (zone.type==='bull'?' selected':'') + '>🟢 Bull</option>' +
+    '<option value="bear"' + (zone.type==='bear'?' selected':'') + '>🔴 Bear</option>' +
+    '</select></div>' +
+    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'status\',this.value);renderTF(\'' + tf + '\')">' + sOpts + '</select></div>' +
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="' + (top||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'top\',this.value)"></div>' +
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="' + (btm||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'btm\',this.value)"></div>' +
+    '</div>' +
+    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="' + esc(zone.label||'') + '" placeholder="Ex: Tavan principal" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'label\',this.value)"></div></div>' +
+    '<div class="form-row">' +
+    '<div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="' + (zone.formed_date||'') + '" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'formed_date\',this.value)"></div>' +
+    '<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="' + (zone.formed_time||'') + '" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'formed_time\',this.value)"></div>' +
+    '<div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="' + esc(isOB?(zone.ob_note||''):(zone.fvg_note||'')) + '" placeholder="Context" onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'' + (isOB?'ob_note':'fvg_note') + '\',this.value)"></div>' +
+    '</div>' +
+    '<div class="tags-wrap">' + tagList.map(function(t) {
+      return '<button class="tag-btn' + (tags.indexOf(t) >= 0 ? ' active' : '') + '" onclick="toggleTag(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'' + t + '\',this)">' + t + '</button>';
+    }).join('') + '</div>' +
+    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">🗑 Delete</button></div>';
+}
+
+function renderUpdateExpand(tf, ztype, zone, id) {
+  var isOB = ztype === 'ob';
+  var top = isOB ? zone.top : zone.entry;
+  var btm = isOB ? zone.btm : zone.exit;
+  var sOpts = (isOB ? ['active','tested','broken','breaker'] : ['active','mitigated','breaker']).map(function(s) {
+    return '<option value="' + s + '"' + (zone.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+  }).join('');
+  var history = zone.update_history || [];
+
+  return '<div class="form-row">' +
+    '<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="updateZF(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'status\',this.value);renderTF(\'' + tf + '\')">' + sOpts + '</select></div>' +
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="' + (top||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'top\',this.value)"></div>' +
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="' + (btm||'') + '" onchange="updateZP(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\',\'btm\',this.value)"></div>' +
+    '</div>' +
+    '<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span>' +
+    '<div style="display:flex;gap:6px;margin-top:3px;">' +
+    '<input type="text" id="upd-' + id + '" placeholder="Ce s-a schimbat...">' +
+    '<button class="btn btn-green btn-sm" onclick="saveNote(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">Save</button>' +
+    '</div></div>' +
+    (history.length > 0 ?
+      '<div class="update-history"><span class="field-lbl">HISTORY</span>' +
+      history.slice().reverse().map(function(h) {
+        return '<div class="update-entry"><div class="update-entry-date">' + h.date + ' ' + h.time + '</div><div class="update-entry-text">' + esc(h.note) + '</div></div>';
+      }).join('') + '</div>'
+    : '') +
+    '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\'' + tf + '\',\'' + ztype + '\',\'' + id + '\')">🗑 Delete</button></div>';
+}
+
+function renderAddZoneBtn(tf, ztype) {
+  return '<button class="add-btn" onclick="showAddForm(\'' + tf + '\',\'' + ztype + '\')">+ Add ' + ztype.toUpperCase() + '</button>' +
+    '<div class="add-zone-form" id="addform-' + tf + '-' + ztype + '">' +
+    '<div class="form-row">' +
+    '<div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-' + tf + '-' + ztype + '"><option value="bear">🔴 Bear</option><option value="bull">🟢 Bull</option></select></div>' +
+    '<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-' + tf + '-' + ztype + '" placeholder="1.16500"></div>' +
+    '<div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" id="nf-btm-' + tf + '-' + ztype + '" placeholder="1.16350"></div>' +
+    '</div>' +
+    '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-' + tf + '-' + ztype + '" placeholder="Ex: Tavan principal"></div></div>' +
+    '<div class="form-row">' +
+    '<div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-' + tf + '-' + ztype + '"></div>' +
+    '<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" id="nf-time-' + tf + '-' + ztype + '"></div>' +
+    '</div>' +
+    '<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;">' +
+    '<button class="btn btn-red btn-sm" onclick="hideAddForm(\'' + tf + '\',\'' + ztype + '\')">Cancel</button>' +
+    '<button class="btn btn-green btn-sm" onclick="commitAdd(\'' + tf + '\',\'' + ztype + '\')">Add</button>' +
+    '</div></div>';
+}
+
+function renderEventHTML(tf, ev) {
+  if (!ev._id) ev._id = uid();
+  var id = ev._id;
+  var tOpts = ['choch','bos','sweep','sfp'].map(function(t) {
+    var labels = {choch:'CHoCH',bos:'BOS',sweep:'SWEEP (x)',sfp:'SFP'};
+    return '<option value="' + t + '"' + (ev.type === t ? ' selected' : '') + '>' + labels[t] + '</option>';
+  }).join('');
+  return '<div class="event-row ' + ev.type + '" id="ev-' + id + '">' +
+    '<select style="width:88px;flex-shrink:0;font-weight:600;" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'type\',this.value);renderTF(\'' + tf + '\')">' + tOpts + '</select>' +
+    '<select style="width:72px;flex-shrink:0;" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'dir\',this.value)">' +
+    '<option value="bull"' + (ev.dir==='bull'?' selected':'') + '>↑ Bull</option>' +
+    '<option value="bear"' + (ev.dir==='bear'?' selected':'') + '>↓ Bear</option>' +
+    '</select>' +
+    '<input style="width:88px;flex-shrink:0;" type="number" step="0.00001" value="' + (ev.price||'') + '" placeholder="Price" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'price\',this.value)">' +
+    '<input style="width:72px;flex-shrink:0;" type="time" value="' + (ev.time||'') + '" onchange="updateEF(\'' + tf + '\',\'' + id + '\',\'time\',this.value)">' +
+    '<button class="btn btn-red btn-sm" onclick="removeEvent(\'' + tf + '\',\'' + id + '\')">×</button>' +
+    '</div>';
+}
+
+// ── ANALYSIS RENDER ────────────────────────────────────────
+function renderAnalysisPage() {
+  if (!analysisData) {
+    return '<div class="analysis-page">' +
+      '<div class="analysis-import-zone">' +
+      '<div class="ai-icon">📊</div>' +
+      '<div class="ai-text">Nicio analiza incarcata</div>' +
+      '<div class="ai-sub">Importa un JSON de analiza pentru a vedea brief-ul</div>' +
+      '<button class="btn btn-green" onclick="openAnalysisImport()">⬆ Import Analiza JSON</button>' +
+      '</div></div>';
+  }
+
+  var a = analysisData;
+  var biasDirs = {bull:'↑ BULL', bear:'↓ BEAR', neutral:'— RANGE'};
+
+  var biasRows = [
+    {tf:'WEEKLY', d:a.bias.weekly},
+    {tf:'DAILY',  d:a.bias.daily},
+    {tf:'H4',     d:a.bias.h4},
+  ].map(function(r) {
+    return '<tr><td><b>' + r.tf + '</b></td><td><span class="bias-dir ' + r.d.direction + '">' + (biasDirs[r.d.direction]||r.d.direction) + '</span></td><td style="color:var(--text2)">' + (r.d.summary||'') + '</td></tr>';
+  }).join('');
+
+  var levelRows = (a.key_levels||[]).map(function(l) {
+    var tfBadge = l.tf ? '<span class="level-tf ' + l.tf + '">' + l.tf.toUpperCase() + '</span>' : '';
+    return '<div class="level-row ' + l.type + '"><span class="level-price">' + l.price + '</span><span class="level-label">' + l.label + '</span>' + tfBadge + '</div>';
+  }).join('');
+
+  function renderSetup(s, prefix) {
+    var tgts = (s.targets||[]).map(function(t) {
+      return '<div class="target-row ' + t.tp.toLowerCase() + '">' +
+        '<span class="target-label">' + t.tp + '</span>' +
+        '<span class="target-price">' + t.price + '</span>' +
+        '<span class="target-pips">' + t.pips + 'p</span>' +
+        '<span class="target-rr">' + t.rr + '</span>' +
+        '<span class="target-size">' + t.size_pct + '%</span>' +
+        '</div>';
+    }).join('');
+    return '<div class="setup-card ' + (s.priority||'secondary') + '">' +
+      '<div class="setup-hdr" onclick="toggleSetup(\'' + prefix + '-' + s.id + '\')">' +
+      '<span class="setup-id ' + prefix + '">' + s.id + '</span>' +
+      '<span class="setup-title">' + s.label + '</span>' +
+      '<span class="setup-dir ' + s.direction + '">' + (s.direction==='short'?'↓ SHORT':'↑ LONG') + '</span>' +
+      '<span class="setup-chevron" id="schv-' + prefix + '-' + s.id + '">▶</span>' +
+      '</div>' +
+      '<div class="setup-body" id="sbody-' + prefix + '-' + s.id + '">' +
+      '<div class="setup-logic">' + (s.logic||'') + '</div>' +
+      '<div class="setup-condition"><strong>Conditie:</strong> ' + (s.condition||'') + '</div>' +
+      (s.warning ? '<div class="setup-warning">⚠ ' + s.warning + '</div>' : '') +
+      '<div class="setup-params">' +
+      '<div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">' + s.entry + '</div></div>' +
+      '<div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">' + s.sl + '</div></div>' +
+      '<div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">' + s.risk_pips + ' pips</div></div>' +
+      (s.session ? '<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">' + s.session + '</div></div>' : '') +
+      (s.duration ? '<div class="setup-param"><div class="setup-param-lbl">DURATA</div><div class="setup-param-val">' + s.duration + '</div></div>' : '') +
+      '</div>' +
+      '<div class="setup-targets">' + tgts + '</div>' +
+      (s.management ? '<div class="setup-management">📋 ' + s.management + '</div>' : '') +
+      (s.invalidation ? '<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> ' + s.invalidation + '</div>' : '') +
+      '</div></div>';
+  }
+
+  var dtHTML = (a.day_trades||[]).map(function(s) { return renderSetup(s, 'dt'); }).join('');
+  var swHTML = (a.swing_trades||[]).map(function(s) { return renderSetup(s, 'sw'); }).join('');
+  var avoidHTML = (a.avoid||[]).map(function(x) { return '<li>' + x + '</li>'; }).join('');
+  var scenHTML = (a.scenarios||[]).map(function(s) {
+    return '<div class="scenario-row"><span class="scenario-cond">' + s.condition + '</span><span class="scenario-arrow">→</span><span class="scenario-action">' + s.action + '</span></div>';
+  }).join('');
+
+  return '<div class="analysis-page">' +
+    '<div class="analysis-header">' +
+    '<div class="analysis-header-top">' +
+    '<div class="analysis-title">📊 ' + (a.pair||currentPair).replace(/([A-Z]{3})([A-Z]{3}|[0-9]{2,3})/,'$1/$2') + ' — ' + (a.day||'') + ' ' + (a.date||'') + '</div>' +
+    '<div class="analysis-meta">' +
+    '<span class="analysis-meta-badge">💱 ' + (a.pair||currentPair) + '</span>' +
+    '<span class="analysis-meta-badge">📍 ' + (a.current_price||'N/A') + '</span>' +
+    '<span class="analysis-meta-badge">🕐 ' + (a.session||a.day||'') + '</span>' +
+    '<button class="btn btn-ghost btn-sm" onclick="openAnalysisImport()">↻ Schimba analiza</button>' +
+    '</div></div>' +
+    (a.session_note ? '<div class="session-note">⚠ ' + a.session_note + '</div>' : '') +
+    '</div>' +
+    '<div class="analysis-grid">' +
+    '<div class="analysis-card"><div class="analysis-card-title">Bias Multi-TF</div>' +
+    '<table class="bias-table"><tr><th>TF</th><th>Bias</th><th>Motiv</th></tr>' + biasRows + '</table>' +
+    '<div class="bias-conclusion">' + (a.bias.conclusion||'') + '</div>' +
+    '</div>' +
+    '<div class="analysis-card"><div class="analysis-card-title">Nivele Cheie</div>' +
+    '<div class="levels-list">' + levelRows + '</div></div>' +
+    (a.critical_observation ? '<div class="analysis-card full"><div class="analysis-card-title">⚠ Observatie critica</div><div class="setup-warning"><strong>' + a.critical_observation.title + '</strong><br>' + a.critical_observation.text + '</div></div>' : '') +
+    '<div class="analysis-card"><div class="analysis-card-title">🎯 Day Trade</div><div class="setups-grid">' + (dtHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de day trade.</span>') + '</div></div>' +
+    '<div class="analysis-card"><div class="analysis-card-title">📈 Swing Trade</div><div class="setups-grid">' + (swHTML||'<span style="color:var(--text3);font-size:12px">Niciun setup de swing trade.</span>') + '</div></div>' +
+    '<div class="analysis-card"><div class="analysis-card-title">✕ Zone de evitat</div><ul class="avoid-list">' + avoidHTML + '</ul></div>' +
+    '<div class="analysis-card"><div class="analysis-card-title">🔑 Scenariile zilei</div>' + scenHTML + '</div>' +
+    '</div></div>';
+}
+
+function toggleSetup(id) {
+  var body = document.getElementById('sbody-' + id);
+  var chv  = document.getElementById('schv-' + id);
+  if (body) body.classList.toggle('open');
+  if (chv)  chv.classList.toggle('open');
+}
+
+// ── ZONE ACTIONS ───────────────────────────────────────────
+function toggleZone(id) {
+  var ze  = document.getElementById('ze-' + id);
+  var chv = document.getElementById('chv-' + id);
+  if (ze)  ze.classList.toggle('open');
+  if (chv) chv.classList.toggle('open');
+}
+function showAddForm(tf, ztype) { document.getElementById('addform-' + tf + '-' + ztype).classList.add('open'); }
+function hideAddForm(tf, ztype) { document.getElementById('addform-' + tf + '-' + ztype).classList.remove('open'); }
+
+function commitAdd(tf, ztype) {
+  var isOB = ztype === 'ob';
+  var top = document.getElementById('nf-top-' + tf + '-' + ztype).value;
+  var btm = document.getElementById('nf-btm-' + tf + '-' + ztype).value;
+  if (!top || !btm) { showToast('⚠ Completeaza Top si Bottom'); return; }
+  var zone = {
+    _id: uid(), type: document.getElementById('nf-type-' + tf + '-' + ztype).value,
+    status: 'active', label: document.getElementById('nf-lbl-' + tf + '-' + ztype).value,
+    formed_date: document.getElementById('nf-date-' + tf + '-' + ztype).value,
+    formed_time: document.getElementById('nf-time-' + tf + '-' + ztype).value,
+    tags: [], update_history: [],
+  };
+  if (isOB) { zone.top = top; zone.btm = btm; zone.ob_note = ''; }
+  else       { zone.entry = top; zone.exit = btm; zone.fvg_note = ''; }
+  state[tf][isOB ? 'obs' : 'fvgs'].push(zone);
+  renderTF(tf);
+  showToast('✓ Zona adaugata');
+}
+
+function removeZone(tf, ztype, id) {
+  var arr = state[tf][ztype === 'ob' ? 'obs' : 'fvgs'];
+  var i = arr.findIndex(function(z) { return z._id === id; });
+  if (i >= 0) arr.splice(i, 1);
+  renderTF(tf);
+  showToast('✓ Zona stearsa');
+}
+
+function findZone(tf, ztype, id) {
+  return state[tf][ztype === 'ob' ? 'obs' : 'fvgs'].find(function(z) { return z._id === id; });
+}
+
+function updateZF(tf, ztype, id, field, val) {
+  var z = findZone(tf, ztype, id); if (z) z[field] = val;
+}
+function updateZP(tf, ztype, id, side, val) {
+  var z = findZone(tf, ztype, id); if (!z) return;
+  if (ztype === 'ob') { if (side === 'top') z.top = val; else z.btm = val; }
+  else                { if (side === 'top') z.entry = val; else z.exit = val; }
+}
+
+function saveNote(tf, ztype, id) {
+  var input = document.getElementById('upd-' + id);
+  if (!input || !input.value.trim()) return;
+  var z = findZone(tf, ztype, id); if (!z) return;
+  if (!z.update_history) z.update_history = [];
+  var n = new Date();
+  z.update_history.push({
+    date: n.toLocaleDateString('en-GB'),
+    time: n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+    note: input.value.trim()
+  });
+  input.value = '';
+  renderTF(tf);
+  showToast('✓ Nota salvata');
+}
+
+function toggleTag(tf, ztype, id, tag, btn) {
+  var z = findZone(tf, ztype, id); if (!z) return;
+  if (!z.tags) z.tags = [];
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) z.tags.push(tag);
+  else z.tags = z.tags.filter(function(t) { return t !== tag; });
+}
+
+// ── EVENT ACTIONS ──────────────────────────────────────────
+function addEvent(tf) {
+  state[tf].events.push({_id:uid(), type:'choch', dir:'bear', price:'', time:''});
+  renderTF(tf);
+}
+function updateEF(tf, id, field, val) {
+  var ev = state[tf].events.find(function(e) { return e._id === id; });
+  if (ev) ev[field] = val;
+}
+function removeEvent(tf, id) {
+  state[tf].events = state[tf].events.filter(function(e) { return e._id !== id; });
+  renderTF(tf);
+}
+
+// ── EXPORT ─────────────────────────────────────────────────
+function exportData() {
+  var now = new Date();
+  var h = now.getHours();
+  var session = h>=10&&h<13?'London':h>=16&&h<20?'NY':h>=9&&h<10?'PreLondon':'OutOfSession';
+  var payload = {
+    pair:currentPair, exported_at:now.toISOString(),
+    date:now.toLocaleDateString('en-GB'),
+    time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+    session:session, current_price:state.current_price||'',
+    weekly:cleanTF('weekly'), daily:cleanTF('daily'), h4:cleanTF('h4'), h1:cleanTF('h1'),
+  };
+  var blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var ds = now.toISOString().slice(0,10);
+  var ts = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}).replace(':','-');
+  a.href=url; a.download=currentPair+'_SMC_'+ds+'_'+ts+'_'+session+'.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ Exported — '+session);
+}
+
+function cleanTF(tf) {
+  var d = state[tf];
+  var out = {
+    bias:d.bias, notes:d.notes,
+    obs:d.obs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
+    fvgs:d.fvgs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),
+    events:d.events.map(function(e){var c=Object.assign({},e);delete c._id;return c;}),
+  };
+  if (tf==='h4'||tf==='h1'){out.eqh=d.eqh;out.eql=d.eql;}
+  if (tf==='h1'){out.entry=d.entry;out.sl=d.sl;out.tp1=d.tp1;out.tp2=d.tp2;out.direction=d.direction;}
+  return out;
+}
+
+// ── IMPORT CONTEXT ─────────────────────────────────────────
+function openImport() { document.getElementById('importModal').classList.add('active'); }
+function closeImport() { document.getElementById('importModal').classList.remove('active'); }
+function doImport() {
+  try {
+    var data = JSON.parse(document.getElementById('importText').value.trim());
+    if (data.current_price) { state.current_price=data.current_price; document.getElementById('currentPrice').value=data.current_price; }
+    TFS.forEach(function(tf) {
+      if (!data[tf]) return;
+      var d = data[tf];
+      state[tf] = {
+        bias:d.bias||'', notes:d.notes||'',
+        obs:(d.obs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
+        fvgs:(d.fvgs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
+        events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);}),
+      };
+      if (tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}
+      if (tf==='h1'){state[tf].entry=d.entry||'';state[tf].sl=d.sl||'';state[tf].tp1=d.tp1||'';state[tf].tp2=d.tp2||'';state[tf].direction=d.direction||'';}
+    });
+    if (data.pair && PAIRS.indexOf(data.pair) >= 0) {
+      currentPair = data.pair;
+      pairStates[currentPair] = state;
+      document.getElementById('pairSelector').value = currentPair;
+    }
+    closeImport(); renderAll();
+    showToast('✓ JSON loaded — ' + currentPair);
+  } catch(e) { alert('JSON invalid: '+e.message); }
+}
+
+// ── IMPORT ANALYSIS ────────────────────────────────────────
+function openAnalysisImport() { document.getElementById('analysisImportModal').classList.add('active'); }
+function closeAnalysisImport() { document.getElementById('analysisImportModal').classList.remove('active'); }
+function doAnalysisImport() {
+  try {
+    analysisData = JSON.parse(document.getElementById('analysisImportText').value.trim());
+    closeAnalysisImport();
+    if (appMode !== 'analysis') setMode('analysis');
+    else renderAll();
+    showToast('✓ Analiza incarcata');
+  } catch(e) { alert('JSON invalid: '+e.message); }
+}
+
+// ── CLEAR ──────────────────────────────────────────────────
+function clearAll() {
+  if (!confirm('Clear all data?')) return;
+  TFS.forEach(function(tf) {
+    state[tf] = (tf==='h4'||tf==='h1') ? emptyTFExtra(tf) : emptyTF();
+  });
+  state.current_price='';
+  document.getElementById('currentPrice').value='';
+  renderAll();
+  showToast('✓ Cleared');
+}
+
+// ── UTILS ──────────────────────────────────────────────────
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showToast(msg) {
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+// ── INIT ───────────────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>
