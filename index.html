@@ -318,7 +318,7 @@ select{cursor:pointer;}
 <script>
 // ── SUPABASE ───────────────────────────────────────────────
 const SUPABASE_URL = 'https://caenefhnwfyzhmneuyjb.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZW5lZmhud2Z5emhtbmV1eWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NDIxMjcsImV4cCI6MjA5NTAxODEyN30.b42SdHt6UY04ip7iVxGy7SsjxUfb5NHPaAi72AcVr20';
+const SUPABASE_KEY = 'PUNE_CHEIA_TA_ANON_AICI';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── CONSTANTS ──────────────────────────────────────────────
@@ -345,6 +345,20 @@ function emptyTFX(tf) {
   return b;
 }
 function uid() { return 'z'+Date.now()+Math.random().toString(36).slice(2,6); }
+
+function zoneUid(pair, tf, ztype, dir, top, btm) {
+  // ID determinist — aceeasi zona = acelasi ID intotdeauna
+  var topR = parseFloat(top||0).toFixed(5);
+  var btmR = parseFloat(btm||0).toFixed(5);
+  var raw  = pair + '_' + tf + '_' + ztype + '_' + dir + '_' + topR + '_' + btmR;
+  // simplu hash
+  var hash = 0;
+  for (var i = 0; i < raw.length; i++) {
+    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+    hash |= 0;
+  }
+  return 'z' + Math.abs(hash).toString(36) + raw.length.toString(36);
+}
 
 // ── DATE ───────────────────────────────────────────────────
 function updateDate() {
@@ -731,7 +745,9 @@ async function loadFromSupabase(pair){
       TFS.forEach(function(tf){s[tf].obs=[];s[tf].fvgs=[];});
       zones.forEach(function(z){
         if(!s[z.tf])return;
-        var zone={_id:z.id,type:z.direction,status:z.status,label:z.label||'',
+        var topV=(z.top_price||0).toString(),btmV=(z.btm_price||0).toString();
+        var detId=zoneUid(pair,z.tf,z.zone_type,z.direction,topV,btmV);
+        var zone={_id:detId,type:z.direction,status:z.status,label:z.label||'',
           formed_date:z.formed_date||'',formed_time:z.formed_time||'',
           tags:z.tags||[],update_history:z.update_history||[]};
         if(z.zone_type==='ob'){zone.top=z.top_price?.toString()||'';zone.btm=z.btm_price?.toString()||'';zone.ob_note=z.context_note||'';s[z.tf].obs.push(zone);}
@@ -762,7 +778,9 @@ function commitAdd(tf,zt){
   var top=document.getElementById('nf-top-'+tf+'-'+zt).value;
   var btm=document.getElementById('nf-btm-'+tf+'-'+zt).value;
   if(!top||!btm){showToast('⚠ Completeaza Top si Bottom');return;}
-  var zone={_id:uid(),type:document.getElementById('nf-type-'+tf+'-'+zt).value,status:'active',
+  var dtype=document.getElementById('nf-type-'+tf+'-'+zt).value;
+  var detId=zoneUid(currentPair,tf,zt,dtype,top,btm);
+  var zone={_id:detId,type:dtype,status:'active',
     label:document.getElementById('nf-lbl-'+tf+'-'+zt).value,
     formed_date:document.getElementById('nf-date-'+tf+'-'+zt).value,
     formed_time:document.getElementById('nf-time-'+tf+'-'+zt).value,
@@ -850,8 +868,16 @@ function doImport(){
     TFS.forEach(function(tf){
       if(!data[tf])return;var d=data[tf];
       state[tf]={bias:d.bias||'',notes:d.notes||'',
-        obs:(d.obs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
-        fvgs:(d.fvgs||[]).map(function(z){return Object.assign({_id:uid(),update_history:[]},z);}),
+        obs:(d.obs||[]).map(function(z){
+          var top=z.top||'0',btm=z.btm||'0';
+          var detId=zoneUid(data.pair||currentPair,tf,'ob',z.type||'bear',top,btm);
+          return Object.assign({update_history:[]},z,{_id:detId});
+        }),
+        fvgs:(d.fvgs||[]).map(function(z){
+          var top=z.entry||'0',btm=z.exit||'0';
+          var detId=zoneUid(data.pair||currentPair,tf,'fvg',z.type||'bear',top,btm);
+          return Object.assign({update_history:[]},z,{_id:detId});
+        }),
         events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);})};
       if(tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}
       if(tf==='h1'){state[tf].entry=d.entry||'';state[tf].sl=d.sl||'';state[tf].tp1=d.tp1||'';state[tf].tp2=d.tp2||'';state[tf].direction=d.direction||'';}
