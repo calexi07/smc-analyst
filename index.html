@@ -691,40 +691,77 @@ async function syncToSupabase(){
   setSyncStatus('syncing');
   try{
     var now=new Date().toISOString();
+
+    // Colecteaza toate zonele si eventurile
+    var allZones=[];
+    var allEvents=[];
     for(var i=0;i<TFS.length;i++){
       var tf=TFS[i],d=state[tf];
+
+      // Context
       await sb.from('smc_context').upsert({
         pair:currentPair,tf:tf,bias:d.bias,notes:d.notes||'',
         eqh:d.eqh?parseFloat(d.eqh):null,eql:d.eql?parseFloat(d.eql):null,
         current_price:state.current_price?parseFloat(state.current_price):null,
         updated_at:now
       },{onConflict:'pair,tf'});
-      var allZones=[
-        ...d.obs.map(function(z){return Object.assign({},z,{zone_type:'ob'});}),
-        ...d.fvgs.map(function(z){return Object.assign({},z,{zone_type:'fvg'});})
-      ];
-      for(var j=0;j<allZones.length;j++){
-        var z=allZones[j];
-        await sb.from('smc_zones').upsert({
-          id:z._id,pair:currentPair,tf:tf,zone_type:z.zone_type,direction:z.type,
-          top_price:parseFloat(z.zone_type==='ob'?z.top:z.entry)||null,
-          btm_price:parseFloat(z.zone_type==='ob'?z.btm:z.exit)||null,
-          label:z.label||'',status:z.status||'active',
-          formed_date:z.formed_date||null,formed_time:z.formed_time||null,
-          context_note:z.ob_note||z.fvg_note||'',
-          tags:z.tags||[],update_history:z.update_history||[],updated_at:now
-        },{onConflict:'id'});
-      }
-      for(var k=0;k<d.events.length;k++){
-        var ev=d.events[k];
-        await sb.from('smc_events').upsert({
-          id:ev._id,pair:currentPair,tf:tf,event_type:ev.type,
-          direction:ev.dir,price:parseFloat(ev.price)||null,event_time:ev.time||null
-        },{onConflict:'id'});
-      }
+
+      // Zone
+      d.obs.forEach(function(z){ allZones.push({z:z,tf:tf,ztype:'ob'}); });
+      d.fvgs.forEach(function(z){ allZones.push({z:z,tf:tf,ztype:'fvg'}); });
+
+      // Events
+      d.events.forEach(function(ev){ allEvents.push({ev:ev,tf:tf}); });
     }
+
+    // Sterge zonele manuale existente (nu cele de la Pine Script care au id ps_)
+    await sb.from('smc_zones')
+      .delete()
+      .eq('pair', currentPair)
+      .not('id','like','ps_%');
+
+    // Reinserteaza toate zonele
+    for(var j=0;j<allZones.length;j++){
+      var item=allZones[j];
+      var z=item.z, tf=item.tf, ztype=item.ztype;
+      var topV=parseFloat(ztype==='ob'?z.top:z.entry)||null;
+      var btmV=parseFloat(ztype==='ob'?z.btm:z.exit)||null;
+      var detId=zoneUid(currentPair,tf,ztype,z.type||'bear',
+                        (topV||0).toFixed(5),(btmV||0).toFixed(5));
+      await sb.from('smc_zones').upsert({
+        id:detId,pair:currentPair,tf:tf,zone_type:ztype,direction:z.type||'bear',
+        top_price:topV,btm_price:btmV,
+        label:z.label||'',status:z.status||'active',
+        formed_date:z.formed_date||null,formed_time:z.formed_time||null,
+        context_note:z.ob_note||z.fvg_note||'',
+        tags:z.tags||[],update_history:z.update_history||[],updated_at:now
+      },{onConflict:'id'});
+    }
+
+    // Events — sterge si reinserteaza
+    await sb.from('smc_events')
+      .delete()
+      .eq('pair', currentPair)
+      .not('id','like','ps_%');
+
+    for(var k=0;k<allEvents.length;k++){
+      var item=allEvents[k];
+      var ev=item.ev, tf=item.tf;
+      if(!ev.price&&!ev.type) continue;
+      var evId='ev_'+currentPair+'_'+tf+'_'+(ev.type||'')+'_'+(ev.dir||'')+'_'+(ev.price||'0');
+      await sb.from('smc_events').upsert({
+        id:evId,pair:currentPair,tf:tf,event_type:ev.type||'',
+        direction:ev.dir||'bear',price:parseFloat(ev.price)||null,
+        event_time:ev.time||null
+      },{onConflict:'id'});
+    }
+
     setSyncStatus('synced');
-  }catch(e){console.error(e);setSyncStatus('error');}
+    console.log('Sync OK — '+allZones.length+' zone, '+allEvents.length+' events');
+  }catch(e){
+    console.error('Sync error:',e);
+    setSyncStatus('error');
+  }
 }
 
 async function loadFromSupabase(pair){
