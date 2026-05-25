@@ -15,7 +15,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .logo{font-weight:800;font-size:16px;}.logo span{color:var(--bull);}
 .pair-selector{background:var(--bg2);border:2px solid var(--bull-b);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;min-width:120px;}
 .mode-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-.mode-btn{padding:6px 12px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all .15s;}
+.mode-btn{padding:6px 11px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all .15s;}
 .mode-btn.active{background:var(--text);color:#fff;}
 .bias-bar{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 10px;}
 .bias-item{display:flex;align-items:center;gap:4px;padding:0 3px;}
@@ -35,13 +35,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .btn-green{background:var(--bull);color:#fff;}.btn-green:hover{background:#096644;}
 .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}.btn-ghost:hover{border-color:var(--neutral);color:var(--neutral);}
 .btn-red{background:transparent;color:var(--text3);border:1px solid var(--border);}.btn-red:hover{border-color:var(--bear);color:var(--bear);}
-.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px;}
-.btn-orange{background:var(--sweep);color:#fff;}.btn-orange:hover{background:#a06010;}
+.btn-orange{background:var(--sweep);color:#fff;}.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px;}
 .main{max-width:1600px;margin:0 auto;padding:16px;}
 .tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.tf-panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.tf-panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;}
 .tf-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.tf-panel.weekly .tf-hdr{background:var(--weekly-bg);}.tf-panel.daily .tf-hdr{background:var(--bear-bg);}.tf-panel.h4 .tf-hdr{background:var(--sweep-bg);}.tf-panel.h1 .tf-hdr{background:var(--neutral-bg);}
+.tf-panel.weekly .tf-hdr{background:var(--weekly-bg);}.tf-panel.daily .tf-hdr{background:var(--bear-bg);}
+.tf-panel.h4 .tf-hdr{background:var(--sweep-bg);}.tf-panel.h1 .tf-hdr{background:var(--neutral-bg);}
 .tf-title{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;}
 .tf-badge{padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:1px;}
 .weekly .tf-badge{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
@@ -50,7 +50,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .h1 .tf-badge{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
 .tf-body{padding:12px 14px;}
 .bias-row{display:flex;gap:4px;}
-.bias-btn{padding:3px 9px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all .12s;}
+.bias-btn{padding:3px 9px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);}
 .bias-btn.bull.active{background:var(--bull-bg);border-color:var(--bull);color:var(--bull);}
 .bias-btn.bear.active{background:var(--bear-bg);border-color:var(--bear);color:var(--bear);}
 .bias-btn.neutral.active{background:var(--neutral-bg);border-color:var(--neutral);color:var(--neutral);}
@@ -60,8 +60,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .sec-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:6px;}
 .sec-count{font-size:10px;background:var(--bg3);color:var(--text2);padding:1px 7px;border-radius:10px;font-weight:600;}
 .zone-list{display:flex;flex-direction:column;gap:4px;}
-.zone-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;transition:box-shadow .15s;}
-.zone-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.zone-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;}
 .zone-item.bull-ob{border-left:4px solid var(--bull);}.zone-item.bear-ob{border-left:4px solid var(--bear);}
 .zone-item.bull-fvg{border-left:4px solid var(--bull);}.zone-item.bear-fvg{border-left:4px solid var(--bear);}
 .zone-item.near{background:var(--near-bg);border-color:var(--near-b);}
@@ -80,26 +79,26 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .status-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
 .status-badge.active{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
 .status-badge.tested{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
-.status-badge.broken{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
+.status-badge.broken,.status-badge.mitigated{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
 .status-badge.breaker{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
-.status-badge.mitigated{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
 .dist-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
 .dist-badge.above{background:var(--bear-bg);color:var(--bear);}.dist-badge.below{background:var(--bull-bg);color:var(--bull);}
 .dist-badge.inside{background:var(--in-bg);color:var(--bull);border:1px solid var(--in-b);}
 .dist-badge.near{background:var(--near-bg);color:var(--sweep);border:1px solid var(--near-b);}
 .zone-expand{display:none;padding:10px 12px;border-top:1px solid var(--border);background:var(--bg3);}
 .zone-expand.open{display:block;}
-input,select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border-color .15s;width:100%;}
+input,select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;outline:none;width:100%;}
 input:focus,select:focus,textarea:focus{border-color:var(--neutral);}
 select{cursor:pointer;}
 .field-lbl{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;letter-spacing:.3px;}
 .form-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;flex-wrap:wrap;}
 .form-col{display:flex;flex-direction:column;}
-.form-col.flex1{flex:1;min-width:80px;}.form-col.w60{width:60px;flex-shrink:0;}.form-col.w80{width:80px;flex-shrink:0;}.form-col.w100{width:100px;flex-shrink:0;}.form-col.w120{width:120px;flex-shrink:0;}.form-col.w140{width:140px;flex-shrink:0;}
+.form-col.flex1{flex:1;min-width:80px;}.form-col.w60{width:60px;flex-shrink:0;}.form-col.w80{width:80px;flex-shrink:0;}
+.form-col.w100{width:100px;flex-shrink:0;}.form-col.w120{width:120px;flex-shrink:0;}.form-col.w140{width:140px;flex-shrink:0;}
 .update-history{margin-top:8px;}
 .update-entry{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 9px;margin-bottom:4px;}
 .update-entry-date{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:2px;}
-.update-entry-text{font-size:12px;color:var(--text);}
+.update-entry-text{font-size:12px;}
 .add-zone-form{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;padding:12px;margin-top:6px;display:none;}
 .add-zone-form.open{display:block;}
 .add-btn{background:transparent;border:1px dashed var(--border2);color:var(--text3);padding:6px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;width:100%;transition:all .15s;margin-top:4px;text-align:center;}
@@ -115,140 +114,109 @@ select{cursor:pointer;}
 .seq-chip.sfp{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
 .seq-arrow{color:var(--text3);font-size:11px;}
 .notes-area{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 9px;border-radius:6px;font-size:12px;width:100%;resize:vertical;min-height:46px;outline:none;}
-.notes-area:focus{border-color:var(--neutral);background:var(--bg2);}
-.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.entry-item{display:flex;flex-direction:column;gap:3px;}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.active{display:flex;}
 .modal{background:var(--bg2);border-radius:12px;padding:22px;width:600px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);border:1px solid var(--border);}
 .modal h3{font-size:15px;font-weight:700;margin-bottom:14px;}
-.modal textarea{width:100%;height:180px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:11px;resize:vertical;outline:none;margin-bottom:12px;}
+.modal textarea{width:100%;height:170px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:11px;resize:vertical;outline:none;margin-bottom:12px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
 .toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:#fff;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:300;opacity:0;transform:translateY(8px);transition:all .2s;}
 .toast.show{opacity:1;transform:translateY(0);}
-/* EMPTY STATE */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;color:var(--text3);}
 .empty-icon{font-size:48px;margin-bottom:16px;}
 .empty-title{font-size:18px;font-weight:700;color:var(--text2);margin-bottom:8px;}
 .empty-sub{font-size:13px;margin-bottom:24px;max-width:400px;line-height:1.6;}
-/* ANALYSIS */
-.analysis-page{max-width:1200px;margin:0 auto;padding:20px 16px;}
-.analysis-day-nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
-.analysis-day-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:5px;}
-.analysis-day-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
-.analysis-day-btn.brief{border-left:3px solid var(--bull);}
-.analysis-day-btn.debrief{border-left:3px solid var(--sweep);}
-.analysis-type-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.5px;}
-.analysis-type-badge.brief{background:var(--bull-bg);color:var(--bull);}
-.analysis-type-badge.debrief{background:var(--sweep-bg);color:var(--sweep);}
-.analysis-header{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;}
-.analysis-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;}
-.analysis-title{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px;}
-.analysis-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.analysis-meta-badge{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
-.session-note{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--sweep);font-weight:500;}
-.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
-.analysis-card{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:18px 20px;}
-.analysis-card.full{grid-column:1/-1;}
-.analysis-card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.analysis-card-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.bias-table{width:100%;border-collapse:collapse;}
-.bias-table th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border);}
-.bias-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
-.bias-table tr:last-child td{border-bottom:none;}
-.bias-dir{font-weight:700;font-size:13px;}.bias-dir.bear{color:var(--bear);}.bias-dir.bull{color:var(--bull);}
-.bias-conclusion{background:var(--bg3);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.6;border-left:3px solid var(--bear);}
-.levels-list{display:flex;flex-direction:column;gap:3px;}
-.level-row{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;}
-.level-row.resistance{background:rgba(184,48,48,.04);border-left:3px solid var(--bear);}
-.level-row.support{background:rgba(10,122,84,.04);border-left:3px solid var(--bull);}
-.level-row.current{background:var(--sweep-bg);border-left:3px solid var(--sweep);font-weight:700;}
-.level-price{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;min-width:72px;}
-.level-label{font-size:12px;flex:1;}
-.level-tf{font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
-.level-tf.daily{background:var(--bear-bg);color:var(--bear);}.level-tf.h4{background:var(--sweep-bg);color:var(--sweep);}
-.level-tf.weekly{background:var(--weekly-bg);color:var(--weekly);}.level-tf.h1{background:var(--neutral-bg);color:var(--neutral);}
-.setups-grid{display:flex;flex-direction:column;gap:10px;}
-.setup-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.setup-card.primary{border-left:4px solid var(--bull);}.setup-card.secondary{border-left:4px solid var(--sweep);}
-.setup-card.optional{border-left:4px solid var(--neutral);}.setup-card.quality{border-left:4px solid var(--weekly);}
-.setup-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);cursor:pointer;user-select:none;}
-.setup-id{font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
-.setup-id.dt{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
-.setup-id.sw{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
-.setup-title{font-weight:700;font-size:13px;flex:1;}
-.setup-dir{font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;}
-.setup-dir.short{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
-.setup-dir.long{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
-.setup-chevron{color:var(--text3);font-size:10px;transition:transform .2s;}.setup-chevron.open{transform:rotate(90deg);}
-.setup-body{display:none;padding:14px 16px;border-top:1px solid var(--border);}.setup-body.open{display:block;}
-.setup-logic{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;padding:8px 12px;background:var(--bg3);border-radius:6px;}
-.setup-params{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px;}
-.setup-param{background:var(--bg3);border-radius:6px;padding:8px 10px;}
-.setup-param-lbl{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;}
-.setup-param-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text);}
-.setup-param-val.red{color:var(--bear);}.setup-param-val.green{color:var(--bull);}
-.setup-targets{margin-bottom:10px;}
-.target-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;margin-bottom:4px;font-size:12px;}
-.target-row.tp1{background:rgba(10,122,84,.05);}.target-row.tp2{background:rgba(10,122,84,.10);}.target-row.tp3{background:rgba(10,122,84,.15);}
-.target-label{font-weight:700;min-width:36px;color:var(--bull);}
-.target-price{font-family:'JetBrains Mono',monospace;font-weight:700;min-width:72px;}
-.target-pips{color:var(--bull);font-weight:600;min-width:52px;}.target-rr{color:var(--text2);min-width:52px;}.target-size{color:var(--text3);font-size:11px;}
-.setup-warning{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:6px;padding:8px 12px;font-size:11px;color:var(--sweep);margin-bottom:8px;}
-.setup-condition{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;margin-bottom:8px;}.setup-condition strong{color:var(--text);}
-.setup-management{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--neutral-bg);border-radius:6px;border-left:3px solid var(--neutral);}
-.add-to-journal-btn{margin-top:8px;width:100%;}
+.page{max-width:1200px;margin:0 auto;padding:20px 16px;}
+.day-nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+.day-btn{padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);}
+.day-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
+.day-btn.brief{border-left:3px solid var(--bull);}.day-btn.debrief{border-left:3px solid var(--sweep);}
+.type-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.type-badge.brief{background:var(--bull-bg);color:var(--bull);}
+.type-badge.debrief{background:var(--sweep-bg);color:var(--sweep);}
+.acard{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:18px 20px;margin-bottom:14px;}
+.acard.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:transparent;padding:0;border:none;margin-bottom:14px;}
+.acard-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.acard-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.ahdr{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;}
+.ahdr-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px;}
+.atitle{font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;}
+.ameta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.ameta-badge{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.snote{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--sweep);}
+.btable{width:100%;border-collapse:collapse;}
+.btable th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.btable td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.btable tr:last-child td{border-bottom:none;}
+.bdir{font-weight:700;font-size:13px;}.bdir.bear{color:var(--bear);}.bdir.bull{color:var(--bull);}
+.bconc{background:var(--bg3);border-radius:7px;padding:10px 14px;font-size:12px;margin-top:10px;line-height:1.6;border-left:3px solid var(--bear);}
+.lrow{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;margin-bottom:3px;}
+.lrow.resistance{background:rgba(184,48,48,.04);border-left:3px solid var(--bear);}
+.lrow.support{background:rgba(10,122,84,.04);border-left:3px solid var(--bull);}
+.lrow.current{background:var(--sweep-bg);border-left:3px solid var(--sweep);font-weight:700;}
+.lprice{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;min-width:72px;}
+.llabel{font-size:12px;flex:1;}
+.ltf{font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.ltf.daily{background:var(--bear-bg);color:var(--bear);}.ltf.h4{background:var(--sweep-bg);color:var(--sweep);}
+.ltf.weekly{background:var(--weekly-bg);color:var(--weekly);}.ltf.h1{background:var(--neutral-bg);color:var(--neutral);}
+.scard{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.scard.primary{border-left:4px solid var(--bull);}.scard.secondary{border-left:4px solid var(--sweep);}
+.scard.optional{border-left:4px solid var(--neutral);}.scard.quality{border-left:4px solid var(--weekly);}
+.shdr{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);cursor:pointer;}
+.sid{font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;}
+.sid.dt{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+.sid.sw{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
+.stitle{font-weight:700;font-size:13px;flex:1;}
+.sdir{font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;}
+.sdir.short{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
+.sdir.long{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
+.schv{color:var(--text3);font-size:10px;transition:transform .2s;}.schv.open{transform:rotate(90deg);}
+.sbody{display:none;padding:14px 16px;border-top:1px solid var(--border);}.sbody.open{display:block;}
+.slogic{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;padding:8px 12px;background:var(--bg3);border-radius:6px;}
+.sparams{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px;}
+.sparam{background:var(--bg3);border-radius:6px;padding:8px 10px;}
+.sparam-l{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;}
+.sparam-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;}
+.sparam-v.red{color:var(--bear);}.sparam-v.green{color:var(--bull);}
+.trow{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;margin-bottom:4px;font-size:12px;}
+.trow.tp1{background:rgba(10,122,84,.05);}.trow.tp2{background:rgba(10,122,84,.10);}.trow.tp3{background:rgba(10,122,84,.15);}
+.tlbl{font-weight:700;min-width:36px;color:var(--bull);}
+.tprice{font-family:'JetBrains Mono',monospace;font-weight:700;min-width:72px;}
+.tpips{color:var(--bull);font-weight:600;min-width:52px;}.trr{color:var(--text2);min-width:52px;}.tsize{color:var(--text3);font-size:11px;}
+.swarn{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:6px;padding:8px 12px;font-size:11px;color:var(--sweep);margin-bottom:8px;}
+.scond{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;margin-bottom:8px;}
+.smgmt{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--neutral-bg);border-radius:6px;border-left:3px solid var(--neutral);}
 .avoid-list{list-style:none;}
 .avoid-list li{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
-.avoid-list li:last-child{border-bottom:none;}.avoid-list li::before{content:'✕';color:var(--bear);font-weight:700;flex-shrink:0;margin-top:1px;}
-.scenario-row{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;}
-.scenario-cond{flex:1;font-size:12px;font-weight:600;}.scenario-arrow{color:var(--text3);font-size:14px;flex-shrink:0;margin-top:2px;}.scenario-action{flex:1;font-size:12px;color:var(--text2);}
-/* DEBRIEF */
-.debrief-content{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:24px;font-size:13px;line-height:1.8;}
-.debrief-content h2{font-size:16px;font-weight:700;margin:20px 0 10px;color:var(--text);display:flex;align-items:center;gap:8px;}
-.debrief-content h2:first-child{margin-top:0;}
-.debrief-content h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--text2);}
-.debrief-content p{color:var(--text2);margin-bottom:8px;}
-.debrief-content ul{padding-left:20px;margin-bottom:8px;}
-.debrief-content li{color:var(--text2);margin-bottom:4px;}
-.debrief-content strong{color:var(--text);}
-.debrief-content code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px;}
-.debrief-content pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin:10px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;}
-.debrief-content table{width:100%;border-collapse:collapse;margin:10px 0;}
-.debrief-content th{background:var(--bg3);padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:2px solid var(--border);}
-.debrief-content td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);}
-.debrief-content tr:last-child td{border-bottom:none;}
-.debrief-import-zone{border:2px dashed var(--border2);border-radius:12px;padding:50px 40px;text-align:center;color:var(--text3);}
-/* ARCHIVE */
-.archive-page{max-width:1200px;margin:0 auto;padding:20px 16px;}
-.archive-zone-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:4px;opacity:.7;}
-.archive-zone-item .zone-row-compact{background:var(--bg2);}
-.mitigated-date{font-size:9px;color:var(--bear);font-weight:600;white-space:nowrap;}
-/* JOURNAL */
-.journal-page{max-width:1200px;margin:0 auto;padding:20px 16px;}
-.journal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
-.journal-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:20px;}
-.stat-card{background:var(--bg2);border-radius:10px;border:1px solid var(--border);padding:14px 16px;}
-.stat-val{font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;}
-.stat-val.green{color:var(--bull);}.stat-val.red{color:var(--bear);}.stat-val.orange{color:var(--sweep);}
-.stat-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
-.journal-table{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
-.journal-table th{background:var(--bg3);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);}
-.journal-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
-.journal-table tr:last-child td{border-bottom:none;}
-.journal-table tr:hover td{background:var(--bg3);}
-.journal-result{font-weight:700;padding:2px 8px;border-radius:10px;font-size:11px;}
-.journal-result.win{background:var(--bull-bg);color:var(--bull);}
-.journal-result.loss{background:var(--bear-bg);color:var(--bear);}
-.journal-result.be{background:var(--sweep-bg);color:var(--sweep);}
-.journal-result.open{background:var(--neutral-bg);color:var(--neutral);}
-.journal-result.skip{background:var(--bg3);color:var(--text3);}
-.journal-dir{font-weight:700;font-size:11px;}
-.journal-dir.short{color:var(--bear);}.journal-dir.long{color:var(--bull);}
-.journal-pips{font-family:'JetBrains Mono',monospace;font-weight:700;}
-.journal-pips.pos{color:var(--bull);}.journal-pips.neg{color:var(--bear);}
+.avoid-list li:last-child{border-bottom:none;}.avoid-list li::before{content:'x';color:var(--bear);font-weight:700;flex-shrink:0;}
+.scen-row{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;}
+.scen-cond{flex:1;font-size:12px;font-weight:600;}.scen-arr{color:var(--text3);font-size:14px;flex-shrink:0;}.scen-act{flex:1;font-size:12px;color:var(--text2);}
+.db-content{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:24px;font-size:13px;line-height:1.8;}
+.db-content h2{font-size:15px;font-weight:700;margin:18px 0 8px;}.db-content h3{font-size:13px;font-weight:700;margin:12px 0 5px;color:var(--text2);}
+.db-content p{color:var(--text2);margin-bottom:8px;}.db-content pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin:10px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;white-space:pre-wrap;}
+.db-content table{width:100%;border-collapse:collapse;margin:10px 0;}
+.db-content th{background:var(--bg3);padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);border-bottom:2px solid var(--border);}
+.db-content td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);}
+.jstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:20px;}
+.jstat{background:var(--bg2);border-radius:10px;border:1px solid var(--border);padding:14px 16px;}
+.jstat-v{font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.jstat-v.g{color:var(--bull);}.jstat-v.r{color:var(--bear);}.jstat-v.o{color:var(--sweep);}
+.jstat-l{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-top:4px;}
+.jtable{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.jtable th{background:var(--bg3);padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);}
+.jtable td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.jtable tr:last-child td{border-bottom:none;}.jtable tr:hover td{background:var(--bg3);}
+.jres{font-weight:700;padding:2px 8px;border-radius:10px;font-size:11px;}
+.jres.win{background:var(--bull-bg);color:var(--bull);}.jres.loss{background:var(--bear-bg);color:var(--bear);}
+.jres.be{background:var(--sweep-bg);color:var(--sweep);}.jres.open{background:var(--neutral-bg);color:var(--neutral);}
+.jres.skip{background:var(--bg3);color:var(--text3);}
+.jdir.short{color:var(--bear);font-weight:700;}.jdir.long{color:var(--bull);font-weight:700;}
+.jpips.pos{color:var(--bull);font-weight:700;font-family:monospace;}.jpips.neg{color:var(--bear);font-weight:700;font-family:monospace;}
+.arch-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:4px;opacity:.75;}
+.arch-item .zone-row-compact{background:var(--bg2);}
+.mit-date{font-size:9px;color:var(--bear);font-weight:600;}
 ::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-@media(max-width:900px){.tf-grid,.analysis-grid{grid-template-columns:1fr;}.bias-bar{display:none;}.journal-stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.tf-grid{grid-template-columns:1fr;}.acard.grid2{grid-template-columns:1fr;}.bias-bar{display:none;}}
 </style>
 </head>
 <body>
@@ -263,294 +231,581 @@ select{cursor:pointer;}
       <option value="GBPAUD">GBP/AUD</option><option value="USDCHF">USD/CHF</option>
     </select>
     <div class="mode-toggle" id="modeToggle" style="display:none;">
-      <button class="mode-btn active" id="modeUpdateBtn" onclick="setMode('update')">🔄 Zone</button>
-      <button class="mode-btn" id="modeAnalysisBtn" onclick="setMode('analysis')">☀ Brief</button>
-      <button class="mode-btn" id="modeDebriefBtn" onclick="setMode('debrief')">🌙 Debrief</button>
-      <button class="mode-btn" id="modeJournalBtn" onclick="setMode('journal')">📓 Jurnal</button>
-      <button class="mode-btn" id="modeArchiveBtn" onclick="setMode('archive')">🗄 Arhiva</button>
+      <button class="mode-btn active" id="modeZoneBtn" onclick="setMode('zone')">Zone</button>
+      <button class="mode-btn" id="modeBriefBtn" onclick="setMode('brief')">Brief</button>
+      <button class="mode-btn" id="modeDebriefBtn" onclick="setMode('debrief')">Debrief</button>
+      <button class="mode-btn" id="modeJournalBtn" onclick="setMode('journal')">Jurnal</button>
+      <button class="mode-btn" id="modeArchiveBtn" onclick="setMode('archive')">Arhiva</button>
     </div>
     <div class="bias-bar">
-      <div class="bias-item"><span class="bias-tf">W</span><span class="bias-arrow neutral" id="ba-weekly">—</span></div><div class="bias-sep"></div>
-      <div class="bias-item"><span class="bias-tf">D</span><span class="bias-arrow neutral" id="ba-daily">—</span></div><div class="bias-sep"></div>
-      <div class="bias-item"><span class="bias-tf">H4</span><span class="bias-arrow neutral" id="ba-h4">—</span></div><div class="bias-sep"></div>
-      <div class="bias-item"><span class="bias-tf">H1</span><span class="bias-arrow neutral" id="ba-h1">—</span></div>
+      <div class="bias-item"><span class="bias-tf">W</span><span class="bias-arrow neutral" id="ba-weekly">-</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">D</span><span class="bias-arrow neutral" id="ba-daily">-</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">H4</span><span class="bias-arrow neutral" id="ba-h4">-</span></div>
+      <div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">H1</span><span class="bias-arrow neutral" id="ba-h1">-</span></div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
     <div class="price-bar"><span class="price-label">Price</span>
       <input class="price-input" type="number" step="0.00001" placeholder="1.16500" id="currentPrice" oninput="refreshAllDist()">
     </div>
-    <span class="sync-indicator synced" id="syncIndicator">✓ Synced</span>
+    <span class="sync-indicator synced" id="syncIndicator">Synced</span>
     <span class="date-disp" id="dateDisp"></span>
-    <button class="btn btn-ghost" onclick="openImport()">⬆ Import Zone</button>
-    <button class="btn btn-green" onclick="exportData()">⬇ Export</button>
+    <button class="btn btn-ghost" onclick="openImport()">Import Zone</button>
+    <button class="btn btn-green" onclick="exportData()">Export</button>
   </div>
 </div>
 <div class="main" id="mainContent"></div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="importModal"><div class="modal"><h3>Import Context JSON</h3>
-<textarea id="importText" placeholder="Paste context JSON..."></textarea>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('importModal')">Cancel</button><button class="btn btn-green" onclick="doImport()">Load</button></div></div></div>
-
-<div class="modal-overlay" id="analysisImportModal"><div class="modal">
-<h3>Import Analiza</h3>
-<div style="display:flex;gap:8px;margin-bottom:14px;">
-  <button class="btn btn-green btn-sm" id="aTypeBrief" onclick="setAnalysisType('brief')">☀ Brief</button>
-  <button class="btn btn-ghost btn-sm" id="aTypeDebrief" onclick="setAnalysisType('debrief')">🌙 Debrief</button>
-</div>
-<textarea id="analysisImportText" placeholder="Paste analysis JSON..."></textarea>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('analysisImportModal')">Cancel</button><button class="btn btn-green" onclick="doAnalysisImport()">Salveaza</button></div></div></div>
-
-<div class="modal-overlay" id="debriefImportModal"><div class="modal"><h3>🌙 Import Debrief</h3>
-<p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Importa JSON-ul de debrief generat dupa analiza CSV-urilor zilnice.</p>
-<textarea id="debriefImportText" placeholder="Paste debrief JSON..."></textarea>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('debriefImportModal')">Cancel</button><button class="btn btn-green" onclick="doDebriefImport()">Salveaza Debrief</button></div></div></div>
-
-<div class="modal-overlay" id="journalModal"><div class="modal"><h3 id="journalModalTitle">Adauga Trade in Jurnal</h3>
-<div class="form-row">
-  <div class="form-col w100"><span class="field-lbl">DATA</span><input type="date" id="jDate"></div>
-  <div class="form-col w100"><span class="field-lbl">SESIUNE</span><select id="jSession"><option>London</option><option>NY</option><option>Pre-London</option><option>Asian</option></select></div>
-  <div class="form-col w80"><span class="field-lbl">DIRECTIE</span><select id="jDir"><option value="short">Short</option><option value="long">Long</option></select></div>
-</div>
-<div class="form-row">
-  <div class="form-col flex1"><span class="field-lbl">SETUP</span><input type="text" id="jSetup" placeholder="DT1 — Short la Danger FVG"></div>
-  <div class="form-col w100"><span class="field-lbl">ZONA</span><input type="text" id="jZone" placeholder="Danger"></div>
-</div>
-<div class="form-row">
-  <div class="form-col w80"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" id="jEntry"></div>
-  <div class="form-col w80"><span class="field-lbl">SL</span><input type="number" step="0.00001" id="jSl"></div>
-  <div class="form-col w80"><span class="field-lbl">TP1</span><input type="number" step="0.00001" id="jTp1"></div>
-  <div class="form-col w80"><span class="field-lbl">TP2</span><input type="number" step="0.00001" id="jTp2"></div>
-  <div class="form-col w80"><span class="field-lbl">TP3</span><input type="number" step="0.00001" id="jTp3"></div>
-</div>
-<div class="form-row">
-  <div class="form-col w100"><span class="field-lbl">REZULTAT</span>
-    <select id="jResult"><option value="open">Open</option><option value="win">Win TP1</option><option value="win2">Win TP2</option><option value="win3">Win TP3</option><option value="be">Breakeven</option><option value="loss">Loss SL</option><option value="skip">Skip</option></select>
+<div class="modal-overlay" id="importModal">
+  <div class="modal"><h3>Import Context JSON</h3>
+  <textarea id="importText" placeholder="Paste context JSON..."></textarea>
+  <div class="modal-footer"><button class="btn btn-red" onclick="closeModal('importModal')">Cancel</button><button class="btn btn-green" onclick="doImport()">Load</button></div>
   </div>
-  <div class="form-col w80"><span class="field-lbl">EXIT PRICE</span><input type="number" step="0.00001" id="jExit"></div>
-  <div class="form-col w80"><span class="field-lbl">PIPS</span><input type="number" step="0.1" id="jPips" placeholder="auto"></div>
-  <div class="form-col w80"><span class="field-lbl">R:R</span><input type="number" step="0.1" id="jRr" placeholder="auto"></div>
 </div>
-<div class="form-col" style="margin-bottom:8px;"><span class="field-lbl">NOTE</span><textarea style="height:60px;" id="jNotes" placeholder="Observatii despre trade..."></textarea></div>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('journalModal')">Cancel</button><button class="btn btn-green" onclick="saveJournalEntry()">Salveaza</button></div></div></div>
+
+<div class="modal-overlay" id="briefModal">
+  <div class="modal"><h3>Import Brief JSON</h3>
+  <textarea id="briefText" placeholder="Paste brief JSON..."></textarea>
+  <div class="modal-footer"><button class="btn btn-red" onclick="closeModal('briefModal')">Cancel</button><button class="btn btn-green" onclick="doBriefImport()">Salveaza</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="debriefModal">
+  <div class="modal"><h3>Import Debrief JSON</h3>
+  <textarea id="debriefText" placeholder="Paste debrief JSON..."></textarea>
+  <div class="modal-footer"><button class="btn btn-red" onclick="closeModal('debriefModal')">Cancel</button><button class="btn btn-green" onclick="doDebriefImport()">Salveaza</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="journalModal">
+  <div class="modal">
+  <h3 id="jModalTitle">Trade Nou</h3>
+  <div class="form-row">
+    <div class="form-col w120"><span class="field-lbl">DATA</span><input type="date" id="jDate"></div>
+    <div class="form-col w100"><span class="field-lbl">SESIUNE</span><select id="jSession"><option>London</option><option>NY</option><option>Pre-London</option><option>Asian</option></select></div>
+    <div class="form-col w80"><span class="field-lbl">DIR</span><select id="jDir"><option value="short">Short</option><option value="long">Long</option></select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-col flex1"><span class="field-lbl">SETUP</span><input type="text" id="jSetup" placeholder="DT1 - Short la Danger"></div>
+    <div class="form-col w100"><span class="field-lbl">ZONA</span><input type="text" id="jZone" placeholder="Danger"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-col w80"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" id="jEntry"></div>
+    <div class="form-col w80"><span class="field-lbl">SL</span><input type="number" step="0.00001" id="jSl"></div>
+    <div class="form-col w80"><span class="field-lbl">TP1</span><input type="number" step="0.00001" id="jTp1"></div>
+    <div class="form-col w80"><span class="field-lbl">TP2</span><input type="number" step="0.00001" id="jTp2"></div>
+    <div class="form-col w80"><span class="field-lbl">TP3</span><input type="number" step="0.00001" id="jTp3"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-col w100"><span class="field-lbl">REZULTAT</span>
+      <select id="jResult"><option value="open">Open</option><option value="win">Win TP1</option><option value="win2">Win TP2</option><option value="win3">Win TP3</option><option value="be">Breakeven</option><option value="loss">Loss</option><option value="skip">Skip</option></select>
+    </div>
+    <div class="form-col w80"><span class="field-lbl">EXIT</span><input type="number" step="0.00001" id="jExit"></div>
+    <div class="form-col w80"><span class="field-lbl">PIPS</span><input type="number" step="0.1" id="jPips"></div>
+    <div class="form-col w80"><span class="field-lbl">R:R</span><input type="number" step="0.1" id="jRr"></div>
+  </div>
+  <div class="form-col" style="margin-bottom:8px;"><span class="field-lbl">NOTE</span><textarea style="height:55px;margin-bottom:0;" id="jNotes"></textarea></div>
+  <div class="modal-footer"><button class="btn btn-red" onclick="closeModal('journalModal')">Cancel</button><button class="btn btn-green" onclick="saveJournal()">Salveaza</button></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
+
 <script>
-var SUPABASE_URL='https://caenefhnwfyzhmneuyjb.supabase.co';
-var SUPABASE_KEY='sb_publishable_0mIG5sSi6ueUNELew2G0iQ_7dozolX3';
-var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+var SB_URL='https://caenefhnwfyzhmneuyjb.supabase.co';
+var SB_KEY='sb_publishable_0mIG5sSi6ueUNELew2G0iQ_7dozolX3';
+var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var TFS=['weekly','daily','h4','h1'];
 var PAIRS=['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
-var TAGS_OB=['post-BOS','pre-sweep','1x tested','2x tested','fresh','news near','institutional'];
-var TAGS_FVG=['post-BOS','impulse','1x tested','2x tested','fresh','news near'];
 var NEAR=25;
-var analysisImportType='brief';
 var appMode='empty';
 var currentPair='EURUSD';
 var hasData=false;
 var pairStates={};
-PAIRS.forEach(function(p){pairStates[p]={current_price:'',weekly:emptyTF(),daily:emptyTF(),h4:emptyTFX('h4'),h1:emptyTFX('h1')};});
+PAIRS.forEach(function(p){pairStates[p]={current_price:'',weekly:eTF(),daily:eTF(),h4:eTFX(),h1:eTFH()};});
 var state=pairStates['EURUSD'];
-var allAnalyses=[];
-var selectedAnalysis=null;
-var allDebriefs=[];
-var selectedDebrief=null;
+var allBriefs=[]; var selBrief=null;
+var allDebriefs=[]; var selDebrief=null;
 var archivedZones=[];
 var journalEntries=[];
-var editingJournalId=null;
+var editJId=null;
 
-function emptyTF(){return{bias:'',obs:[],fvgs:[],events:[],notes:''}}
-function emptyTFX(tf){var b=emptyTF();b.eqh='';b.eql='';if(tf==='h1'){b.entry='';b.sl='';b.tp1='';b.tp2='';b.direction='';}return b;}
+function eTF(){return{bias:'',obs:[],fvgs:[],events:[],notes:''};}
+function eTFX(){var b=eTF();b.eqh='';b.eql='';return b;}
+function eTFH(){var b=eTFX();b.entry='';b.sl='';b.tp1='';b.tp2='';b.direction='';return b;}
 function uid(){return'z'+Date.now()+Math.random().toString(36).slice(2,6);}
-function zoneUid(pair,tf,ztype,dir,top,btm){var raw=pair+'_'+tf+'_'+ztype+'_'+dir+'_'+parseFloat(top||0).toFixed(5)+'_'+parseFloat(btm||0).toFixed(5);var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}return'z'+Math.abs(h).toString(36)+raw.length.toString(36);}
+function zid(pair,tf,zt,dir,top,btm){var raw=pair+'_'+tf+'_'+zt+'_'+dir+'_'+parseFloat(top||0).toFixed(5)+'_'+parseFloat(btm||0).toFixed(5);var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h|=0;}return'z'+Math.abs(h).toString(36)+raw.length.toString(36);}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 function closeModal(id){document.getElementById(id).classList.remove('active');}
 function updateDate(){var n=new Date();document.getElementById('dateDisp').textContent=n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})+' '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});}
 updateDate();setInterval(updateDate,30000);
 function zoneAge(fd,ft){if(!fd)return'';var f=new Date(fd+(ft?'T'+ft:'T00:00'));if(isNaN(f.getTime()))return'';var dH=Math.floor((new Date()-f)/36e5);var dD=Math.floor(dH/24);var cls=dD<7?'fresh':dD<30?'old':'ancient';var txt=dH<24?(dH+'h'):dD<7?(dD+'d'):Math.floor(dD/7)<8?(Math.floor(dD/7)+'w'):(Math.floor(dD/30)+'mo');return'<span class="zone-age '+cls+'">'+txt+' ago</span>';}
-function setAnalysisType(t){analysisImportType=t;document.getElementById('aTypeBrief').className=t==='brief'?'btn btn-green btn-sm':'btn btn-ghost btn-sm';document.getElementById('aTypeDebrief').className=t==='debrief'?'btn btn-sm':'btn btn-ghost btn-sm';if(t==='debrief'){document.getElementById('aTypeDebrief').style.background='var(--sweep)';document.getElementById('aTypeDebrief').style.color='#fff';}else{document.getElementById('aTypeDebrief').style.background='';document.getElementById('aTypeDebrief').style.color='';}}
-function setMode(m){appMode=m;['update','analysis','debrief','journal','archive'].forEach(function(n){var el=document.getElementById('mode'+n.charAt(0).toUpperCase()+n.slice(1)+'Btn');if(el)el.classList.toggle('active',n===m);});renderAll();}
-function checkHasData(){var tot=0;TFS.forEach(function(tf){tot+=state[tf].obs.length+state[tf].fvgs.length+state[tf].events.length;});hasData=tot>0||allAnalyses.length>0||allDebriefs.length>0||journalEntries.length>0;document.getElementById('modeToggle').style.display=hasData?'flex':'none';if(!hasData)appMode='empty';}
-function switchPair(p){currentPair=p;state=pairStates[p];selectedAnalysis=null;selectedDebrief=null;loadFromSupabase(p);}
-function getPrice(){var v=parseFloat(document.getElementById('currentPrice').value);return isNaN(v)?null:v;}
-function calcDist(top,btm){var price=getPrice();if(!price||!top||!btm)return null;var rTop=Math.max(+top,+btm),rBtm=Math.min(+top,+btm);if(price>=rBtm&&price<=rTop)return{type:'inside',pips:0};if(price>rTop)return{type:'below',pips:Math.round((price-rTop)*10000)};return{type:'above',pips:Math.round((rBtm-price)*10000)};}
-function distHTML(top,btm){var d=calcDist(top,btm);if(!d)return'';if(d.type==='inside')return'<span class="dist-badge inside">● IN ZONE</span>';var cls=d.pips<=NEAR?'near':d.type;return'<span class="dist-badge '+cls+'">'+(d.type==='above'?'▲':'▼')+' '+d.pips+'p</span>';}
-function zoneExCls(top,btm){var d=calcDist(top,btm);if(!d)return'';return d.type==='inside'?'inside':d.pips<=NEAR?'near':'';}
-function refreshAllDist(){state.current_price=document.getElementById('currentPrice').value;schedulSync();renderAll();}
-function setBias(tf,val){state[tf].bias=val;updateBiasBar();renderTF(tf);schedulSync();}
-function updateBiasBar(){var map={bull:'↑',bear:'↓',neutral:'—','':'—'};var cls={bull:'bull',bear:'bear',neutral:'neutral','':'neutral'};TFS.forEach(function(tf){var el=document.getElementById('ba-'+tf);if(el){el.textContent=map[state[tf].bias]||'—';el.className='bias-arrow '+(cls[state[tf].bias]||'neutral');}});}
 
-function renderAll(){var main=document.getElementById('mainContent');checkHasData();if(appMode==='empty'&&!hasData){main.innerHTML=renderEmpty();return;}if(appMode==='analysis'){main.innerHTML=renderAnalysisPage();return;}if(appMode==='debrief'){main.innerHTML=renderDebriefPage();return;}if(appMode==='journal'){main.innerHTML=renderJournalPage();return;}if(appMode==='archive'){main.innerHTML=renderArchivePage();return;}main.innerHTML='<div class="tf-grid">'+TFS.map(function(tf){return'<div id="panel-'+tf+'">'+renderTFHTML(tf)+'</div>';}).join('')+'</div>';updateBiasBar();}
-function renderTF(tf){var el=document.getElementById('panel-'+tf);if(el)el.innerHTML=renderTFHTML(tf);updateBiasBar();}
-function renderEmpty(){return'<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">SMC Analyst — '+currentPair+'</div><div class="empty-sub">Nicio data pentru aceasta pereche. Incepe prin a importa zone sau o analiza.</div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"><button class="btn btn-green" onclick="openImport()">⬆ Import Zone JSON</button><button class="btn btn-ghost" onclick="openAnalysisModal()">☀ Import Brief</button><button class="btn btn-ghost" onclick="openDebriefModal()">🌙 Import Debrief</button></div></div>';}
+function setMode(m){appMode=m;['zone','brief','debrief','journal','archive'].forEach(function(n){var e=document.getElementById('mode'+n.charAt(0).toUpperCase()+n.slice(1)+'Btn');if(e)e.classList.toggle('active',n===m);});renderAll();}
+function chkData(){var t=0;TFS.forEach(function(tf){t+=state[tf].obs.length+state[tf].fvgs.length+state[tf].events.length;});hasData=t>0||allBriefs.length>0||allDebriefs.length>0||journalEntries.length>0;document.getElementById('modeToggle').style.display=hasData?'flex':'none';if(!hasData)appMode='empty';}
+function switchPair(p){currentPair=p;state=pairStates[p];selBrief=null;selDebrief=null;loadSB(p);}
+function getPrice(){var v=parseFloat(document.getElementById('currentPrice').value);return isNaN(v)?null:v;}
+function calcDist(top,btm){var price=getPrice();if(!price||!top||!btm)return null;var rT=Math.max(+top,+btm),rB=Math.min(+top,+btm);if(price>=rB&&price<=rT)return{type:'inside',pips:0};if(price>rT)return{type:'below',pips:Math.round((price-rT)*10000)};return{type:'above',pips:Math.round((rB-price)*10000)};}
+function distBadge(top,btm){var d=calcDist(top,btm);if(!d)return'';if(d.type==='inside')return'<span class="dist-badge inside">IN ZONE</span>';var cls=d.pips<=NEAR?'near':d.type;return'<span class="dist-badge '+cls+'">'+(d.type==='above'?'+':'-')+d.pips+'p</span>';}
+function exCls(top,btm){var d=calcDist(top,btm);if(!d)return'';return d.type==='inside'?'inside':d.pips<=NEAR?'near':'';}
+function refreshAllDist(){state.current_price=document.getElementById('currentPrice').value;schedSync();renderAll();}
+function setBias(tf,v){state[tf].bias=v;updateBiasBar();renderTF(tf);schedSync();}
+function updateBiasBar(){var m={bull:'UP',bear:'DN',neutral:'-','':'-'};var c={bull:'bull',bear:'bear',neutral:'neutral','':'neutral'};TFS.forEach(function(tf){var e=document.getElementById('ba-'+tf);if(e){e.textContent=m[state[tf].bias]||'-';e.className='bias-arrow '+(c[state[tf].bias]||'neutral');}});}
+
+function renderAll(){var main=document.getElementById('mainContent');chkData();if(appMode==='empty'&&!hasData){main.innerHTML=renderEmpty();return;}if(appMode==='brief'){main.innerHTML=renderBriefPage();return;}if(appMode==='debrief'){main.innerHTML=renderDebriefPage();return;}if(appMode==='journal'){main.innerHTML=renderJournalPage();return;}if(appMode==='archive'){main.innerHTML=renderArchivePage();return;}main.innerHTML='<div class="tf-grid">'+TFS.map(function(tf){return'<div id="panel-'+tf+'">'+renderTFHTML(tf)+'</div>';}).join('')+'</div>';updateBiasBar();}
+function renderTF(tf){var e=document.getElementById('panel-'+tf);if(e)e.innerHTML=renderTFHTML(tf);updateBiasBar();}
+function renderEmpty(){return'<div class="empty-state"><div class="empty-icon">SMC</div><div class="empty-title">SMC Analyst - '+currentPair+'</div><div class="empty-sub">Nicio data. Importa zone sau o analiza pentru a incepe.</div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"><button class="btn btn-green" onclick="openImport()">Import Zone JSON</button><button class="btn btn-ghost" onclick="document.getElementById(String.fromCharCode(98,114,105,101,102,77,111,100,97,108)).classList.add(String.fromCharCode(97,99,116,105,118,101))">Import Brief</button><button class="btn btn-ghost" onclick="document.getElementById(String.fromCharCode(100,101,98,114,105,101,102,77,111,100,97,108)).classList.add(String.fromCharCode(97,99,116,105,118,101))">Import Debrief</button></div></div>';}
 function openImport(){document.getElementById('importModal').classList.add('active');}
-function openAnalysisModal(){setAnalysisType('brief');document.getElementById('analysisImportModal').classList.add('active');}
-function openDebriefModal(){document.getElementById('debriefImportModal').classList.add('active');}
 
 function renderTFHTML(tf){
-  var d=state[tf],names={weekly:'Weekly',daily:'Daily',h4:'4H',h1:'1H'};
-  var biasOpts=['bull','bear','neutral'].map(function(v){var lbl=v==='bull'?'↑ Bull':v==='bear'?'↓ Bear':'— Range';return'<button class="bias-btn '+v+(d.bias===v?' active':'')+'" onclick="setBias(\''+tf+'\',\''+v+'\')">'+lbl+'</button>';}).join('');
-  var eqHtml=(tf==='h4'||tf==='h1')?'<div class="section"><span class="sec-title">EQL / EQH</span><div class="entry-grid" style="margin-top:7px;"><div class="entry-item"><span class="field-lbl">EQH</span><input type="number" step="0.00001" value="'+(d.eqh||'')+'" onchange="state[\''+tf+'\'].eqh=this.value;schedulSync()"></div><div class="entry-item"><span class="field-lbl">EQL</span><input type="number" step="0.00001" value="'+(d.eql||'')+'" onchange="state[\''+tf+'\'].eql=this.value;schedulSync()"></div></div></div>':'';
-  return'<div class="tf-panel '+tf+'"><div class="tf-hdr"><div class="tf-title"><span class="tf-badge">'+tf.toUpperCase()+'</span>'+names[tf]+'</div><div class="bias-row">'+biasOpts+'</div></div><div class="tf-body"><div class="section"><div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">'+d.obs.length+'</span></span></div><div class="zone-list">'+d.obs.map(function(z){return renderZoneHTML(tf,'ob',z);}).join('')+'</div>'+renderAddBtn(tf,'ob')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">Fair Value Gaps <span class="sec-count">'+d.fvgs.length+'</span></span></div><div class="zone-list">'+d.fvgs.map(function(z){return renderZoneHTML(tf,'fvg',z);}).join('')+'</div>'+renderAddBtn(tf,'fvg')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">Sequence</span></div>'+d.events.map(function(ev){return renderEvHTML(tf,ev);}).join('')+'<button class="add-btn" onclick="addEvent(\''+tf+'\')">+ Add Event</button></div>'+eqHtml+'<div class="section"><span class="sec-title">Notes</span><textarea class="notes-area" style="margin-top:7px;" onchange="state[\''+tf+'\'].notes=this.value;schedulSync()" placeholder="Context...">'+esc(d.notes||'')+'</textarea></div></div></div>';}
+  var d=state[tf],nm={weekly:'Weekly',daily:'Daily',h4:'4H',h1:'1H'};
+  var bo=['bull','bear','neutral'].map(function(v){return'<button class="bias-btn '+v+(d.bias===v?' active':'')+'" onclick="setBias(''+tf+'',''+v+'')">'+(v==='bull'?'Bull':v==='bear'?'Bear':'Range')+'</button>';}).join('');
+  var eq=(tf==='h4'||tf==='h1')?'<div class="section"><span class="sec-title">EQL/EQH</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px;"><div><span class="field-lbl">EQH</span><input type="number" step="0.00001" value="'+(d.eqh||'')+'" onchange="state[''+tf+''].eqh=this.value;schedSync()"></div><div><span class="field-lbl">EQL</span><input type="number" step="0.00001" value="'+(d.eql||'')+'" onchange="state[''+tf+''].eql=this.value;schedSync()"></div></div></div>':'';
+  return'<div class="tf-panel '+tf+'"><div class="tf-hdr"><div class="tf-title"><span class="tf-badge">'+tf.toUpperCase()+'</span>'+nm[tf]+'</div><div class="bias-row">'+bo+'</div></div><div class="tf-body"><div class="section"><div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">'+d.obs.length+'</span></span></div><div class="zone-list" id="obs-'+tf+'">'+d.obs.map(function(z){return renderZone(tf,'ob',z);}).join('')+'</div>'+mkAddBtn(tf,'ob')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">FVG <span class="sec-count">'+d.fvgs.length+'</span></span></div><div class="zone-list" id="fvgs-'+tf+'">'+d.fvgs.map(function(z){return renderZone(tf,'fvg',z);}).join('')+'</div>'+mkAddBtn(tf,'fvg')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">Sequence</span></div>'+d.events.map(function(ev){return renderEv(tf,ev);}).join('')+'<button class="add-btn" onclick="addEvent(''+tf+'')">+ Add Event</button></div>'+eq+'<div class="section"><span class="sec-title">Notes</span><textarea class="notes-area" style="margin-top:7px;" onchange="state[''+tf+''].notes=this.value;schedSync()">'+esc(d.notes||'')+'</textarea></div></div></div>';}
 
-function renderZoneHTML(tf,ztype,zone){if(!zone._id)zone._id=uid();var id=zone._id,isOB=ztype==='ob';var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;var ex=zoneExCls(top,btm);var cCls='zone-item '+zone.type+'-'+ztype+(ex?' '+ex:'');var lbl=zone.label||(isOB?'Unnamed OB':'Unnamed FVG');var stBadge='<span class="status-badge '+(zone.status||'active')+'">'+(zone.status||'active')+'</span>';
-  return'<div class="'+cCls+'" id="zi-'+id+'"><div class="zone-row-compact" onclick="toggleZone(\''+id+'\')"><span class="zone-compact-type">'+(zone.type==='bull'?'🟢':'🔴')+' '+zone.type.toUpperCase()+' '+ztype.toUpperCase()+'</span><span class="zone-compact-label">'+esc(lbl)+'</span><span class="zone-compact-prices">'+parseFloat(top||0).toFixed(5)+' / '+parseFloat(btm||0).toFixed(5)+'</span><span class="zone-compact-dist">'+distHTML(top,btm)+'</span><span class="zone-compact-status">'+stBadge+'</span>'+zoneAge(zone.formed_date,zone.formed_time)+'<span class="zone-chevron" id="chv-'+id+'">▶</span></div><div class="zone-expand" id="ze-'+id+'">'+renderZoneExpand(tf,ztype,zone,id)+'</div></div>';}
+function renderZone(tf,zt,zone){
+  if(!zone._id)zone._id=uid();
+  var id=zone._id,isOB=zt==='ob';
+  var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;
+  var ex=exCls(top,btm);
+  var lbl=zone.label||(isOB?'OB':'FVG');
+  var st=zone.status||'active';
+  var allSt=['active','tested','mitigated','broken','breaker'];
+  var sOpts=allSt.map(function(s){return'<option value="'+s+'"'+(st===s?' selected':'')+'>'+s+'</option>';}).join('');
+  var hist=zone.update_history||[];
+  var expand='<div class="form-row">'
+    +'<div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updZF(''+tf+'',''+zt+'',''+id+'','type',this.value);renderTF(''+tf+'')">'
+    +'<option value="bull"'+(zone.type==='bull'?' selected':'')+'>Bull</option>'
+    +'<option value="bear"'+(zone.type==='bear'?' selected':'')+'>Bear</option>'
+    +'</select></div>'
+    +'<div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="chgStatus(''+tf+'',''+zt+'',''+id+'',this.value)">'+sOpts+'</select></div>'
+    +'<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updZP(''+tf+'',''+zt+'',''+id+'','top',this.value)"></div>'
+    +'<div class="form-col w80"><span class="field-lbl">BTM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updZP(''+tf+'',''+zt+'',''+id+'','btm',this.value)"></div>'
+    +'</div>'
+    +'<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="'+esc(zone.label||'')+'" onchange="updZF(''+tf+'',''+zt+'',''+id+'','label',this.value);schedSync()"></div></div>'
+    +'<div class="form-row">'
+    +'<div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" value="'+(zone.formed_date||'')+'" onchange="updZF(''+tf+'',''+zt+'',''+id+'','formed_date',this.value);schedSync()"></div>'
+    +'<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="'+(zone.formed_time||'')+'" onchange="updZF(''+tf+'',''+zt+'',''+id+'','formed_time',this.value);schedSync()"></div>'
+    +'<div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="'+esc(isOB?(zone.ob_note||''):(zone.fvg_note||''))+'" onchange="updZF(''+tf+'',''+zt+'',''+id+'',''+(isOB?'ob_note':'fvg_note')+'',this.value);schedSync()"></div>'
+    +'</div>'
+    +(zone.mitigated_at?'<div style="font-size:10px;color:var(--bear);margin-bottom:6px;">Mitigated: '+zone.mitigated_at+'</div>':'')
+    +'<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span><div style="display:flex;gap:6px;margin-top:3px;"><input type="text" id="upd-'+id+'" placeholder="Ce s-a schimbat..."><button class="btn btn-green btn-sm" onclick="saveNote(''+tf+'',''+zt+'',''+id+'')">Save</button></div></div>'
+    +(hist.length>0?'<div class="update-history"><span class="field-lbl">HISTORY</span>'+hist.slice().reverse().map(function(h){return'<div class="update-entry"><div class="update-entry-date">'+h.date+' '+h.time+'</div><div class="update-entry-text">'+esc(h.note)+'</div></div>';}).join('')+'</div>':'')
+    +'<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="delZone(''+tf+'',''+zt+'',''+id+'')">Delete</button></div>';
+  return'<div class="zone-item '+zone.type+'-'+zt+(ex?' '+ex:'')+'" id="zi-'+id+'">'
+    +'<div class="zone-row-compact" onclick="togZ(''+id+'')">'
+    +'<span class="zone-compact-type">'+(zone.type==='bull'?'[B]':'[S]')+' '+zone.type.toUpperCase()+' '+zt.toUpperCase()+'</span>'
+    +'<span class="zone-compact-label">'+esc(lbl)+'</span>'
+    +'<span class="zone-compact-prices">'+parseFloat(top||0).toFixed(5)+' / '+parseFloat(btm||0).toFixed(5)+'</span>'
+    +'<span class="zone-compact-dist">'+distBadge(top,btm)+'</span>'
+    +'<span class="zone-compact-status"><span class="status-badge '+st+'">'+st+'</span></span>'
+    +zoneAge(zone.formed_date,zone.formed_time)
+    +'<span class="zone-chevron" id="chv-'+id+'">v</span>'
+    +'</div>'
+    +'<div class="zone-expand" id="ze-'+id+'">'+expand+'</div>'
+    +'</div>';}
 
-function renderZoneExpand(tf,ztype,zone,id){var isOB=ztype==='ob';var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;var allSt=['active','tested','mitigated','broken','breaker'];var sOpts=allSt.map(function(s){return'<option value="'+s+'"'+(zone.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('');var hist=zone.update_history||[];
-  return'<div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')"><option value="bull"'+(zone.type==='bull'?' selected':'')+'>🟢 Bull</option><option value="bear"'+(zone.type==='bear'?' selected':'')+'>🔴 Bear</option></select></div><div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="changeStatus(\''+tf+'\',\''+ztype+'\',\''+id+'\',this.value)">'+sOpts+'</select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div></div>'+
-  '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="'+esc(zone.label||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'label\',this.value);schedulSync()"></div></div>'+
-  '<div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="'+(zone.formed_date||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_date\',this.value);schedulSync()"></div><div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="'+(zone.formed_time||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_time\',this.value);schedulSync()"></div><div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="'+esc(isOB?(zone.ob_note||''):(zone.fvg_note||''))+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\''+(isOB?'ob_note':'fvg_note')+'\',this.value);schedulSync()"></div></div>'+
-  (zone.mitigated_at?'<div style="font-size:10px;color:var(--bear);margin-bottom:6px;">Mitigated: '+zone.mitigated_at+'</div>':'')+
-  '<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span><div style="display:flex;gap:6px;margin-top:3px;"><input type="text" id="upd-'+id+'" placeholder="Ce s-a schimbat..."><button class="btn btn-green btn-sm" onclick="saveNote(\''+tf+'\',\''+ztype+'\',\''+id+'\')">Save</button></div></div>'+
-  (hist.length>0?'<div class="update-history"><span class="field-lbl">HISTORY</span>'+hist.slice().reverse().map(function(h){return'<div class="update-entry"><div class="update-entry-date">'+h.date+' '+h.time+'</div><div class="update-entry-text">'+esc(h.note)+'</div></div>';}).join('')+'</div>':'')+
-  '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\''+tf+'\',\''+ztype+'\',\''+id+'\')">🗑 Delete</button></div>';}
+function mkAddBtn(tf,zt){return'<button class="add-btn" onclick="showAdd(''+tf+'',''+zt+'')">+ Add '+zt.toUpperCase()+'</button>'
+  +'<div class="add-zone-form" id="addform-'+tf+'-'+zt+'">'
+  +'<div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-'+tf+'-'+zt+'"><option value="bear">Bear</option><option value="bull">Bull</option></select></div>'
+  +'<div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-'+tf+'-'+zt+'"></div>'
+  +'<div class="form-col w80"><span class="field-lbl">BTM</span><input type="number" step="0.00001" id="nf-btm-'+tf+'-'+zt+'"></div></div>'
+  +'<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-'+tf+'-'+zt+'"></div></div>'
+  +'<div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-'+tf+'-'+zt+'"></div>'
+  +'<div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" id="nf-time-'+tf+'-'+zt+'"></div></div>'
+  +'<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;">'
+  +'<button class="btn btn-red btn-sm" onclick="hideAdd(''+tf+'',''+zt+'')">Cancel</button>'
+  +'<button class="btn btn-green btn-sm" onclick="commitAdd(''+tf+'',''+zt+'')">Add</button>'
+  +'</div></div>';}
 
-function renderAddBtn(tf,ztype){return'<button class="add-btn" onclick="showAddForm(\''+tf+'\',\''+ztype+'\')">+ Add '+ztype.toUpperCase()+'</button><div class="add-zone-form" id="addform-'+tf+'-'+ztype+'"><div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-'+tf+'-'+ztype+'"><option value="bear">🔴 Bear</option><option value="bull">🟢 Bull</option></select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-'+tf+'-'+ztype+'"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" id="nf-btm-'+tf+'-'+ztype+'"></div></div><div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-'+tf+'-'+ztype+'"></div></div><div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-'+tf+'-'+ztype+'"></div><div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" id="nf-time-'+tf+'-'+ztype+'"></div></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;"><button class="btn btn-red btn-sm" onclick="hideAddForm(\''+tf+'\',\''+ztype+'\')">Cancel</button><button class="btn btn-green btn-sm" onclick="commitAdd(\''+tf+'\',\''+ztype+'\')">Add</button></div></div>';}
+function renderEv(tf,ev){
+  if(!ev._id)ev._id=uid();
+  var id=ev._id;
+  var tOpts=['choch','bos','sweep','sfp'].map(function(t){return'<option value="'+t+'"'+(ev.type===t?' selected':'')+'>'+{choch:'CHoCH',bos:'BOS',sweep:'SWEEP',sfp:'SFP'}[t]+'</option>';}).join('');
+  return'<div class="event-row '+ev.type+'">'
+    +'<select style="width:76px;flex-shrink:0;font-weight:600;" onchange="updEF(''+tf+'',''+id+'','type',this.value);renderTF(''+tf+'')">'+tOpts+'</select>'
+    +'<select style="width:62px;flex-shrink:0;" onchange="updEF(''+tf+'',''+id+'','dir',this.value)">'
+    +'<option value="bull"'+(ev.dir==='bull'?' selected':'')+'>Bull</option>'
+    +'<option value="bear"'+(ev.dir==='bear'?' selected':'')+'>Bear</option>'
+    +'</select>'
+    +'<input style="width:80px;flex-shrink:0;" type="number" step="0.00001" value="'+(ev.price||'')+'" onchange="updEF(''+tf+'',''+id+'','price',this.value)">'
+    +'<input style="width:100px;flex-shrink:0;" type="date" value="'+(ev.date||'')+'" onchange="updEF(''+tf+'',''+id+'','date',this.value)">'
+    +'<input style="width:64px;flex-shrink:0;" type="time" value="'+(ev.time||'')+'" onchange="updEF(''+tf+'',''+id+'','time',this.value)">'
+    +'<button class="btn btn-red btn-sm" onclick="delEvent(''+tf+'',''+id+'')">x</button>'
+    +'</div>';}
 
-function renderEvHTML(tf,ev){if(!ev._id)ev._id=uid();var id=ev._id;var tOpts=['choch','bos','sweep','sfp'].map(function(t){return'<option value="'+t+'"'+(ev.type===t?' selected':'')+'>'+{choch:'CHoCH',bos:'BOS',sweep:'SWEEP',sfp:'SFP'}[t]+'</option>';}).join('');
-  return'<div class="event-row '+ev.type+'"><select style="width:78px;flex-shrink:0;font-weight:600;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')">'+tOpts+'</select><select style="width:64px;flex-shrink:0;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'dir\',this.value)"><option value="bull"'+(ev.dir==='bull'?' selected':'')+'>↑ Bull</option><option value="bear"'+(ev.dir==='bear'?' selected':'')+'>↓ Bear</option></select><input style="width:80px;flex-shrink:0;" type="number" step="0.00001" value="'+(ev.price||'')+'" placeholder="Price" onchange="updateEF(\''+tf+'\',\''+id+'\',\'price\',this.value)"><input style="width:100px;flex-shrink:0;" type="date" value="'+(ev.date||'')+'" onchange="updateEF(\''+tf+'\',\''+id+'\',\'date\',this.value)"><input style="width:66px;flex-shrink:0;" type="time" value="'+(ev.time||'')+'" onchange="updateEF(\''+tf+'\',\''+id+'\',\'time\',this.value)"><button class="btn btn-red btn-sm" onclick="removeEvent(\''+tf+'\',\''+id+'\')">×</button></div>';}
-
-// ── ANALYSIS PAGE ──────────────────────────────────────────
-function renderAnalysisPage(){
-  var nav='<div class="analysis-day-nav"><button class="btn btn-green btn-sm" onclick="openAnalysisModal()">+ Brief</button>';
-  allAnalyses.forEach(function(a,i){var cls=(selectedAnalysis&&selectedAnalysis.id===a.id)?'analysis-day-btn active brief':'analysis-day-btn brief';nav+='<button class="'+cls+'" onclick="selectAnalysis('+i+')"><span class="analysis-type-badge brief">☀</span> '+a.date+'</button>';});
+// Brief page
+function renderBriefPage(){
+  var nav='<div class="day-nav"><button class="btn btn-green btn-sm" onclick="document.getElementById('briefModal').classList.add('active')">+ Brief</button>';
+  allBriefs.forEach(function(a,i){nav+='<button class="day-btn brief'+(selBrief&&selBrief.id===a.id?' active':'')+'" onclick="selBriefFn('+i+')"><span class="type-badge brief">B</span> '+a.date+'</button>';});
   nav+='</div>';
-  if(!selectedAnalysis)return'<div class="analysis-page">'+nav+'<div class="analysis-import-zone" style="border:2px dashed var(--border2);border-radius:12px;padding:50px;text-align:center;color:var(--text3);"><div style="font-size:36px;margin-bottom:12px;">☀</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text2);">Niciun brief</div><button class="btn btn-green" onclick="openAnalysisModal()">+ Import Brief</button></div></div>';
-  return'<div class="analysis-page">'+nav+renderAnalysisContent(selectedAnalysis)+'</div>';}
+  if(!selBrief)return'<div class="page">'+nav+'<div style="text-align:center;padding:60px;color:var(--text3);">Niciun brief. Importa un JSON de analiza.</div></div>';
+  return'<div class="page">'+nav+mkBriefHTML(selBrief)+'</div>';}
 
-function renderAnalysisContent(rec){var a=rec.data||rec;var bDirs={bull:'↑ BULL',bear:'↓ BEAR',neutral:'— RANGE'};
-  var biasRows='';if(a.bias){biasRows=[{tf:'WEEKLY',d:a.bias.weekly},{tf:'DAILY',d:a.bias.daily},{tf:'H4',d:a.bias.h4}].map(function(r){if(!r.d)return'';return'<tr><td><b>'+r.tf+'</b></td><td><span class="bias-dir '+(r.d.direction||'')+'">'+( bDirs[r.d.direction]||'')+'</span></td><td style="color:var(--text2)">'+(r.d.summary||'')+'</td></tr>';}).join('');}
-  var levelRows=(a.key_levels||[]).map(function(l){return'<div class="level-row '+l.type+'"><span class="level-price">'+l.price+'</span><span class="level-label">'+l.label+'</span>'+(l.tf?'<span class="level-tf '+l.tf+'">'+l.tf.toUpperCase()+'</span>':'')+'</div>';}).join('');
-  function rSetup(s,pfx){var tgts=(s.targets||[]).map(function(t){return'<div class="target-row '+t.tp.toLowerCase()+'"><span class="target-label">'+t.tp+'</span><span class="target-price">'+t.price+'</span><span class="target-pips">'+t.pips+'p</span><span class="target-rr">'+t.rr+'</span><span class="target-size">'+t.size_pct+'%</span></div>';}).join('');
-    return'<div class="setup-card '+(s.priority||'secondary')+'"><div class="setup-hdr" onclick="toggleSetup(\''+pfx+'-'+s.id+'\')"><span class="setup-id '+pfx+'">'+s.id+'</span><span class="setup-title">'+s.label+'</span><span class="setup-dir '+s.direction+'">'+(s.direction==='short'?'↓ SHORT':'↑ LONG')+'</span><span class="setup-chevron" id="schv-'+pfx+'-'+s.id+'">▶</span></div><div class="setup-body" id="sbody-'+pfx+'-'+s.id+'"><div class="setup-logic">'+(s.logic||'')+'</div><div class="setup-condition"><strong>Conditie:</strong> '+(s.condition||'')+'</div>'+(s.warning?'<div class="setup-warning">⚠ '+s.warning+'</div>':'')+'<div class="setup-params"><div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+s.entry+'</div></div><div class="setup-param"><div class="setup-param-lbl">SL</div><div class="setup-param-val red">'+s.sl+'</div></div><div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">'+s.risk_pips+'p</div></div>'+(s.session?'<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">'+s.session+'</div></div>':'')+(s.duration?'<div class="setup-param"><div class="setup-param-lbl">DURATA</div><div class="setup-param-val">'+s.duration+'</div></div>':'')+'</div><div class="setup-targets">'+tgts+'</div>'+(s.management?'<div class="setup-management">📋 '+s.management+'</div>':'')+(s.invalidation?'<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> '+s.invalidation+'</div>':'')+
-    '<button class="btn btn-ghost btn-sm add-to-journal-btn" onclick="addToJournal('+JSON.stringify(s).replace(/"/g,"'").replace(/'/g,"\\'").replace(/\\\\'([^']*)\\\\':/g,"'$1':")+')">📓 Adauga in Jurnal</button></div></div>';}
-  var dtHTML=(a.day_trades||[]).map(function(s){return rSetup(s,'dt');}).join('');
-  var swHTML=(a.swing_trades||[]).map(function(s){return rSetup(s,'sw');}).join('');
-  var avoidHTML=(a.avoid||[]).map(function(x){return'<li>'+x+'</li>';}).join('');
-  var scenHTML=(a.scenarios||[]).map(function(s){return'<div class="scenario-row"><span class="scenario-cond">'+s.condition+'</span><span class="scenario-arrow">→</span><span class="scenario-action">'+s.action+'</span></div>';}).join('');
-  return'<div class="analysis-header"><div class="analysis-header-top"><div class="analysis-title"><span class="analysis-type-badge brief">☀ BRIEF</span>'+(a.pair||currentPair)+' — '+(a.day||'')+' '+(a.date||'')+'</div><div class="analysis-meta"><span class="analysis-meta-badge">📍 '+(a.current_price||'N/A')+'</span><button class="btn btn-red btn-sm" onclick="deleteAnalysis(\''+rec.id+'\',\'brief\')">🗑</button></div></div>'+(a.session_note?'<div class="session-note">⚠ '+a.session_note+'</div>':'')+'</div><div class="analysis-grid">'+(a.bias?'<div class="analysis-card"><div class="analysis-card-title">Bias</div><table class="bias-table"><tr><th>TF</th><th>Bias</th><th>Motiv</th></tr>'+biasRows+'</table><div class="bias-conclusion">'+(a.bias.conclusion||'')+'</div></div>':'')+(levelRows?'<div class="analysis-card"><div class="analysis-card-title">Nivele</div><div class="levels-list">'+levelRows+'</div></div>':'')+(a.critical_observation?'<div class="analysis-card full"><div class="analysis-card-title">⚠ Observatie critica</div><div class="setup-warning"><strong>'+a.critical_observation.title+'</strong><br>'+a.critical_observation.text+'</div></div>':'')+(dtHTML?'<div class="analysis-card"><div class="analysis-card-title">🎯 Day Trade</div><div class="setups-grid">'+dtHTML+'</div></div>':'')+(swHTML?'<div class="analysis-card"><div class="analysis-card-title">📈 Swing Trade</div><div class="setups-grid">'+swHTML+'</div></div>':'')+(avoidHTML?'<div class="analysis-card"><div class="analysis-card-title">✕ Evita</div><ul class="avoid-list">'+avoidHTML+'</ul></div>':'')+(scenHTML?'<div class="analysis-card"><div class="analysis-card-title">🔑 Scenarii</div>'+scenHTML+'</div>':'')+'</div>';}
+function selBriefFn(i){selBrief=allBriefs[i];renderAll();}
 
-function toggleSetup(id){var b=document.getElementById('sbody-'+id),c=document.getElementById('schv-'+id);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
-function selectAnalysis(idx){selectedAnalysis=allAnalyses[idx];renderAll();}
-
-// ── DEBRIEF PAGE ───────────────────────────────────────────
-function renderDebriefPage(){
-  var nav='<div class="analysis-day-nav"><button class="btn btn-orange btn-sm" onclick="openDebriefModal()">+ Debrief</button>';
-  allDebriefs.forEach(function(d,i){var cls=(selectedDebrief&&selectedDebrief.id===d.id)?'analysis-day-btn active debrief':'analysis-day-btn debrief';nav+='<button class="'+cls+'" onclick="selectDebrief('+i+')"><span class="analysis-type-badge debrief">🌙</span> '+d.date+'</button>';});
-  nav+='</div>';
-  if(!selectedDebrief){return'<div class="analysis-page">'+nav+'<div class="analysis-import-zone" style="border:2px dashed var(--border2);border-radius:12px;padding:50px;text-align:center;color:var(--text3);"><div style="font-size:36px;margin-bottom:12px;">🌙</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text2);">Niciun debrief</div><div style="font-size:12px;margin-bottom:20px;">Importa JSON-ul de debrief generat dupa analiza CSV-urilor</div><button class="btn btn-orange" onclick="openDebriefModal()">+ Import Debrief</button></div></div>';}
-  var d=selectedDebrief;
-  var html='<div class="analysis-page">'+nav;
-  html+='<div class="analysis-header"><div class="analysis-header-top"><div class="analysis-title"><span class="analysis-type-badge debrief">🌙 DEBRIEF</span> '+(d.data.pair||currentPair)+' — '+(d.date||'')+'</div><div class="analysis-meta"><button class="btn btn-red btn-sm" onclick="deleteAnalysis(\''+d.id+'\',\'debrief\')">🗑</button></div></div></div>';
-  html+=renderDebriefContent(d.data);
-  html+='</div>';
-  return html;}
-
-function renderDebriefContent(data){
-  if(!data)return'';
-  // Render structured debrief JSON
-  var html='<div class="analysis-grid">';
-  // Sessions
-  if(data.sessions){
-    data.sessions.forEach(function(s){
-      html+='<div class="analysis-card full"><div class="analysis-card-title">'+s.name+'</div>';
-      html+='<div class="debrief-content"><p>'+esc(s.narrative||'')+'</p>';
-      if(s.candles&&s.candles.length>0){html+='<pre>';s.candles.forEach(function(c){html+=c+'\n';});html+='</pre>';}
-      html+='</div></div>';});
+function mkBriefHTML(rec){
+  var a=rec.data||rec;
+  var bDirs={bull:'BULL',bear:'BEAR',neutral:'RANGE'};
+  var bRows='';
+  if(a.bias){
+    [{tf:'WEEKLY',d:a.bias.weekly},{tf:'DAILY',d:a.bias.daily},{tf:'H4',d:a.bias.h4}].forEach(function(r){
+      if(!r.d)return;
+      bRows+='<tr><td><b>'+r.tf+'</b></td><td><span class="bdir '+(r.d.direction||'')+'">'+(bDirs[r.d.direction]||r.d.direction||'')+'</span></td><td>'+esc(r.d.summary||'')+'</td></tr>';
+    });
   }
-  // Zones touched
-  if(data.zones_touched&&data.zones_touched.length>0){
-    html+='<div class="analysis-card full"><div class="analysis-card-title">📍 Zone Atinse — Calcul Trade</div><div class="debrief-content">';
-    data.zones_touched.forEach(function(z){
-      html+='<h3>'+esc(z.zone||'')+'</h3>';
-      if(z.trade){html+='<table><tr><th>Entry</th><th>SL</th><th>TP1</th><th>TP2</th><th>Risk</th><th>Rezultat</th></tr><tr><td>'+z.trade.entry+'</td><td>'+z.trade.sl+'</td><td>'+(z.trade.tp1||'-')+'</td><td>'+(z.trade.tp2||'-')+'</td><td>'+(z.trade.risk_pips||'-')+'p</td><td><strong>'+esc(z.trade.result||'-')+'</strong></td></tr></table>';}
-      if(z.notes)html+='<p>'+esc(z.notes)+'</p>';});
-    html+='</div></div>';}
-  // Predictions table
-  if(data.predictions&&data.predictions.length>0){
-    html+='<div class="analysis-card full"><div class="analysis-card-title">✅ Predictii vs Realitate</div><div class="debrief-content"><table><tr><th>Predictie</th><th>Realitate</th><th>Verdict</th></tr>';
-    data.predictions.forEach(function(p){html+='<tr><td>'+esc(p.prediction)+'</td><td>'+esc(p.reality)+'</td><td><strong>'+(p.correct?'✅':'❌')+' '+esc(p.verdict||'')+'</strong></td></tr>';});
-    html+='</table></div></div>';}
+  var lvls=(a.key_levels||[]).map(function(l){return'<div class="lrow '+l.type+'"><span class="lprice">'+l.price+'</span><span class="llabel">'+esc(l.label)+'</span>'+(l.tf?'<span class="ltf '+l.tf+'">'+l.tf+'</span>':'')+'</div>';}).join('');
+  var dtHTML=(a.day_trades||[]).map(function(s){return mkSetup(s,'dt');}).join('');
+  var swHTML=(a.swing_trades||[]).map(function(s){return mkSetup(s,'sw');}).join('');
+  var avHTML=(a.avoid||[]).map(function(x){return'<li>'+esc(x)+'</li>';}).join('');
+  var scHTML=(a.scenarios||[]).map(function(s){return'<div class="scen-row"><span class="scen-cond">'+esc(s.condition)+'</span><span class="scen-arr">to</span><span class="scen-act">'+esc(s.action)+'</span></div>';}).join('');
+  var h='<div class="ahdr"><div class="ahdr-top"><div class="atitle"><span class="type-badge brief">BRIEF</span>'+esc(a.pair||currentPair)+' - '+esc(a.day||'')+' '+esc(a.date||'')+'</div>'
+    +'<div class="ameta"><span class="ameta-badge">'+esc(a.current_price||'')+'</span><button class="btn btn-red btn-sm" onclick="delBrief(''+rec.id+'')">Delete</button></div></div>'
+    +(a.session_note?'<div class="snote">'+esc(a.session_note)+'</div>':'')+'</div>';
+  h+='<div class="acard grid2">';
+  if(bRows)h+='<div class="acard"><div class="acard-title">Bias</div><table class="btable"><tr><th>TF</th><th>Dir</th><th>Motiv</th></tr>'+bRows+'</table>'+(a.bias.conclusion?'<div class="bconc">'+esc(a.bias.conclusion)+'</div>':'')+'</div>';
+  if(lvls)h+='<div class="acard"><div class="acard-title">Nivele</div>'+lvls+'</div>';
+  h+='</div>';
+  if(a.critical_observation)h+='<div class="acard"><div class="acard-title">Observatie critica</div><div class="swarn"><b>'+esc(a.critical_observation.title)+'</b><br>'+esc(a.critical_observation.text)+'</div></div>';
+  h+='<div class="acard grid2">';
+  if(dtHTML)h+='<div class="acard"><div class="acard-title">Day Trade</div>'+dtHTML+'</div>';
+  if(swHTML)h+='<div class="acard"><div class="acard-title">Swing Trade</div>'+swHTML+'</div>';
+  h+='</div>';
+  if(avHTML)h+='<div class="acard"><div class="acard-title">Evita</div><ul class="avoid-list">'+avHTML+'</ul></div>';
+  if(scHTML)h+='<div class="acard"><div class="acard-title">Scenarii</div>'+scHTML+'</div>';
+  return h;}
+
+function mkSetup(s,pfx){
+  var tgts=(s.targets||[]).map(function(t){return'<div class="trow '+t.tp.toLowerCase()+'"><span class="tlbl">'+t.tp+'</span><span class="tprice">'+t.price+'</span><span class="tpips">'+t.pips+'p</span><span class="trr">'+t.rr+'</span><span class="tsize">'+t.size_pct+'%</span></div>';}).join('');
+  var bid='s-'+pfx+'-'+s.id;
+  return'<div class="scard '+(s.priority||'secondary')+'">'
+    +'<div class="shdr" onclick="togSetup(''+bid+'')">'
+    +'<span class="sid '+pfx+'">'+s.id+'</span>'
+    +'<span class="stitle">'+esc(s.label)+'</span>'
+    +'<span class="sdir '+(s.direction||'')+'">'+(s.direction==='short'?'SHORT':'LONG')+'</span>'
+    +'<span class="schv" id="chv-'+bid+'">v</span>'
+    +'</div>'
+    +'<div class="sbody" id="sb-'+bid+'">'
+    +(s.logic?'<div class="slogic">'+esc(s.logic)+'</div>':'')
+    +(s.condition?'<div class="scond"><b>Conditie:</b> '+esc(s.condition)+'</div>':'')
+    +(s.warning?'<div class="swarn">'+esc(s.warning)+'</div>':'')
+    +'<div class="sparams">'
+    +'<div class="sparam"><div class="sparam-l">ENTRY</div><div class="sparam-v">'+esc(s.entry||'')+'</div></div>'
+    +'<div class="sparam"><div class="sparam-l">SL</div><div class="sparam-v red">'+esc(s.sl||'')+'</div></div>'
+    +'<div class="sparam"><div class="sparam-l">RISC</div><div class="sparam-v">'+esc(String(s.risk_pips||''))+'p</div></div>'
+    +(s.session?'<div class="sparam"><div class="sparam-l">SESIUNE</div><div class="sparam-v" style="font-size:10px">'+esc(s.session)+'</div></div>':'')
+    +(s.duration?'<div class="sparam"><div class="sparam-l">DURATA</div><div class="sparam-v">'+esc(s.duration)+'</div></div>':'')
+    +'</div>'
+    +(tgts?'<div class="setup-targets">'+tgts+'</div>':'')
+    +(s.management?'<div class="smgmt">'+esc(s.management)+'</div>':'')
+    +(s.invalidation?'<div class="scond" style="border-left:3px solid var(--bear);margin-top:8px;"><b>Invalidare:</b> '+esc(s.invalidation)+'</div>':'')
+    +'<button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;" onclick="addToJournal('+JSON.stringify(s).replace(/\/g,'\\').replace(/'/g,"\'").replace(/"/g,'\"')+')">Adauga in Jurnal</button>'
+    +'</div></div>';}
+
+function togSetup(id){var b=document.getElementById('sb-'+id),c=document.getElementById('chv-'+id);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
+
+// Debrief page
+function renderDebriefPage(){
+  var nav='<div class="day-nav"><button class="btn btn-orange btn-sm" onclick="document.getElementById('debriefModal').classList.add('active')">+ Debrief</button>';
+  allDebriefs.forEach(function(a,i){nav+='<button class="day-btn debrief'+(selDebrief&&selDebrief.id===a.id?' active':'')+'" onclick="selDebriefFn('+i+')"><span class="type-badge debrief">D</span> '+a.date+'</button>';});
+  nav+='</div>';
+  if(!selDebrief)return'<div class="page">'+nav+'<div style="text-align:center;padding:60px;color:var(--text3);">Niciun debrief. Importa JSON de debrief dupa analiza CSV.</div></div>';
+  var d=selDebrief.data||{};
+  var h='<div class="page">'+nav;
+  h+='<div class="ahdr"><div class="ahdr-top"><div class="atitle"><span class="type-badge debrief">DEBRIEF</span>'+esc(d.pair||currentPair)+' - '+esc(selDebrief.date)+'</div><div class="ameta"><button class="btn btn-red btn-sm" onclick="delDebrief(''+selDebrief.id+'')">Delete</button></div></div></div>';
+  // Sessions
+  if(d.sessions&&d.sessions.length>0){
+    d.sessions.forEach(function(s){
+      h+='<div class="acard"><div class="acard-title">'+esc(s.name||'Sesiune')+'</div>';
+      h+='<div class="db-content"><p>'+esc(s.narrative||'')+'</p>';
+      if(s.candles&&s.candles.length>0){h+='<pre>';s.candles.forEach(function(c){h+=esc(c)+'
+';});h+='</pre>';}
+      h+='</div></div>';
+    });
+  }
+  // Zones
+  if(d.zones_touched&&d.zones_touched.length>0){
+    h+='<div class="acard"><div class="acard-title">Zone Atinse</div><div class="db-content">';
+    d.zones_touched.forEach(function(z){
+      h+='<h3>'+esc(z.zone||'')+'</h3>';
+      if(z.trade){h+='<table><tr><th>Entry</th><th>SL</th><th>TP1</th><th>TP2</th><th>Pips</th><th>Rezultat</th></tr><tr><td>'+esc(String(z.trade.entry||'-'))+'</td><td>'+esc(String(z.trade.sl||'-'))+'</td><td>'+esc(String(z.trade.tp1||'-'))+'</td><td>'+esc(String(z.trade.tp2||'-'))+'</td><td>'+esc(String(z.trade.risk_pips||'-'))+'</td><td><b>'+esc(String(z.trade.result||'-'))+'</b></td></tr></table>';}
+      if(z.notes)h+='<p>'+esc(z.notes)+'</p>';
+    });
+    h+='</div></div>';
+  }
+  // Predictions
+  if(d.predictions&&d.predictions.length>0){
+    h+='<div class="acard"><div class="acard-title">Predictii vs Realitate</div><div class="db-content"><table><tr><th>Predictie</th><th>Realitate</th><th>Verdict</th></tr>';
+    d.predictions.forEach(function(p){h+='<tr><td>'+esc(p.prediction||'')+'</td><td>'+esc(p.reality||'')+'</td><td>'+(p.correct?'OK':'X')+' '+esc(p.verdict||'')+'</td></tr>';});
+    h+='</table></div></div>';
+  }
   // Tomorrow
-  if(data.for_tomorrow){
-    html+='<div class="analysis-card full"><div class="analysis-card-title">🔮 Ce inseamna pentru maine</div><div class="debrief-content">';
-    if(Array.isArray(data.for_tomorrow)){data.for_tomorrow.forEach(function(t){html+='<p>'+esc(t)+'</p>';});}
-    else{html+='<p>'+esc(data.for_tomorrow)+'</p>';}
-    html+='</div></div>';}
-  // Fallback: raw text
-  if(!data.sessions&&!data.zones_touched&&!data.predictions){
-    html+='<div class="analysis-card full"><div class="debrief-content"><pre style="white-space:pre-wrap;">'+esc(JSON.stringify(data,null,2))+'</pre></div></div>';}
-  html+='</div>';
-  return html;}
+  if(d.for_tomorrow){
+    h+='<div class="acard"><div class="acard-title">Pentru Maine</div><div class="db-content">';
+    if(Array.isArray(d.for_tomorrow)){d.for_tomorrow.forEach(function(t){h+='<p>'+esc(t)+'</p>';});}
+    else{h+='<p>'+esc(d.for_tomorrow)+'</p>';}
+    h+='</div></div>';
+  }
+  if(!d.sessions&&!d.zones_touched&&!d.predictions){
+    h+='<div class="acard"><div class="db-content"><pre>'+esc(JSON.stringify(d,null,2))+'</pre></div></div>';
+  }
+  h+='</div>';
+  return h;}
 
-function selectDebrief(idx){selectedDebrief=allDebriefs[idx];renderAll();}
+function selDebriefFn(i){selDebrief=allDebriefs[i];renderAll();}
 
-// ── JOURNAL PAGE ───────────────────────────────────────────
+// Journal page
 function renderJournalPage(){
   var wins=journalEntries.filter(function(e){return e.result&&e.result.startsWith('win');}).length;
   var losses=journalEntries.filter(function(e){return e.result==='loss';}).length;
   var bes=journalEntries.filter(function(e){return e.result==='be';}).length;
   var closed=wins+losses+bes;
   var wr=closed>0?Math.round(wins/closed*100):0;
-  var totalPips=journalEntries.reduce(function(acc,e){return acc+(parseFloat(e.pips)||0);},0);
-  var html='<div class="journal-page">';
-  html+='<div class="journal-header"><h2 style="font-size:16px;font-weight:700;">📓 Jurnal Trades — '+currentPair+'</h2><button class="btn btn-green" onclick="openJournalModal()">+ Trade Nou</button></div>';
-  html+='<div class="journal-stats">';
-  html+='<div class="stat-card"><div class="stat-val">'+journalEntries.length+'</div><div class="stat-lbl">Total Trades</div></div>';
-  html+='<div class="stat-card"><div class="stat-val green">'+wins+'</div><div class="stat-lbl">Wins</div></div>';
-  html+='<div class="stat-card"><div class="stat-val red">'+losses+'</div><div class="stat-lbl">Losses</div></div>';
-  html+='<div class="stat-card"><div class="stat-val orange">'+bes+'</div><div class="stat-lbl">Breakeven</div></div>';
-  html+='<div class="stat-card"><div class="stat-val '+(wr>=50?'green':'red')+'">'+wr+'%</div><div class="stat-lbl">Winrate</div></div>';
-  html+='<div class="stat-card"><div class="stat-val '+(totalPips>=0?'green':'red')+'">'+totalPips.toFixed(1)+'</div><div class="stat-lbl">Total Pips</div></div>';
-  html+='</div>';
-  if(journalEntries.length===0){html+='<div style="text-align:center;padding:60px;color:var(--text3);"><div style="font-size:36px;margin-bottom:12px;">📓</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text2);">Niciun trade</div><div style="font-size:12px;margin-bottom:20px;">Adauga trades manual sau din brief-ul de analiza</div><button class="btn btn-green" onclick="openJournalModal()">+ Trade Nou</button></div>';}
+  var tp=journalEntries.reduce(function(a,e){return a+(parseFloat(e.pips)||0);},0);
+  var h='<div class="page">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">';
+  h+='<h2 style="font-size:16px;font-weight:700;">Jurnal - '+currentPair+'</h2>';
+  h+='<button class="btn btn-green" onclick="openJModal()">+ Trade Nou</button></div>';
+  h+='<div class="jstats">';
+  h+='<div class="jstat"><div class="jstat-v">'+journalEntries.length+'</div><div class="jstat-l">Total</div></div>';
+  h+='<div class="jstat"><div class="jstat-v g">'+wins+'</div><div class="jstat-l">Wins</div></div>';
+  h+='<div class="jstat"><div class="jstat-v r">'+losses+'</div><div class="jstat-l">Losses</div></div>';
+  h+='<div class="jstat"><div class="jstat-v o">'+bes+'</div><div class="jstat-l">BE</div></div>';
+  h+='<div class="jstat"><div class="jstat-v '+(wr>=50?'g':'r')+'">'+wr+'%</div><div class="jstat-l">Winrate</div></div>';
+  h+='<div class="jstat"><div class="jstat-v '+(tp>=0?'g':'r')+'">'+tp.toFixed(1)+'</div><div class="jstat-l">Total Pips</div></div>';
+  h+='</div>';
+  if(journalEntries.length===0){h+='<div style="text-align:center;padding:60px;color:var(--text3);">Niciun trade. Adauga primul trade sau importa dintr-un brief.</div>';}
   else{
-    html+='<div style="overflow-x:auto;"><table class="journal-table"><thead><tr><th>Data</th><th>Sesiune</th><th>Dir</th><th>Setup</th><th>Zona</th><th>Entry</th><th>SL</th><th>TP1</th><th>Exit</th><th>Pips</th><th>R:R</th><th>Rezultat</th><th>Note</th><th></th></tr></thead><tbody>';
+    h+='<div style="overflow-x:auto;"><table class="jtable"><thead><tr><th>Data</th><th>Ses</th><th>Dir</th><th>Setup</th><th>Zona</th><th>Entry</th><th>SL</th><th>TP1</th><th>Exit</th><th>Pips</th><th>R:R</th><th>Result</th><th>Note</th><th></th></tr></thead><tbody>';
     journalEntries.slice().reverse().forEach(function(e){
-      var rCls=e.result==='loss'?'loss':e.result==='be'?'be':e.result==='open'?'open':e.result==='skip'?'skip':'win';
-      var rLabel={win:'Win TP1',win2:'Win TP2',win3:'Win TP3',be:'BE',loss:'Loss',open:'Open',skip:'Skip'}[e.result]||e.result||'-';
-      var pipsCls=parseFloat(e.pips||0)>=0?'pos':'neg';
-      html+='<tr><td>'+esc(e.date||'-')+'</td><td>'+esc(e.session||'-')+'</td><td><span class="journal-dir '+(e.direction||'')+'">'+({short:'↓ SHORT',long:'↑ LONG'}[e.direction]||'-')+'</span></td><td>'+esc(e.setup_id||'-')+'</td><td>'+esc(e.zone_label||'-')+'</td><td style="font-family:monospace">'+(e.entry_price||'-')+'</td><td style="font-family:monospace;color:var(--bear)">'+(e.sl_price||'-')+'</td><td style="font-family:monospace;color:var(--bull)">'+(e.tp1_price||'-')+'</td><td style="font-family:monospace">'+(e.exit_price||'-')+'</td><td><span class="journal-pips '+pipsCls+'">'+(e.pips!=null?(parseFloat(e.pips)>=0?'+':'')+parseFloat(e.pips).toFixed(1)+'p':'-')+'</span></td><td>'+(e.rr_achieved?'1:'+e.rr_achieved:'-')+'</td><td><span class="journal-result '+rCls+'">'+rLabel+'</span></td><td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+esc(e.notes||'')+'">'+esc(e.notes||'')+'</td><td style="white-space:nowrap;"><button class="btn btn-ghost btn-sm" onclick="editJournal(\''+e.id+'\')">✏</button> <button class="btn btn-red btn-sm" onclick="deleteJournal(\''+e.id+'\')">🗑</button></td></tr>';});
-    html+='</tbody></table></div>';}
-  html+='</div>';
-  return html;}
+      var rc=e.result==='loss'?'loss':e.result==='be'?'be':e.result==='open'?'open':e.result==='skip'?'skip':'win';
+      var rl={win:'Win TP1',win2:'Win TP2',win3:'Win TP3',be:'BE',loss:'Loss',open:'Open',skip:'Skip'}[e.result]||e.result||'-';
+      var pc=parseFloat(e.pips||0)>=0?'pos':'neg';
+      h+='<tr>';
+      h+='<td>'+esc(e.date||'-')+'</td>';
+      h+='<td>'+esc(e.session||'-')+'</td>';
+      h+='<td><span class="jdir '+(e.direction||'')+'">'+(e.direction==='short'?'SHORT':'LONG')+'</span></td>';
+      h+='<td>'+esc(e.setup_id||'-')+'</td>';
+      h+='<td>'+esc(e.zone_label||'-')+'</td>';
+      h+='<td style="font-family:monospace">'+(e.entry_price||'-')+'</td>';
+      h+='<td style="font-family:monospace;color:var(--bear)">'+(e.sl_price||'-')+'</td>';
+      h+='<td style="font-family:monospace;color:var(--bull)">'+(e.tp1_price||'-')+'</td>';
+      h+='<td style="font-family:monospace">'+(e.exit_price||'-')+'</td>';
+      h+='<td><span class="jpips '+pc+'">'+(e.pips!=null?(parseFloat(e.pips)>=0?'+':'')+parseFloat(e.pips).toFixed(1)+'p':'-')+'</span></td>';
+      h+='<td>'+(e.rr_achieved?'1:'+e.rr_achieved:'-')+'</td>';
+      h+='<td><span class="jres '+rc+'">'+rl+'</span></td>';
+      h+='<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+esc(e.notes||'')+'">'+esc(e.notes||'')+'</td>';
+      h+='<td style="white-space:nowrap;"><button class="btn btn-ghost btn-sm" onclick="editJ(''+e.id+'')">Edit</button> <button class="btn btn-red btn-sm" onclick="delJ(''+e.id+'')">Del</button></td>';
+      h+='</tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='</div>';
+  return h;}
 
-function openJournalModal(setup){editingJournalId=null;document.getElementById('journalModalTitle').textContent='Adauga Trade in Jurnal';document.getElementById('jDate').value=new Date().toISOString().slice(0,10);document.getElementById('jSession').value='London';document.getElementById('jDir').value='short';document.getElementById('jSetup').value='';document.getElementById('jZone').value='';document.getElementById('jEntry').value='';document.getElementById('jSl').value='';document.getElementById('jTp1').value='';document.getElementById('jTp2').value='';document.getElementById('jTp3').value='';document.getElementById('jResult').value='open';document.getElementById('jExit').value='';document.getElementById('jPips').value='';document.getElementById('jRr').value='';document.getElementById('jNotes').value='';if(setup){document.getElementById('jDir').value=setup.direction||'short';document.getElementById('jSetup').value=setup.id+' — '+(setup.label||'');document.getElementById('jZone').value=setup.zone_label||'';document.getElementById('jEntry').value=(setup.entry||'').split('-')[0].trim();document.getElementById('jSl').value=setup.sl||'';if(setup.targets&&setup.targets[0])document.getElementById('jTp1').value=setup.targets[0].price||'';if(setup.targets&&setup.targets[1])document.getElementById('jTp2').value=setup.targets[1].price||'';if(setup.targets&&setup.targets[2])document.getElementById('jTp3').value=setup.targets[2].price||'';}document.getElementById('journalModal').classList.add('active');}
+function openJModal(setup){
+  editJId=null;
+  document.getElementById('jModalTitle').textContent='Trade Nou';
+  document.getElementById('jDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('jSession').value='London';
+  document.getElementById('jDir').value='short';
+  document.getElementById('jSetup').value='';
+  document.getElementById('jZone').value='';
+  document.getElementById('jEntry').value='';
+  document.getElementById('jSl').value='';
+  document.getElementById('jTp1').value='';
+  document.getElementById('jTp2').value='';
+  document.getElementById('jTp3').value='';
+  document.getElementById('jResult').value='open';
+  document.getElementById('jExit').value='';
+  document.getElementById('jPips').value='';
+  document.getElementById('jRr').value='';
+  document.getElementById('jNotes').value='';
+  if(setup){
+    document.getElementById('jDir').value=setup.direction||'short';
+    document.getElementById('jSetup').value=(setup.id||'')+(setup.label?' - '+setup.label:'');
+    document.getElementById('jZone').value=setup.zone_label||'';
+    var entryStr=(setup.entry||'').toString().split('-')[0].trim();
+    document.getElementById('jEntry').value=entryStr;
+    document.getElementById('jSl').value=setup.sl||'';
+    if(setup.targets&&setup.targets[0])document.getElementById('jTp1').value=setup.targets[0].price||'';
+    if(setup.targets&&setup.targets[1])document.getElementById('jTp2').value=setup.targets[1].price||'';
+    if(setup.targets&&setup.targets[2])document.getElementById('jTp3').value=setup.targets[2].price||'';
+  }
+  document.getElementById('journalModal').classList.add('active');}
 
-function addToJournal(setup){openJournalModal(setup);}
+function addToJournal(s){openJModal(s);}
 
-function editJournal(id){var e=journalEntries.find(function(j){return j.id===id;});if(!e)return;editingJournalId=id;document.getElementById('journalModalTitle').textContent='Editeaza Trade';document.getElementById('jDate').value=e.date||'';document.getElementById('jSession').value=e.session||'London';document.getElementById('jDir').value=e.direction||'short';document.getElementById('jSetup').value=e.setup_id||'';document.getElementById('jZone').value=e.zone_label||'';document.getElementById('jEntry').value=e.entry_price||'';document.getElementById('jSl').value=e.sl_price||'';document.getElementById('jTp1').value=e.tp1_price||'';document.getElementById('jTp2').value=e.tp2_price||'';document.getElementById('jTp3').value=e.tp3_price||'';document.getElementById('jResult').value=e.result||'open';document.getElementById('jExit').value=e.exit_price||'';document.getElementById('jPips').value=e.pips||'';document.getElementById('jRr').value=e.rr_achieved||'';document.getElementById('jNotes').value=e.notes||'';document.getElementById('journalModal').classList.add('active');}
+function editJ(id){
+  var e=journalEntries.find(function(j){return j.id===id;});
+  if(!e)return;
+  editJId=id;
+  document.getElementById('jModalTitle').textContent='Editeaza Trade';
+  document.getElementById('jDate').value=e.date||'';
+  document.getElementById('jSession').value=e.session||'London';
+  document.getElementById('jDir').value=e.direction||'short';
+  document.getElementById('jSetup').value=e.setup_id||'';
+  document.getElementById('jZone').value=e.zone_label||'';
+  document.getElementById('jEntry').value=e.entry_price||'';
+  document.getElementById('jSl').value=e.sl_price||'';
+  document.getElementById('jTp1').value=e.tp1_price||'';
+  document.getElementById('jTp2').value=e.tp2_price||'';
+  document.getElementById('jTp3').value=e.tp3_price||'';
+  document.getElementById('jResult').value=e.result||'open';
+  document.getElementById('jExit').value=e.exit_price||'';
+  document.getElementById('jPips').value=e.pips||'';
+  document.getElementById('jRr').value=e.rr_achieved||'';
+  document.getElementById('jNotes').value=e.notes||'';
+  document.getElementById('journalModal').classList.add('active');}
 
-async function saveJournalEntry(){
+async function saveJournal(){
   var entry=parseFloat(document.getElementById('jEntry').value)||null;
   var sl=parseFloat(document.getElementById('jSl').value)||null;
   var exit=parseFloat(document.getElementById('jExit').value)||null;
+  var tp1=parseFloat(document.getElementById('jTp1').value)||null;
+  var dir=document.getElementById('jDir').value;
   var pips=parseFloat(document.getElementById('jPips').value)||null;
   var rr=parseFloat(document.getElementById('jRr').value)||null;
-  var dir=document.getElementById('jDir').value;
-  // Auto-calc pips
   if(!pips&&entry&&exit){pips=dir==='short'?Math.round((entry-exit)*10000)/10:Math.round((exit-entry)*10000)/10;}
-  var tp1=parseFloat(document.getElementById('jTp1').value)||null;
   if(!rr&&entry&&sl&&tp1){var risk=Math.abs(entry-sl);var reward=Math.abs(tp1-entry);rr=risk>0?Math.round(reward/risk*10)/10:null;}
-  var id=editingJournalId||('j_'+currentPair+'_'+Date.now());
+  var id=editJId||('j_'+currentPair+'_'+Date.now());
   var obj={id:id,pair:currentPair,date:document.getElementById('jDate').value,session:document.getElementById('jSession').value,direction:dir,setup_id:document.getElementById('jSetup').value,zone_label:document.getElementById('jZone').value,entry_price:entry,sl_price:sl,tp1_price:tp1,tp2_price:parseFloat(document.getElementById('jTp2').value)||null,tp3_price:parseFloat(document.getElementById('jTp3').value)||null,result:document.getElementById('jResult').value,exit_price:exit,pips:pips,rr_achieved:rr,notes:document.getElementById('jNotes').value};
   await sb.from('smc_journal').upsert(obj,{onConflict:'id'});
-  if(editingJournalId){var idx=journalEntries.findIndex(function(e){return e.id===editingJournalId;});if(idx>=0)journalEntries[idx]=obj;}else{journalEntries.push(obj);}
-  closeModal('journalModal');renderAll();showToast('✓ Trade salvat');}
+  if(editJId){var idx=journalEntries.findIndex(function(e){return e.id===editJId;});if(idx>=0)journalEntries[idx]=obj;}
+  else{journalEntries.push(obj);}
+  closeModal('journalModal');renderAll();toast('Trade salvat');}
 
-async function deleteJournal(id){if(!confirm('Sterge trade-ul?'))return;await sb.from('smc_journal').delete().eq('id',id);journalEntries=journalEntries.filter(function(e){return e.id!==id;});renderAll();showToast('✓ Trade sters');}
+async function delJ(id){if(!confirm('Sterge?'))return;await sb.from('smc_journal').delete().eq('id',id);journalEntries=journalEntries.filter(function(e){return e.id!==id;});renderAll();toast('Sters');}
 
+// Archive page
 function renderArchivePage(){
-  var html='<div class="archive-page"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><h2 style="font-size:16px;font-weight:700;">🗄 Arhiva Zone — '+currentPair+'</h2></div>';
-  if(archivedZones.length===0){html+='<div style="text-align:center;padding:60px;color:var(--text3);"><div style="font-size:36px;margin-bottom:12px;">🗄</div><div style="font-size:15px;font-weight:700;color:var(--text2);">Nicio zona arhivata</div></div>';}
-  else{html+='<div class="zone-list">';archivedZones.forEach(function(z){var top=z.top_price||0,btm=z.btm_price||0;html+='<div class="zone-item archive-zone-item '+(z.direction||'bear')+'-'+(z.zone_type||'ob')+'"><div class="zone-row-compact" onclick="toggleZone('arch-'+z.id+'')"><span class="zone-compact-type">'+(z.direction==='bull'?'🟢':'🔴')+' ['+(z.tf||'').toUpperCase()+'] '+(z.direction||'').toUpperCase()+' '+(z.zone_type||'').toUpperCase()+'</span><span class="zone-compact-label">'+esc(z.label||'')+'</span><span class="zone-compact-prices">'+parseFloat(btm).toFixed(5)+' / '+parseFloat(top).toFixed(5)+'</span><span class="zone-compact-status"><span class="status-badge '+(z.status||'mitigated')+'">'+( z.status||'mitigated')+'</span></span>'+(z.mitigated_at?'<span class="mitigated-date">'+z.mitigated_at+'</span>':'')+'<span class="zone-chevron" id="chv-arch-'+z.id+'">▶</span></div><div class="zone-expand" id="ze-arch-'+z.id+'"><div class="form-row"><div class="form-col w140"><span class="field-lbl">RESTAUREAZA CA</span><select onchange="restoreZone(''+z.id+'',this.value)"><option value="">-- selecteaza --</option><option value="active">↩ Active</option><option value="tested">↩ Tested</option></select></div></div><div style="font-size:11px;color:var(--text2);">'+esc(z.context_note||'No context')+'</div></div></div>';});html+='</div>';}
-  html+='</div>';return html;}
+  var h='<div class="page">';
+  h+='<div style="margin-bottom:16px;"><h2 style="font-size:16px;font-weight:700;">Arhiva Zone - '+currentPair+'</h2></div>';
+  if(archivedZones.length===0){
+    h+='<div style="text-align:center;padding:60px;color:var(--text3);">Nicio zona arhivata.</div>';
+  } else {
+    h+='<div class="zone-list">';
+    for(var i=0;i<archivedZones.length;i++){
+      var z=archivedZones[i];
+      var zTop=z.top_price||0;
+      var zBtm=z.btm_price||0;
+      var zSt=z.status||'mitigated';
+      var zLbl=esc(z.label||'');
+      var zTF=(z.tf||'').toUpperCase();
+      var zDir=(z.direction||'bear');
+      var zZT=(z.zone_type||'ob');
+      var zMit=z.mitigated_at?'<span class="mit-date">'+esc(z.mitigated_at)+'</span>':'';
+      var zCtx=esc(z.context_note||'No context');
+      var zEId='ze-arch'+i;
+      var zCId='chv-arch'+i;
+      var zDId=JSON.stringify(z.id);
+      h+='<div class="arch-item">';
+      h+='<div class="zone-row-compact" onclick="togArchZ('+i+')">';
+      h+=(zDir==='bull'?'[B] ':'[S] ')+zTF+' '+zDir.toUpperCase()+' '+zZT.toUpperCase()+' ';
+      h+=zLbl+' ';
+      h+='<span style="font-family:monospace;font-size:10px;color:var(--text2);">'+parseFloat(zBtm).toFixed(5)+'/'+parseFloat(zTop).toFixed(5)+'</span> ';
+      h+='<span class="status-badge '+zSt+'">'+zSt+'</span> ';
+      h+=zMit;
+      h+='<span class="zone-chevron" id="'+zCId+'">v</span>';
+      h+='</div>';
+      h+='<div class="zone-expand" id="'+zEId+'">';
+      h+='<div class="form-row"><div class="form-col w140"><span class="field-lbl">RESTAUREAZA CA</span>';
+      h+='<select onchange="restoreZ('+zDId+',this.value)">';
+      h+='<option value="">-- selecteaza --</option>';
+      h+='<option value="active">Restore Active</option>';
+      h+='<option value="tested">Restore Tested</option>';
+      h+='</select></div></div>';
+      h+='<p style="font-size:11px;color:var(--text2);margin-top:6px;">'+zCtx+'</p>';
+      h+='</div></div>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;}
 
-async function restoreZone(zid,newStatus){if(!newStatus)return;await sb.from('smc_zones').update({status:newStatus,mitigated_at:null}).eq('id',zid);showToast('✓ Zona restaurata ca '+newStatus);loadFromSupabase(currentPair);}
+function togArchZ(i){
+  var ze=document.getElementById('ze-arch'+i);
+  var chv=document.getElementById('chv-arch'+i);
+  if(ze)ze.classList.toggle('open');
+  if(chv)chv.classList.toggle('open');}
 
-loadFromSupabase(currentPair);
+async function restoreZ(zid,newStatus){
+  if(!newStatus)return;
+  await sb.from('smc_zones').update({status:newStatus,mitigated_at:null}).eq('id',zid);
+  toast('Zona restaurata ca '+newStatus);
+  loadSB(currentPair);}
+
+// Supabase
+function setSyncSt(s){var el=document.getElementById('syncIndicator');if(!el)return;if(s==='syncing'){el.className='sync-indicator syncing';el.textContent='Saving...';}else if(s==='synced'){el.className='sync-indicator synced';el.textContent='Synced';}else{el.className='sync-indicator error';el.textContent='Error';}}
+var _sT=null;
+function schedSync(){clearTimeout(_sT);_sT=setTimeout(syncSB,1500);}
+
+async function syncSB(){setSyncSt('syncing');try{var now=new Date().toISOString();var allZ=[],allEv=[];
+  for(var i=0;i<TFS.length;i++){var tf=TFS[i],d=state[tf];
+    await sb.from('smc_context').upsert({pair:currentPair,tf:tf,bias:d.bias,notes:d.notes||'',eqh:d.eqh?parseFloat(d.eqh):null,eql:d.eql?parseFloat(d.eql):null,current_price:state.current_price?parseFloat(state.current_price):null,updated_at:now},{onConflict:'pair,tf'});
+    d.obs.forEach(function(z){allZ.push({z:z,tf:tf,zt:'ob'});});
+    d.fvgs.forEach(function(z){allZ.push({z:z,tf:tf,zt:'fvg'});});
+    d.events.forEach(function(ev){allEv.push({ev:ev,tf:tf});});}
+  await sb.from('smc_zones').delete().eq('pair',currentPair).not('id','like','ps_%');
+  for(var j=0;j<allZ.length;j++){var item=allZ[j];var z=item.z,tf=item.tf,zt=item.zt;var topV=parseFloat(zt==='ob'?z.top:z.entry)||null;var btmV=parseFloat(zt==='ob'?z.btm:z.exit)||null;var detId=zid(currentPair,tf,zt,z.type||'bear',(topV||0).toFixed(5),(btmV||0).toFixed(5));
+    await sb.from('smc_zones').upsert({id:detId,pair:currentPair,tf:tf,zone_type:zt,direction:z.type||'bear',top_price:topV,btm_price:btmV,label:z.label||'',status:z.status||'active',formed_date:z.formed_date||null,formed_time:z.formed_time||null,context_note:z.ob_note||z.fvg_note||'',tags:z.tags||[],update_history:z.update_history||[],updated_at:now,mitigated_at:z.mitigated_at||null},{onConflict:'id'});}
+  await sb.from('smc_events').delete().eq('pair',currentPair).not('id','like','ps_%');
+  for(var k=0;k<allEv.length;k++){var item=allEv[k];var ev=item.ev,tf=item.tf;if(!ev.price&&!ev.type)continue;var evId='ev_'+currentPair+'_'+tf+'_'+(ev.type||'')+'_'+(ev.dir||'')+'_'+(ev.price||'0');
+    await sb.from('smc_events').upsert({id:evId,pair:currentPair,tf:tf,event_type:ev.type||'',direction:ev.dir||'bear',price:parseFloat(ev.price)||null,event_time:ev.time||null,event_date:ev.date||null},{onConflict:'id'});}
+  setSyncSt('synced');}catch(e){console.error(e);setSyncSt('error');}}
+
+async function loadSB(pair){setSyncSt('syncing');try{var s=pairStates[pair];
+  var r1=await sb.from('smc_context').select('*').eq('pair',pair);
+  if(r1.data&&r1.data.length>0)r1.data.forEach(function(c){if(!s[c.tf])return;s[c.tf].bias=c.bias||'';s[c.tf].notes=c.notes||'';if(c.tf==='h4'||c.tf==='h1'){s[c.tf].eqh=c.eqh?String(c.eqh):'';s[c.tf].eql=c.eql?String(c.eql):'';}if(c.current_price){s.current_price=String(c.current_price);document.getElementById('currentPrice').value=c.current_price;}});
+  var r2=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['active','tested']);
+  if(r2.data&&r2.data.length>0){TFS.forEach(function(tf){s[tf].obs=[];s[tf].fvgs=[];});r2.data.forEach(function(z){if(!s[z.tf])return;var detId=zid(pair,z.tf,z.zone_type,z.direction,String(z.top_price||0),String(z.btm_price||0));var zone={_id:detId,type:z.direction,status:z.status,label:z.label||'',formed_date:z.formed_date||'',formed_time:z.formed_time||'',tags:z.tags||[],update_history:z.update_history||[],mitigated_at:z.mitigated_at||''};if(z.zone_type==='ob'){zone.top=String(z.top_price||'');zone.btm=String(z.btm_price||'');zone.ob_note=z.context_note||'';s[z.tf].obs.push(zone);}else{zone.entry=String(z.top_price||'');zone.exit=String(z.btm_price||'');zone.fvg_note=z.context_note||'';s[z.tf].fvgs.push(zone);}});}
+  var r3=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['mitigated','broken']);
+  archivedZones=r3.data||[];
+  var r4=await sb.from('smc_events').select('*').eq('pair',pair);
+  if(r4.data&&r4.data.length>0){TFS.forEach(function(tf){s[tf].events=[];});r4.data.forEach(function(ev){if(!s[ev.tf])return;s[ev.tf].events.push({_id:ev.id,type:ev.event_type,dir:ev.direction,price:String(ev.price||''),time:ev.event_time||'',date:ev.event_date||''});});}
+  var r5=await sb.from('smc_analyses').select('*').eq('pair',pair).eq('type','brief').order('date',{ascending:false}).limit(30);
+  allBriefs=(r5.data||[]).map(function(a){return{id:a.id,pair:a.pair,date:a.date,type:a.type,data:a.data};});
+  if(allBriefs.length>0&&!selBrief)selBrief=allBriefs[0];
+  var r6=await sb.from('smc_analyses').select('*').eq('pair',pair).eq('type','debrief').order('date',{ascending:false}).limit(30);
+  allDebriefs=(r6.data||[]).map(function(a){return{id:a.id,pair:a.pair,date:a.date,type:a.type,data:a.data};});
+  if(allDebriefs.length>0&&!selDebrief)selDebrief=allDebriefs[0];
+  var r7=await sb.from('smc_journal').select('*').eq('pair',pair).order('date',{ascending:false});
+  journalEntries=r7.data||[];
+  setSyncSt('synced');chkData();if(!hasData)appMode='empty';else if(appMode==='empty')appMode='zone';renderAll();toast(pair+' incarcat');
+  }catch(e){console.error(e);setSyncSt('error');renderAll();}}
+
+// Zone actions
+function togZ(id){var ze=document.getElementById('ze-'+id),chv=document.getElementById('chv-'+id);if(ze)ze.classList.toggle('open');if(chv)chv.classList.toggle('open');}
+function showAdd(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.add('open');}
+function hideAdd(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.remove('open');}
+function commitAdd(tf,zt){var isOB=zt==='ob';var top=document.getElementById('nf-top-'+tf+'-'+zt).value;var btm=document.getElementById('nf-btm-'+tf+'-'+zt).value;if(!top||!btm){toast('Completeaza Top si Bottom');return;}var dtype=document.getElementById('nf-type-'+tf+'-'+zt).value;var detId=zid(currentPair,tf,zt,dtype,top,btm);var zone={_id:detId,type:dtype,status:'active',label:document.getElementById('nf-lbl-'+tf+'-'+zt).value,formed_date:document.getElementById('nf-date-'+tf+'-'+zt).value,formed_time:document.getElementById('nf-time-'+tf+'-'+zt).value,tags:[],update_history:[]};if(isOB){zone.top=top;zone.btm=btm;zone.ob_note='';}else{zone.entry=top;zone.exit=btm;zone.fvg_note='';}state[tf][isOB?'obs':'fvgs'].push(zone);renderTF(tf);schedSync();toast('Zona adaugata');}
+function delZone(tf,zt,id){var arr=state[tf][zt==='ob'?'obs':'fvgs'];var i=arr.findIndex(function(z){return z._id===id;});if(i>=0)arr.splice(i,1);sb.from('smc_zones').delete().eq('id',id);renderTF(tf);toast('Sters');}
+function fndZ(tf,zt,id){return state[tf][zt==='ob'?'obs':'fvgs'].find(function(z){return z._id===id;});}
+function updZF(tf,zt,id,f,v){var z=fndZ(tf,zt,id);if(z)z[f]=v;}
+function updZP(tf,zt,id,side,v){var z=fndZ(tf,zt,id);if(!z)return;if(zt==='ob'){if(side==='top')z.top=v;else z.btm=v;}else{if(side==='top')z.entry=v;else z.exit=v;}schedSync();}
+function chgStatus(tf,zt,id,ns){var z=fndZ(tf,zt,id);if(!z)return;z.status=ns;if(ns==='mitigated'||ns==='broken'){var n=new Date();z.mitigated_at=n.toLocaleDateString('en-GB')+' '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});}renderTF(tf);schedSync();}
+function saveNote(tf,zt,id){var inp=document.getElementById('upd-'+id);if(!inp||!inp.value.trim())return;var z=fndZ(tf,zt,id);if(!z)return;if(!z.update_history)z.update_history=[];var n=new Date();z.update_history.push({date:n.toLocaleDateString('en-GB'),time:n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),note:inp.value.trim()});inp.value='';renderTF(tf);schedSync();toast('Nota salvata');}
+function addEvent(tf){state[tf].events.push({_id:uid(),type:'choch',dir:'bear',price:'',date:'',time:''});renderTF(tf);schedSync();}
+function updEF(tf,id,f,v){var ev=state[tf].events.find(function(e){return e._id===id;});if(ev){ev[f]=v;schedSync();}}
+function delEvent(tf,id){state[tf].events=state[tf].events.filter(function(e){return e._id!==id;});sb.from('smc_events').delete().eq('id',id);renderTF(tf);}
+
+// Import/Export
+function doImport(){try{var data=JSON.parse(document.getElementById('importText').value.trim());if(data.current_price){state.current_price=String(data.current_price);document.getElementById('currentPrice').value=data.current_price;}TFS.forEach(function(tf){if(!data[tf])return;var d=data[tf];state[tf]={bias:d.bias||'',notes:d.notes||'',obs:(d.obs||[]).map(function(z){var top=z.top||'0',btm=z.btm||'0';return Object.assign({update_history:[]},z,{_id:zid(data.pair||currentPair,tf,'ob',z.type||'bear',top,btm)});}),fvgs:(d.fvgs||[]).map(function(z){var top=z.entry||'0',btm=z.exit||'0';return Object.assign({update_history:[]},z,{_id:zid(data.pair||currentPair,tf,'fvg',z.type||'bear',top,btm)});}),events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);})};if(tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}});closeModal('importModal');appMode='zone';renderAll();schedSync();toast('JSON loaded');}catch(e){alert('JSON invalid: '+e.message);}}
+
+async function doBriefImport(){try{var data=JSON.parse(document.getElementById('briefText').value.trim());var date=data.date||new Date().toLocaleDateString('en-GB');var aId=currentPair+'_brief_'+date.replace(/\//g,'-');await sb.from('smc_analyses').upsert({id:aId,pair:currentPair,date:date,type:'brief',data:data},{onConflict:'id'});var rec={id:aId,pair:currentPair,date:date,type:'brief',data:data};allBriefs=allBriefs.filter(function(a){return a.id!==aId;});allBriefs.unshift(rec);selBrief=rec;closeModal('briefModal');appMode='brief';chkData();renderAll();toast('Brief salvat');}catch(e){alert('JSON invalid: '+e.message);}}
+
+async function doDebriefImport(){try{var raw=document.getElementById('debriefText').value.trim();var data;try{data=JSON.parse(raw);}catch(e){data={raw:raw};}var date=data.date||new Date().toLocaleDateString('en-GB');var aId=currentPair+'_debrief_'+date.replace(/\//g,'-');await sb.from('smc_analyses').upsert({id:aId,pair:currentPair,date:date,type:'debrief',data:data},{onConflict:'id'});var rec={id:aId,pair:currentPair,date:date,type:'debrief',data:data};allDebriefs=allDebriefs.filter(function(a){return a.id!==aId;});allDebriefs.unshift(rec);selDebrief=rec;closeModal('debriefModal');appMode='debrief';chkData();renderAll();toast('Debrief salvat');}catch(e){alert('Eroare: '+e.message);}}
+
+async function delBrief(id){if(!confirm('Sterge brief-ul?'))return;await sb.from('smc_analyses').delete().eq('id',id);allBriefs=allBriefs.filter(function(a){return a.id!==id;});selBrief=allBriefs.length>0?allBriefs[0]:null;renderAll();toast('Sters');}
+async function delDebrief(id){if(!confirm('Sterge debrief-ul?'))return;await sb.from('smc_analyses').delete().eq('id',id);allDebriefs=allDebriefs.filter(function(a){return a.id!==id;});selDebrief=allDebriefs.length>0?allDebriefs[0]:null;renderAll();toast('Sters');}
+
+function exportData(){var now=new Date(),h=now.getHours();var session=h>=10&&h<13?'London':h>=16&&h<20?'NY':'OutOfSession';var payload={pair:currentPair,exported_at:now.toISOString(),date:now.toLocaleDateString('en-GB'),time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),session:session,current_price:state.current_price||''};TFS.forEach(function(tf){var d=state[tf];var out={bias:d.bias,notes:d.notes,obs:d.obs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),fvgs:d.fvgs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),events:d.events.map(function(e){var c=Object.assign({},e);delete c._id;return c;})};if(tf==='h4'||tf==='h1'){out.eqh=d.eqh;out.eql=d.eql;}payload[tf]=out;});var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=currentPair+'_SMC_'+now.toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);toast('Exported');}
+
+loadSB(currentPair);
 </script>
 </body>
 </html>
