@@ -531,7 +531,7 @@ async function saveJournalEntry(){
   var rr=parseFloat(document.getElementById('jRr').value)||null;
   var dir=document.getElementById('jDir').value;
   // Auto-calc pips
-  if(!pips&&entry&&exit){pips=d  if(!pips&&entry&&exit){pips=dir==='short'?Math.round((entry-exit)*10000)/10:Math.round((exit-entry)*10000)/10;}
+  if(!pips&&entry&&exit){pips=dir==='short'?Math.round((entry-exit)*10000)/10:Math.round((exit-entry)*10000)/10;}
   var tp1=parseFloat(document.getElementById('jTp1').value)||null;
   if(!rr&&entry&&sl&&tp1){var risk=Math.abs(entry-sl);var reward=Math.abs(tp1-entry);rr=risk>0?Math.round(reward/risk*10)/10:null;}
   var id=editingJournalId||('j_'+currentPair+'_'+Date.now());
