@@ -2,467 +2,119 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SMC Analyst</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#f4f6f9;--bg2:#fff;--bg3:#f0f2f6;--border:#e2e6ed;--border2:#c8cdd8;--bull:#0a7a54;--bull-bg:#e8f6f0;--bull-b:#9ed4bc;--bear:#b83030;--bear-bg:#fdf0f0;--bear-b:#e8aaaa;--sweep:#c07010;--sweep-bg:#fef6e6;--weekly:#6030b0;--weekly-bg:#f0eafa;--neutral:#2060b0;--neutral-bg:#eaf2fc;--text:#1a2030;--text2:#5a6478;--text3:#9aa0b0;--near-bg:#fffbee;--near-b:#e8a820;--in-bg:#edfaf4;--in-b:#0a7a54;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
-.header{background:var(--bg2);border-bottom:2px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);}
-.hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.logo{font-weight:800;font-size:16px;}.logo span{color:var(--bull);}
-.pair-selector{background:var(--bg2);border:2px solid var(--bull-b);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;outline:none;cursor:pointer;min-width:120px;}
-.mode-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-.mode-btn{padding:6px 14px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;}
-.mode-btn.active{background:var(--text);color:#fff;}
-.bias-bar{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 10px;}
-.bias-item{display:flex;align-items:center;gap:4px;padding:0 3px;}
-.bias-tf{font-size:9px;font-weight:700;color:var(--text3);}
-.bias-arrow{font-size:13px;font-weight:700;}
-.bias-arrow.bull{color:var(--bull);}.bias-arrow.bear{color:var(--bear);}.bias-arrow.neutral{color:var(--text3);}
-.bias-sep{width:1px;height:14px;background:var(--border);}
-.price-bar{display:flex;align-items:center;gap:6px;}
-.price-label{font-size:11px;font-weight:600;color:var(--text2);}
-.price-input{border:2px solid var(--border2);background:var(--bg2);color:var(--bull);padding:5px 8px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;width:95px;outline:none;}
-.date-disp{font-size:10px;color:var(--text3);}
-.sync-indicator{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;}
-.sync-indicator.syncing{background:var(--sweep-bg);color:var(--sweep);}
-.sync-indicator.synced{background:var(--bull-bg);color:var(--bull);}
-.sync-indicator.error{background:var(--bear-bg);color:var(--bear);}
-.btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
-.btn-green{background:var(--bull);color:#fff;}.btn-green:hover{background:#096644;}
-.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}.btn-ghost:hover{border-color:var(--neutral);color:var(--neutral);}
-.btn-red{background:transparent;color:var(--text3);border:1px solid var(--border);}.btn-red:hover{border-color:var(--bear);color:var(--bear);}
-.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px;}
-.main{max-width:1600px;margin:0 auto;padding:16px;}
-.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.tf-panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.tf-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.tf-panel.weekly .tf-hdr{background:var(--weekly-bg);}.tf-panel.daily .tf-hdr{background:var(--bear-bg);}.tf-panel.h4 .tf-hdr{background:var(--sweep-bg);}.tf-panel.h1 .tf-hdr{background:var(--neutral-bg);}
-.tf-title{font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;}
-.tf-badge{padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:1px;}
-.weekly .tf-badge{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
-.daily .tf-badge{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
-.h4 .tf-badge{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
-.h1 .tf-badge{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
-.tf-body{padding:12px 14px;}
-.bias-row{display:flex;gap:4px;}
-.bias-btn{padding:3px 9px;border-radius:6px;border:1px solid var(--border2);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all .12s;}
-.bias-btn.bull.active{background:var(--bull-bg);border-color:var(--bull);color:var(--bull);}
-.bias-btn.bear.active{background:var(--bear-bg);border-color:var(--bear);color:var(--bear);}
-.bias-btn.neutral.active{background:var(--neutral-bg);border-color:var(--neutral);color:var(--neutral);}
-.section{margin-bottom:14px;}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.sec-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;display:flex;align-items:center;gap:6px;}
-.sec-title::after{content:'';flex:1;height:1px;background:var(--border);margin-left:6px;}
-.sec-count{font-size:10px;background:var(--bg3);color:var(--text2);padding:1px 7px;border-radius:10px;font-weight:600;}
-.zone-list{display:flex;flex-direction:column;gap:4px;}
-.zone-item{border:1px solid var(--border);border-radius:7px;overflow:hidden;transition:box-shadow .15s;}
-.zone-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.07);}
-.zone-item.bull-ob{border-left:4px solid var(--bull);}.zone-item.bear-ob{border-left:4px solid var(--bear);}
-.zone-item.bull-fvg{border-left:4px solid var(--bull);}.zone-item.bear-fvg{border-left:4px solid var(--bear);}
-.zone-item.near{background:var(--near-bg);border-color:var(--near-b);}
-.zone-item.inside{background:var(--in-bg);border-color:var(--in-b);}
-.zone-item.mitigated-item{opacity:.6;}.zone-item.broken-item{opacity:.5;}
-.zone-row-compact{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;background:var(--bg2);user-select:none;flex-wrap:wrap;}
-.zone-item.near .zone-row-compact{background:var(--near-bg);}.zone-item.inside .zone-row-compact{background:var(--in-bg);}
-.zone-compact-type{font-size:10px;font-weight:700;min-width:64px;}
-.zone-compact-label{font-weight:600;font-size:12px;flex:1;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.zone-compact-prices{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);white-space:nowrap;}
-.zone-compact-dist{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;white-space:nowrap;min-width:58px;text-align:right;}
-.zone-compact-status{min-width:58px;text-align:center;}
-.zone-age{font-size:9px;color:var(--text3);white-space:nowrap;font-style:italic;min-width:50px;text-align:right;}
-.zone-age.fresh{color:var(--bull);}.zone-age.old{color:var(--text3);}.zone-age.ancient{color:var(--bear-b);}
-.zone-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0;}
-.zone-chevron.open{transform:rotate(90deg);}
-.status-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
-.status-badge.active{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
-.status-badge.tested{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
-.status-badge.broken{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
-.status-badge.breaker{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
-.status-badge.mitigated{background:#f4f4f4;color:#888;border:1px solid #ddd;text-decoration:line-through;}
-.dist-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
-.dist-badge.above{background:var(--bear-bg);color:var(--bear);}.dist-badge.below{background:var(--bull-bg);color:var(--bull);}
-.dist-badge.inside{background:var(--in-bg);color:var(--bull);border:1px solid var(--in-b);}
-.dist-badge.near{background:var(--near-bg);color:var(--sweep);border:1px solid var(--near-b);}
-.zone-expand{display:none;padding:10px 12px;border-top:1px solid var(--border);background:var(--bg3);}
-.zone-expand.open{display:block;}
-input,select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border-color .15s;width:100%;}
-input:focus,select:focus,textarea:focus{border-color:var(--neutral);}
-select{cursor:pointer;}
-.field-lbl{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:3px;letter-spacing:.3px;}
-.form-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;flex-wrap:wrap;}
-.form-col{display:flex;flex-direction:column;}
-.form-col.flex1{flex:1;min-width:80px;}.form-col.w80{width:80px;flex-shrink:0;}.form-col.w100{width:100px;flex-shrink:0;}.form-col.w120{width:120px;flex-shrink:0;}
-.update-history{margin-top:8px;}
-.update-entry{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 9px;margin-bottom:4px;}
-.update-entry-date{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:2px;}
-.update-entry-text{font-size:12px;color:var(--text);}
-.add-zone-form{background:var(--bg3);border:1px dashed var(--border2);border-radius:8px;padding:12px;margin-top:6px;display:none;}
-.add-zone-form.open{display:block;}
-.add-btn{background:transparent;border:1px dashed var(--border2);color:var(--text3);padding:6px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;width:100%;transition:all .15s;margin-top:4px;text-align:center;}
-.add-btn:hover{border-color:var(--bull);color:var(--bull);background:var(--bull-bg);}
-.event-row{display:flex;gap:6px;align-items:center;padding:6px 9px;background:var(--bg2);border-radius:6px;border:1px solid var(--border);margin-bottom:4px;flex-wrap:wrap;}
-.event-row.choch{border-left:3px solid var(--bear);}.event-row.bos{border-left:3px solid var(--bull);}
-.event-row.sweep{border-left:3px solid var(--sweep);}.event-row.sfp{border-left:3px solid var(--neutral);}
-.seq-preview{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px;align-items:center;}
-.seq-chip{padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700;}
-.seq-chip.choch{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
-.seq-chip.bos{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
-.seq-chip.sweep{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
-.seq-chip.sfp{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
-.seq-arrow{color:var(--text3);font-size:11px;}
-.tags-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
-.tag-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:2px 8px;border-radius:10px;cursor:pointer;font-size:10px;font-weight:600;transition:all .12s;}
-.tag-btn:hover{border-color:var(--neutral);color:var(--neutral);}
-.tag-btn.active{background:var(--neutral-bg);border-color:var(--neutral);color:var(--neutral);}
-.notes-area{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 9px;border-radius:6px;font-size:12px;width:100%;resize:vertical;min-height:46px;outline:none;}
-.notes-area:focus{border-color:var(--neutral);background:var(--bg2);}
-.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.entry-item{display:flex;flex-direction:column;gap:3px;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
-.modal-overlay.active{display:flex;}
-.modal{background:var(--bg2);border-radius:12px;padding:22px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);border:1px solid var(--border);}
-.modal h3{font-size:15px;font-weight:700;margin-bottom:14px;}
-.modal textarea{width:100%;height:200px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:11px;resize:vertical;outline:none;margin-bottom:12px;}
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;}
-.toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:#fff;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:300;opacity:0;transform:translateY(8px);transition:all .2s;}
-.toast.show{opacity:1;transform:translateY(0);}
-/* EMPTY STATE */
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;color:var(--text3);}
-.empty-icon{font-size:48px;margin-bottom:16px;}
-.empty-title{font-size:18px;font-weight:700;color:var(--text2);margin-bottom:8px;}
-.empty-sub{font-size:13px;margin-bottom:24px;max-width:400px;line-height:1.6;}
-/* ARCHIVE */
-.archive-section{margin-top:20px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.archive-toggle{cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
-.archive-toggle:hover{color:var(--text2);}
-.archive-body{display:none;margin-top:12px;}
-.archive-body.open{display:block;}
-.mitigated-date{font-size:9px;color:var(--bear);font-weight:600;white-space:nowrap;}
-/* ANALYSIS */
-.analysis-page{max-width:1200px;margin:0 auto;padding:20px 16px;}
-.analysis-import-zone{border:2px dashed var(--border2);border-radius:12px;padding:60px 40px;text-align:center;color:var(--text3);}
-.ai-icon{font-size:36px;margin-bottom:12px;}
-.ai-text{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--text2);}
-.ai-sub{font-size:12px;margin-bottom:20px;}
-.analysis-header{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.analysis-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;}
-.analysis-title{font-size:20px;font-weight:800;}
-.analysis-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.analysis-meta-badge{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
-.session-note{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--sweep);font-weight:500;}
-.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
-.analysis-card{background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.analysis-card.full{grid-column:1/-1;}
-.analysis-card-title{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.analysis-card-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.bias-table{width:100%;border-collapse:collapse;}
-.bias-table th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border);}
-.bias-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
-.bias-table tr:last-child td{border-bottom:none;}
-.bias-dir{font-weight:700;font-size:13px;}.bias-dir.bear{color:var(--bear);}.bias-dir.bull{color:var(--bull);}
-.bias-conclusion{background:var(--bg3);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--text);margin-top:10px;line-height:1.6;border-left:3px solid var(--bear);}
-.levels-list{display:flex;flex-direction:column;gap:3px;}
-.level-row{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;}
-.level-row.resistance{background:rgba(184,48,48,.04);border-left:3px solid var(--bear);}
-.level-row.support{background:rgba(10,122,84,.04);border-left:3px solid var(--bull);}
-.level-row.current{background:var(--sweep-bg);border-left:3px solid var(--sweep);font-weight:700;}
-.level-price{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;min-width:72px;}
-.level-label{font-size:12px;flex:1;}
-.level-tf{font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
-.level-tf.daily{background:var(--bear-bg);color:var(--bear);}.level-tf.h4{background:var(--sweep-bg);color:var(--sweep);}
-.level-tf.weekly{background:var(--weekly-bg);color:var(--weekly);}.level-tf.h1{background:var(--neutral-bg);color:var(--neutral);}
-.setups-grid{display:flex;flex-direction:column;gap:10px;}
-.setup-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.setup-card.primary{border-left:4px solid var(--bull);}.setup-card.secondary{border-left:4px solid var(--sweep);}
-.setup-card.optional{border-left:4px solid var(--neutral);}.setup-card.quality{border-left:4px solid var(--weekly);}
-.setup-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);cursor:pointer;user-select:none;}
-.setup-id{font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
-.setup-id.dt{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
-.setup-id.sw{background:var(--weekly-bg);color:var(--weekly);border:1px solid #c8a8f0;}
-.setup-title{font-weight:700;font-size:13px;flex:1;}
-.setup-dir{font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;}
-.setup-dir.short{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
-.setup-dir.long{background:var(--bull-bg);color:var(--bull);border:1px solid var(--bull-b);}
-.setup-chevron{color:var(--text3);font-size:10px;transition:transform .2s;}.setup-chevron.open{transform:rotate(90deg);}
-.setup-body{display:none;padding:14px 16px;border-top:1px solid var(--border);}.setup-body.open{display:block;}
-.setup-logic{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px;padding:8px 12px;background:var(--bg3);border-radius:6px;}
-.setup-params{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:12px;}
-.setup-param{background:var(--bg3);border-radius:6px;padding:8px 10px;}
-.setup-param-lbl{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:3px;letter-spacing:.5px;}
-.setup-param-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--text);}
-.setup-param-val.red{color:var(--bear);}.setup-param-val.green{color:var(--bull);}
-.setup-targets{margin-bottom:12px;}
-.target-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;margin-bottom:4px;font-size:12px;}
-.target-row.tp1{background:rgba(10,122,84,.05);}.target-row.tp2{background:rgba(10,122,84,.10);}.target-row.tp3{background:rgba(10,122,84,.15);}
-.target-label{font-weight:700;min-width:36px;color:var(--bull);}
-.target-price{font-family:'JetBrains Mono',monospace;font-weight:700;min-width:72px;}
-.target-pips{color:var(--bull);font-weight:600;min-width:52px;}.target-rr{color:var(--text2);min-width:52px;}.target-size{color:var(--text3);font-size:11px;}
-.setup-warning{background:var(--sweep-bg);border:1px solid #e8c060;border-radius:6px;padding:8px 12px;font-size:11px;color:var(--sweep);margin-bottom:8px;}
-.setup-condition{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;margin-bottom:8px;}.setup-condition strong{color:var(--text);}
-.setup-management{font-size:11px;color:var(--text2);padding:8px 12px;background:var(--neutral-bg);border-radius:6px;border-left:3px solid var(--neutral);}
-.avoid-list{list-style:none;}
-.avoid-list li{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
-.avoid-list li:last-child{border-bottom:none;}.avoid-list li::before{content:'✕';color:var(--bear);font-weight:700;flex-shrink:0;margin-top:1px;}
-.scenario-row{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;}
-.scenario-cond{flex:1;font-size:12px;font-weight:600;}.scenario-arrow{color:var(--text3);font-size:14px;flex-shrink:0;margin-top:2px;}.scenario-action{flex:1;font-size:12px;color:var(--text2);}
-/* ANALYSIS DAY SELECTOR */
-.analysis-day-nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
-.analysis-day-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);}
-.analysis-day-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
-.analysis-day-btn.brief{border-left:3px solid var(--bull);}
-.analysis-day-btn.debrief{border-left:3px solid var(--sweep);}
-.analysis-type-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.5px;}
-.analysis-type-badge.brief{background:var(--bull-bg);color:var(--bull);}
-.analysis-type-badge.debrief{background:var(--sweep-bg);color:var(--sweep);}
-::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-@media(max-width:900px){.tf-grid,.analysis-grid{grid-template-columns:1fr;}.bias-bar{display:none;}}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- HEADER -->
 <div class="header">
   <div class="hdr-left">
     <div class="logo">SMC <span>Analyst</span></div>
-    <select class="pair-selector" id="pairSelector" onchange="switchPair(this.value)">
-      <option value="EURUSD">EUR/USD</option><option value="GBPUSD">GBP/USD</option><option value="USDJPY">USD/JPY</option>
-      <option value="USDCAD">USD/CAD</option><option value="AUDUSD">AUD/USD</option><option value="GBPJPY">GBP/JPY</option>
-      <option value="AUDCHF">AUD/CHF</option><option value="AUDNZD">AUD/NZD</option><option value="XAUUSD">XAU/USD</option>
-      <option value="NAS100">NAS100</option><option value="GER40">GER40</option><option value="EURAUD">EUR/AUD</option>
-      <option value="GBPAUD">GBP/AUD</option><option value="USDCHF">USD/CHF</option>
+    <select class="pair-selector" onchange="switchPair(this.value)">
+      <option>EURUSD</option><option>GBPUSD</option><option>USDJPY</option><option>USDCAD</option>
+      <option>AUDUSD</option><option>GBPJPY</option><option>AUDCHF</option><option>AUDNZD</option>
+      <option>XAUUSD</option><option>NAS100</option><option>GER40</option><option>EURAUD</option>
+      <option>GBPAUD</option><option>USDCHF</option>
     </select>
-    <div class="mode-toggle" id="modeToggle" style="display:none;">
-      <button class="mode-btn active" id="modeUpdateBtn" onclick="setMode('update')">🔄 Update</button>
-      <button class="mode-btn" id="modeAnalysisBtn" onclick="setMode('analysis')">📊 Analiza</button>
-      <button class="mode-btn" id="modeArchiveBtn" onclick="setMode('archive')">🗄 Arhiva</button>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="zones" onclick="setMode('zones')">📋 Zones</button>
+      <button class="mode-btn" data-mode="analysis" onclick="setMode('analysis')">📊 Analysis</button>
+      <button class="mode-btn" data-mode="archive" onclick="setMode('archive')">🗄 Archive</button>
     </div>
     <div class="bias-bar">
       <div class="bias-item"><span class="bias-tf">W</span><span class="bias-arrow neutral" id="ba-weekly">—</span></div><div class="bias-sep"></div>
       <div class="bias-item"><span class="bias-tf">D</span><span class="bias-arrow neutral" id="ba-daily">—</span></div><div class="bias-sep"></div>
-      <div class="bias-item"><span class="bias-tf">H4</span><span class="bias-arrow neutral" id="ba-h4">—</span></div><div class="bias-sep"></div>
-      <div class="bias-item"><span class="bias-tf">H1</span><span class="bias-arrow neutral" id="ba-h1">—</span></div>
+      <div class="bias-item"><span class="bias-tf">4H</span><span class="bias-arrow neutral" id="ba-h4">—</span></div><div class="bias-sep"></div>
+      <div class="bias-item"><span class="bias-tf">1H</span><span class="bias-arrow neutral" id="ba-h1">—</span></div>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-    <div class="price-bar"><span class="price-label">Price</span>
-      <input class="price-input" type="number" step="0.00001" placeholder="1.16500" id="currentPrice" oninput="refreshAllDist()">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <div class="price-bar">
+      <span class="price-label">PRICE</span>
+      <span class="price-live"></span>
+      <span class="price-val" id="priceDisplay">—</span>
+      <span class="price-ago" id="priceAgo"></span>
     </div>
-    <span class="sync-indicator synced" id="syncIndicator">✓ Synced</span>
     <span class="date-disp" id="dateDisp"></span>
-    <button class="btn btn-ghost" onclick="openImport()">⬆ Import Zone</button>
-    <button class="btn btn-green" onclick="exportData()">⬇ Export</button>
+    <span class="sync-indicator" id="syncIndicator"></span>
+    <button class="btn btn-ghost btn-sm" onclick="openImport()">⬆ Import</button>
+    <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export</button>
+    <button class="btn btn-green btn-sm" onclick="syncToSupabase()">⟳ Sync</button>
   </div>
 </div>
+
+<!-- MAIN -->
 <div class="main" id="mainContent"></div>
 
 <!-- MODALS -->
-<div class="modal-overlay" id="importModal"><div class="modal"><h3>Import Context JSON</h3>
-<textarea id="importText" placeholder="Paste context JSON..."></textarea>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('importModal')">Cancel</button><button class="btn btn-green" onclick="doImport()">Load</button></div></div></div>
-
-<div class="modal-overlay" id="analysisImportModal"><div class="modal"><h3>Import Analiza JSON</h3>
-<p style="font-size:11px;color:var(--text3);margin-bottom:8px;">Selecteaza tipul:</p>
-<div style="display:flex;gap:8px;margin-bottom:12px;">
-  <button class="btn btn-sm" id="aTypeBrief" onclick="setAnalysisType('brief')" style="background:var(--bull);color:#fff;">☀ Brief</button>
-  <button class="btn btn-sm btn-ghost" id="aTypeDebrief" onclick="setAnalysisType('debrief')">🌙 Debrief</button>
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <h3>⬆ Import Zones JSON</h3>
+    <textarea id="importData" placeholder='Paste JSON...'></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('importModal')">Cancel</button>
+      <button class="btn btn-green btn-sm" onclick="doImport()">Import</button>
+    </div>
+  </div>
 </div>
-<textarea id="analysisImportText" placeholder="Paste analysis JSON..."></textarea>
-<div class="modal-footer"><button class="btn btn-red" onclick="closeModal('analysisImportModal')">Cancel</button><button class="btn btn-green" onclick="doAnalysisImport()">Load Analiza</button></div></div></div>
 
+<div class="modal-overlay" id="analysisImportModal">
+  <div class="modal">
+    <h3 id="analysisImportLabel">⬆ Import Analysis JSON</h3>
+    <input type="hidden" id="analysisImportType" value="brief">
+    <textarea id="analysisImportData" placeholder='Paste JSON...'></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('analysisImportModal')">Cancel</button>
+      <button class="btn btn-green btn-sm" onclick="doAnalysisImport()">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="tradeModal">
+  <div class="modal">
+    <h3>📝 Adauga Trade</h3>
+    <div class="form-row">
+      <div class="form-col w100"><span class="field-lbl">DIRECTIE</span><select id="tm-dir"><option value="long">↑ Long</option><option value="short">↓ Short</option></select></div>
+      <div class="form-col w100"><span class="field-lbl">SETUP ID</span><input type="text" id="tm-setup" placeholder="DT-1"></div>
+      <div class="form-col flex1"><span class="field-lbl">ZONA</span><input type="text" id="tm-zone" placeholder="H4 Bear OB"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col w100"><span class="field-lbl">ENTRY</span><input type="number" step="0.00001" id="tm-entry"></div>
+      <div class="form-col w100"><span class="field-lbl">SL</span><input type="number" step="0.00001" id="tm-sl"></div>
+      <div class="form-col w100"><span class="field-lbl">TP1</span><input type="number" step="0.00001" id="tm-tp1"></div>
+      <div class="form-col w100"><span class="field-lbl">TP2</span><input type="number" step="0.00001" id="tm-tp2"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-col w100"><span class="field-lbl">RESULT</span><select id="tm-result"><option value="">Pending</option><option value="TP1">TP1</option><option value="TP2">TP2</option><option value="TP3">TP3</option><option value="SL">SL</option><option value="BE">BE</option></select></div>
+      <div class="form-col w80"><span class="field-lbl">EXIT</span><input type="number" step="0.00001" id="tm-exit"></div>
+      <div class="form-col w80"><span class="field-lbl">PIPS</span><input type="number" step="0.1" id="tm-pips"></div>
+      <div class="form-col w80"><span class="field-lbl">R:R</span><input type="number" step="0.1" id="tm-rr"></div>
+      <div class="form-col w100"><span class="field-lbl">SESIUNE</span><select id="tm-session"><option value="London">London</option><option value="NY">New York</option><option value="Asian">Asian</option><option value="Overlap">Overlap</option></select></div>
+    </div>
+    <div class="form-row"><div class="form-col flex1"><span class="field-lbl">NOTE</span><textarea id="tm-notes" rows="2" placeholder="Ce ai observat..."></textarea></div></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('tradeModal')">Cancel</button>
+      <button class="btn btn-green btn-sm" onclick="saveTrade()">💾 Save Trade</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script>
-// ── SUPABASE ───────────────────────────────────────────────
-var SUPABASE_URL='https://caenefhnwfyzhmneuyjb.supabase.co';
-var SUPABASE_KEY='sb_publishable_0mIG5sSi6ueUNELew2G0iQ_7dozolX3';
-var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/price.js"></script>
+<script src="js/zones.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/import-export.js"></script>
+<script src="js/app.js"></script>
 
-// ── CONSTANTS ──────────────────────────────────────────────
-var TFS=['weekly','daily','h4','h1'];
-var PAIRS=['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
-var TAGS_OB=['post-BOS','pre-sweep','1x tested','2x tested','fresh','news near','institutional'];
-var TAGS_FVG=['post-BOS','impulse','1x tested','2x tested','fresh','news near'];
-var NEAR=25;
-var analysisImportType='brief';
-
-// ── STATE ──────────────────────────────────────────────────
-var appMode='empty';
-var currentPair='EURUSD';
-var hasData=false;
-var pairStates={};
-PAIRS.forEach(function(p){pairStates[p]={current_price:'',weekly:emptyTF(),daily:emptyTF(),h4:emptyTFX('h4'),h1:emptyTFX('h1')};});
-var state=pairStates['EURUSD'];
-var allAnalyses=[];
-var selectedAnalysis=null;
-var archivedZones=[];
-
-function emptyTF(){return{bias:'',obs:[],fvgs:[],events:[],notes:''};}
-function emptyTFX(tf){var b=emptyTF();b.eqh='';b.eql='';if(tf==='h1'){b.entry='';b.sl='';b.tp1='';b.tp2='';b.direction='';}return b;}
-function uid(){return'z'+Date.now()+Math.random().toString(36).slice(2,6);}
-function zoneUid(pair,tf,ztype,dir,top,btm){var topR=parseFloat(top||0).toFixed(5);var btmR=parseFloat(btm||0).toFixed(5);var raw=pair+'_'+tf+'_'+ztype+'_'+dir+'_'+topR+'_'+btmR;var hash=0;for(var i=0;i<raw.length;i++){hash=((hash<<5)-hash)+raw.charCodeAt(i);hash|=0;}return'z'+Math.abs(hash).toString(36)+raw.length.toString(36);}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-function updateDate(){var n=new Date();document.getElementById('dateDisp').textContent=n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})+' '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});}
-updateDate();setInterval(updateDate,30000);
-
-function zoneAge(fd,ft){if(!fd)return'';var ds=fd+(ft?'T'+ft:'T00:00');var f=new Date(ds);if(isNaN(f.getTime()))return'';var dH=Math.floor((new Date()-f)/36e5);var dD=Math.floor(dH/24);var dW=Math.floor(dD/7);var dM=Math.floor(dD/30);var cls=dD<7?'fresh':dD<30?'old':'ancient';var txt=dH<24?(dH+'h'):dD<7?(dD+'d'):dW<8?(dW+'w'):(dM+'mo');return'<span class="zone-age '+cls+'">'+txt+' ago</span>';}
-
-function setAnalysisType(t){analysisImportType=t;document.getElementById('aTypeBrief').className=t==='brief'?'btn btn-sm':'btn btn-sm btn-ghost';document.getElementById('aTypeBrief').style.background=t==='brief'?'var(--bull)':'';document.getElementById('aTypeBrief').style.color=t==='brief'?'#fff':'';document.getElementById('aTypeDebrief').className=t==='debrief'?'btn btn-sm':'btn btn-sm btn-ghost';document.getElementById('aTypeDebrief').style.background=t==='debrief'?'var(--sweep)':'';document.getElementById('aTypeDebrief').style.color=t==='debrief'?'#fff':'';}
-
-// ── MODE ───────────────────────────────────────────────────
-function setMode(m){appMode=m;['update','analysis','archive'].forEach(function(n){var el=document.getElementById('mode'+n.charAt(0).toUpperCase()+n.slice(1)+'Btn');if(el)el.classList.toggle('active',n===m);});renderAll();}
-
-function checkHasData(){var total=0;TFS.forEach(function(tf){total+=state[tf].obs.length+state[tf].fvgs.length+state[tf].events.length;});hasData=total>0||allAnalyses.length>0;document.getElementById('modeToggle').style.display=hasData?'flex':'none';if(!hasData)appMode='empty';}
-
-function switchPair(p){currentPair=p;state=pairStates[p];selectedAnalysis=null;loadFromSupabase(p);}
-
-// ── PRICE / DIST ───────────────────────────────────────────
-function getPrice(){var v=parseFloat(document.getElementById('currentPrice').value);return isNaN(v)?null:v;}
-function calcDist(top,btm){var price=getPrice();if(!price||!top||!btm)return null;var rTop=Math.max(+top,+btm),rBtm=Math.min(+top,+btm);if(price>=rBtm&&price<=rTop)return{type:'inside',pips:0};if(price>rTop)return{type:'below',pips:Math.round((price-rTop)*10000)};return{type:'above',pips:Math.round((rBtm-price)*10000)};}
-function distHTML(top,btm){var d=calcDist(top,btm);if(!d)return'';if(d.type==='inside')return'<span class="dist-badge inside">● IN ZONE</span>';var cls=d.pips<=NEAR?'near':d.type;return'<span class="dist-badge '+cls+'">'+(d.type==='above'?'▲':'▼')+' '+d.pips+'p</span>';}
-function zoneExCls(top,btm){var d=calcDist(top,btm);if(!d)return'';return d.type==='inside'?'inside':d.pips<=NEAR?'near':'';}
-function refreshAllDist(){state.current_price=document.getElementById('currentPrice').value;schedulSync();renderAll();}
-
-function setBias(tf,val){state[tf].bias=val;updateBiasBar();renderTF(tf);schedulSync();}
-function updateBiasBar(){var map={bull:'↑',bear:'↓',neutral:'—','':'—'};var cls={bull:'bull',bear:'bear',neutral:'neutral','':'neutral'};TFS.forEach(function(tf){var el=document.getElementById('ba-'+tf);if(el){el.textContent=map[state[tf].bias]||'—';el.className='bias-arrow '+(cls[state[tf].bias]||'neutral');}});}
-
-// ── RENDER ─────────────────────────────────────────────────
-function renderAll(){var main=document.getElementById('mainContent');checkHasData();if(appMode==='empty'&&!hasData){main.innerHTML=renderEmptyState();return;}if(appMode==='analysis'){main.innerHTML=renderAnalysisPage();return;}if(appMode==='archive'){main.innerHTML=renderArchivePage();return;}main.innerHTML='<div class="tf-grid">'+TFS.map(function(tf){return'<div id="panel-'+tf+'">'+renderTFHTML(tf)+'</div>';}).join('')+'</div>';updateBiasBar();}
-function renderTF(tf){var el=document.getElementById('panel-'+tf);if(el)el.innerHTML=renderTFHTML(tf);updateBiasBar();}
-
-function renderEmptyState(){return'<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">SMC Analyst — '+currentPair+'</div><div class="empty-sub">Nu exista zone sau analize pentru aceasta pereche. Importa un JSON cu zone sau o analiza pentru a incepe.</div><div style="display:flex;gap:12px;"><button class="btn btn-green" onclick="openImport()">⬆ Import Zone JSON</button><button class="btn btn-ghost" onclick="openAnalysisImportModal()">📊 Import Analiza</button></div></div>';}
-
-function openAnalysisImportModal(){document.getElementById('analysisImportModal').classList.add('active');}
-function openImport(){document.getElementById('importModal').classList.add('active');}
-
-// ── TF PANEL ───────────────────────────────────────────────
-function renderTFHTML(tf){
-  var d=state[tf],names={weekly:'Weekly',daily:'Daily',h4:'4H',h1:'1H'};
-  var biasOpts=['bull','bear','neutral'].map(function(v){var lbl=v==='bull'?'↑ Bull':v==='bear'?'↓ Bear':'— Range';return'<button class="bias-btn '+v+(d.bias===v?' active':'')+'" onclick="setBias(\''+tf+'\',\''+v+'\')">'+lbl+'</button>';}).join('');
-  var eqHtml=(tf==='h4'||tf==='h1')?'<div class="section"><span class="sec-title">EQL / EQH</span><div class="entry-grid" style="margin-top:7px;"><div class="entry-item"><span class="field-lbl">EQH</span><input type="number" step="0.00001" value="'+(d.eqh||'')+'" onchange="state[\''+tf+'\'].eqh=this.value;schedulSync()"></div><div class="entry-item"><span class="field-lbl">EQL</span><input type="number" step="0.00001" value="'+(d.eql||'')+'" onchange="state[\''+tf+'\'].eql=this.value;schedulSync()"></div></div></div>':'';
-  return'<div class="tf-panel '+tf+'"><div class="tf-hdr"><div class="tf-title"><span class="tf-badge">'+tf.toUpperCase()+'</span>'+names[tf]+' Structure</div><div class="bias-row">'+biasOpts+'</div></div><div class="tf-body"><div class="section"><div class="sec-hdr"><span class="sec-title">Order Blocks <span class="sec-count">'+d.obs.length+'</span></span></div><div class="zone-list">'+d.obs.map(function(z){return renderZoneHTML(tf,'ob',z);}).join('')+'</div>'+renderAddBtn(tf,'ob')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">Fair Value Gaps <span class="sec-count">'+d.fvgs.length+'</span></span></div><div class="zone-list">'+d.fvgs.map(function(z){return renderZoneHTML(tf,'fvg',z);}).join('')+'</div>'+renderAddBtn(tf,'fvg')+'</div><div class="section"><div class="sec-hdr"><span class="sec-title">Sequence</span></div>'+d.events.map(function(ev){return renderEvHTML(tf,ev);}).join('')+'<button class="add-btn" onclick="addEvent(\''+tf+'\')">+ Add Event</button><div class="seq-preview">'+d.events.map(function(ev,i){return(i>0?'<span class="seq-arrow">→</span>':'')+' <span class="seq-chip '+ev.type+'">'+({choch:'CHoCH',bos:'BOS',sweep:'x',sfp:'SFP'}[ev.type]||ev.type)+'</span>';}).join('')+'</div></div>'+eqHtml+'<div class="section"><span class="sec-title">Notes</span><textarea class="notes-area" style="margin-top:7px;" onchange="state[\''+tf+'\'].notes=this.value;schedulSync()" placeholder="Context...">'+esc(d.notes||'')+'</textarea></div></div></div>';}
-
-function renderZoneHTML(tf,ztype,zone){if(!zone._id)zone._id=uid();var id=zone._id,isOB=ztype==='ob';var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;var ex=zoneExCls(top,btm);var cCls='zone-item '+zone.type+'-'+ztype+(ex?' '+ex:'');var lbl=zone.label||(isOB?'Unnamed OB':'Unnamed FVG');var stBadge='<span class="status-badge '+(zone.status||'active')+'">'+(zone.status||'active')+'</span>';
-  return'<div class="'+cCls+'" id="zi-'+id+'"><div class="zone-row-compact" onclick="toggleZone(\''+id+'\')"><span class="zone-compact-type">'+(zone.type==='bull'?'🟢':'🔴')+' '+zone.type.toUpperCase()+' '+ztype.toUpperCase()+'</span><span class="zone-compact-label">'+esc(lbl)+'</span><span class="zone-compact-prices">'+parseFloat(top||0).toFixed(5)+' / '+parseFloat(btm||0).toFixed(5)+'</span><span class="zone-compact-dist">'+distHTML(top,btm)+'</span><span class="zone-compact-status">'+stBadge+'</span>'+zoneAge(zone.formed_date,zone.formed_time)+'<span class="zone-chevron" id="chv-'+id+'">▶</span></div><div class="zone-expand" id="ze-'+id+'">'+renderUpdateExp(tf,ztype,zone,id)+'</div></div>';}
-
-function renderUpdateExp(tf,ztype,zone,id){var isOB=ztype==='ob';var top=isOB?zone.top:zone.entry,btm=isOB?zone.btm:zone.exit;var allStatuses=['active','tested','mitigated','broken','breaker'];var sOpts=allStatuses.map(function(s){return'<option value="'+s+'"'+(zone.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('');var hist=zone.update_history||[];
-  return'<div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')"><option value="bull"'+(zone.type==='bull'?' selected':'')+'>🟢 Bull</option><option value="bear"'+(zone.type==='bear'?' selected':'')+'>🔴 Bear</option></select></div><div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="changeStatus(\''+tf+'\',\''+ztype+'\',\''+id+'\',this.value)">'+sOpts+'</select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div></div>'+
-  '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="'+esc(zone.label||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'label\',this.value);schedulSync()"></div></div>'+
-  '<div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="'+(zone.formed_date||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_date\',this.value);schedulSync()"></div><div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="'+(zone.formed_time||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_time\',this.value);schedulSync()"></div><div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="'+esc(isOB?(zone.ob_note||''):(zone.fvg_note||''))+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\''+(isOB?'ob_note':'fvg_note')+'\',this.value);schedulSync()"></div></div>'+
-  (zone.mitigated_at?'<div style="font-size:10px;color:var(--bear);margin-bottom:6px;">Mitigated: '+zone.mitigated_at+'</div>':'')+
-  '<div class="form-col flex1" style="margin-bottom:8px;"><span class="field-lbl">UPDATE NOTE</span><div style="display:flex;gap:6px;margin-top:3px;"><input type="text" id="upd-'+id+'" placeholder="Ce s-a schimbat..."><button class="btn btn-green btn-sm" onclick="saveNote(\''+tf+'\',\''+ztype+'\',\''+id+'\')">Save</button></div></div>'+
-  (hist.length>0?'<div class="update-history"><span class="field-lbl">HISTORY</span>'+hist.slice().reverse().map(function(h){return'<div class="update-entry"><div class="update-entry-date">'+h.date+' '+h.time+'</div><div class="update-entry-text">'+esc(h.note)+'</div></div>';}).join('')+'</div>':'')+
-  '<div style="display:flex;justify-content:flex-end;margin-top:8px;"><button class="btn btn-red btn-sm" onclick="removeZone(\''+tf+'\',\''+ztype+'\',\''+id+'\')">🗑 Delete</button></div>';}
-
-function renderAddBtn(tf,ztype){return'<button class="add-btn" onclick="showAddForm(\''+tf+'\',\''+ztype+'\')">+ Add '+ztype.toUpperCase()+'</button><div class="add-zone-form" id="addform-'+tf+'-'+ztype+'"><div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select id="nf-type-'+tf+'-'+ztype+'"><option value="bear">🔴 Bear</option><option value="bull">🟢 Bull</option></select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" id="nf-top-'+tf+'-'+ztype+'"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" id="nf-btm-'+tf+'-'+ztype+'"></div></div><div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" id="nf-lbl-'+tf+'-'+ztype+'"></div></div><div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE</span><input type="date" id="nf-date-'+tf+'-'+ztype+'"></div><div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" id="nf-time-'+tf+'-'+ztype+'"></div></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:6px;"><button class="btn btn-red btn-sm" onclick="hideAddForm(\''+tf+'\',\''+ztype+'\')">Cancel</button><button class="btn btn-green btn-sm" onclick="commitAdd(\''+tf+'\',\''+ztype+'\')">Add</button></div></div>';}
-
-function renderEvHTML(tf,ev){if(!ev._id)ev._id=uid();var id=ev._id;var tOpts=['choch','bos','sweep','sfp'].map(function(t){return'<option value="'+t+'"'+(ev.type===t?' selected':'')+'>'+{choch:'CHoCH',bos:'BOS',sweep:'SWEEP',sfp:'SFP'}[t]+'</option>';}).join('');
-  return'<div class="event-row '+ev.type+'"><select style="width:80px;flex-shrink:0;font-weight:600;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')">'+tOpts+'</select><select style="width:66px;flex-shrink:0;" onchange="updateEF(\''+tf+'\',\''+id+'\',\'dir\',this.value)"><option value="bull"'+(ev.dir==='bull'?' selected':'')+'>↑ Bull</option><option value="bear"'+(ev.dir==='bear'?' selected':'')+'>↓ Bear</option></select><input style="width:80px;flex-shrink:0;" type="number" step="0.00001" value="'+(ev.price||'')+'" placeholder="Price" onchange="updateEF(\''+tf+'\',\''+id+'\',\'price\',this.value)"><input style="width:100px;flex-shrink:0;" type="date" value="'+(ev.date||'')+'" onchange="updateEF(\''+tf+'\',\''+id+'\',\'date\',this.value)"><input style="width:66px;flex-shrink:0;" type="time" value="'+(ev.time||'')+'" onchange="updateEF(\''+tf+'\',\''+id+'\',\'time\',this.value)"><button class="btn btn-red btn-sm" onclick="removeEvent(\''+tf+'\',\''+id+'\')">×</button></div>';}
-
-// ── ARCHIVE PAGE ───────────────────────────────────────────
-function renderArchivePage(){
-  var html='<div style="max-width:1200px;margin:0 auto;padding:20px 16px;"><h2 style="font-size:16px;font-weight:700;margin-bottom:16px;">🗄 Arhiva Zone Mitigate/Broken — '+currentPair+'</h2>';
-  if(archivedZones.length===0){html+='<div class="empty-state" style="min-height:30vh;"><div class="ai-icon">🗄</div><div class="ai-text">Nicio zona arhivata</div><div class="ai-sub">Zonele mitigate sau broken vor aparea aici.</div></div>';}
-  else{html+='<div class="zone-list">';archivedZones.forEach(function(z){var isOB=z.zone_type==='ob';var top=z.top_price||0,btm=z.btm_price||0;var name=z.label?' "'+z.label+'"':'';var mitDate=z.mitigated_at?'<span class="mitigated-date">'+z.mitigated_at+'</span>':'';
-    html+='<div class="zone-item '+(z.status==='mitigated'?'mitigated-item':'broken-item')+' '+z.direction+'-'+z.zone_type+'" style="opacity:.7;"><div class="zone-row-compact" onclick="toggleZone(\'arch-'+z.id+'\')"><span class="zone-compact-type">'+(z.direction==='bull'?'🟢':'🔴')+' '+(z.direction||'').toUpperCase()+' '+(z.zone_type||'').toUpperCase()+'</span><span class="zone-compact-label">['+(z.tf||'').toUpperCase()+']'+esc(z.label||'')+'</span><span class="zone-compact-prices">'+parseFloat(btm).toFixed(5)+' / '+parseFloat(top).toFixed(5)+'</span><span class="zone-compact-status"><span class="status-badge '+(z.status||'')+'">'+z.status+'</span></span>'+mitDate+'<span class="zone-chevron" id="chv-arch-'+z.id+'">▶</span></div><div class="zone-expand" id="ze-arch-'+z.id+'"><div class="form-row"><div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="restoreZone(\''+z.id+'\',this.value)"><option value="mitigated"'+(z.status==='mitigated'?' selected':'')+'>Mitigated</option><option value="broken"'+(z.status==='broken'?' selected':'')+'>Broken</option><option value="active">↩ Restore Active</option><option value="tested">↩ Restore Tested</option></select></div></div><div style="font-size:11px;color:var(--text2);">'+(z.context_note||'No context')+'</div></div></div>';});html+='</div>';}
-  html+='</div>';return html;}
-
-async function restoreZone(zid,newStatus){
-  if(newStatus==='active'||newStatus==='tested'){await sb.from('smc_zones').update({status:newStatus,mitigated_at:null}).eq('id',zid);showToast('✓ Zona restaurata ca '+newStatus);loadFromSupabase(currentPair);}
-  else{await sb.from('smc_zones').update({status:newStatus}).eq('id',zid);showToast('✓ Status actualizat');loadFromSupabase(currentPair);}}
-
-// ── ANALYSIS PAGE ──────────────────────────────────────────
-function renderAnalysisPage(){
-  var navHtml='<div class="analysis-day-nav"><button class="btn btn-green btn-sm" onclick="openAnalysisImportModal()">+ Adauga Analiza</button>';
-  if(allAnalyses.length>0){allAnalyses.forEach(function(a,i){var cls=selectedAnalysis&&selectedAnalysis.id===a.id?'analysis-day-btn active':'analysis-day-btn';cls+=' '+(a.type||'brief');navHtml+='<button class="'+cls+'" onclick="selectAnalysis('+i+')"><span class="analysis-type-badge '+(a.type||'brief')+'">'+(a.type==='debrief'?'🌙':'☀')+'</span> '+a.date+'</button>';});}
-  navHtml+='</div>';
-  if(!selectedAnalysis){if(allAnalyses.length===0)return'<div class="analysis-page">'+navHtml+'<div class="analysis-import-zone"><div class="ai-icon">📊</div><div class="ai-text">Nicio analiza</div><div class="ai-sub">Importa un JSON de analiza (brief sau debrief).</div><button class="btn btn-green" onclick="openAnalysisImportModal()">⬆ Import Analiza</button></div></div>';return'<div class="analysis-page">'+navHtml+'<div style="text-align:center;color:var(--text3);padding:40px;">Selecteaza o analiza din lista de mai sus.</div></div>';}
-  var a=selectedAnalysis.data||selectedAnalysis;
-  var bDirs={bull:'↑ BULL',bear:'↓ BEAR',neutral:'— RANGE'};
-  var biasRows='';if(a.bias){biasRows=[{tf:'WEEKLY',d:a.bias.weekly},{tf:'DAILY',d:a.bias.daily},{tf:'H4',d:a.bias.h4}].map(function(r){if(!r.d)return'';return'<tr><td><b>'+r.tf+'</b></td><td><span class="bias-dir '+(r.d.direction||'')+'">'+( bDirs[r.d.direction]||r.d.direction||'')+'</span></td><td style="color:var(--text2)">'+(r.d.summary||'')+'</td></tr>';}).join('');}
-  var levelRows=(a.key_levels||[]).map(function(l){return'<div class="level-row '+l.type+'"><span class="level-price">'+l.price+'</span><span class="level-label">'+l.label+'</span>'+(l.tf?'<span class="level-tf '+l.tf+'">'+l.tf.toUpperCase()+'</span>':'')+'</div>';}).join('');
-  function rSetup(s,pfx){var tgts=(s.targets||[]).map(function(t){return'<div class="target-row '+t.tp.toLowerCase()+'"><span class="target-label">'+t.tp+'</span><span class="target-price">'+t.price+'</span><span class="target-pips">'+t.pips+'p</span><span class="target-rr">'+t.rr+'</span><span class="target-size">'+t.size_pct+'%</span></div>';}).join('');return'<div class="setup-card '+(s.priority||'secondary')+'"><div class="setup-hdr" onclick="toggleSetup(\''+pfx+'-'+s.id+'\')"><span class="setup-id '+pfx+'">'+s.id+'</span><span class="setup-title">'+s.label+'</span><span class="setup-dir '+s.direction+'">'+(s.direction==='short'?'↓ SHORT':'↑ LONG')+'</span><span class="setup-chevron" id="schv-'+pfx+'-'+s.id+'">▶</span></div><div class="setup-body" id="sbody-'+pfx+'-'+s.id+'"><div class="setup-logic">'+(s.logic||'')+'</div><div class="setup-condition"><strong>Conditie:</strong> '+(s.condition||'')+'</div>'+(s.warning?'<div class="setup-warning">⚠ '+s.warning+'</div>':'')+'<div class="setup-params"><div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+s.entry+'</div></div><div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">'+s.sl+'</div></div><div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">'+s.risk_pips+' pips</div></div>'+(s.session?'<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">'+s.session+'</div></div>':'')+(s.duration?'<div class="setup-param"><div class="setup-param-lbl">DURATA</div><div class="setup-param-val">'+s.duration+'</div></div>':'')+'</div><div class="setup-targets">'+tgts+'</div>'+(s.management?'<div class="setup-management">📋 '+s.management+'</div>':'')+(s.invalidation?'<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> '+s.invalidation+'</div>':'')+'</div></div>';}
-  var dtHTML=(a.day_trades||[]).map(function(s){return rSetup(s,'dt');}).join('');
-  var swHTML=(a.swing_trades||[]).map(function(s){return rSetup(s,'sw');}).join('');
-  var avoidHTML=(a.avoid||[]).map(function(x){return'<li>'+x+'</li>';}).join('');
-  var scenHTML=(a.scenarios||[]).map(function(s){return'<div class="scenario-row"><span class="scenario-cond">'+s.condition+'</span><span class="scenario-arrow">→</span><span class="scenario-action">'+s.action+'</span></div>';}).join('');
-  var typeBadge=selectedAnalysis.type==='debrief'?'<span class="analysis-type-badge debrief">🌙 DEBRIEF</span>':'<span class="analysis-type-badge brief">☀ BRIEF</span>';
-  return'<div class="analysis-page">'+navHtml+'<div class="analysis-header"><div class="analysis-header-top"><div class="analysis-title">'+typeBadge+' '+(a.pair||currentPair)+' — '+(a.day||'')+' '+(a.date||'')+'</div><div class="analysis-meta"><span class="analysis-meta-badge">📍 '+(a.current_price||'N/A')+'</span><button class="btn btn-red btn-sm" onclick="deleteAnalysis(\''+selectedAnalysis.id+'\')">🗑 Sterge</button></div></div>'+(a.session_note?'<div class="session-note">⚠ '+a.session_note+'</div>':'')+'</div><div class="analysis-grid">'+(a.bias?'<div class="analysis-card"><div class="analysis-card-title">Bias Multi-TF</div><table class="bias-table"><tr><th>TF</th><th>Bias</th><th>Motiv</th></tr>'+biasRows+'</table><div class="bias-conclusion">'+(a.bias.conclusion||'')+'</div></div>':'')+(levelRows?'<div class="analysis-card"><div class="analysis-card-title">Nivele Cheie</div><div class="levels-list">'+levelRows+'</div></div>':'')+(a.critical_observation?'<div class="analysis-card full"><div class="analysis-card-title">⚠ Observatie critica</div><div class="setup-warning"><strong>'+a.critical_observation.title+'</strong><br>'+a.critical_observation.text+'</div></div>':'')+(dtHTML?'<div class="analysis-card"><div class="analysis-card-title">🎯 Day Trade</div><div class="setups-grid">'+dtHTML+'</div></div>':'')+(swHTML?'<div class="analysis-card"><div class="analysis-card-title">📈 Swing Trade</div><div class="setups-grid">'+swHTML+'</div></div>':'')+(avoidHTML?'<div class="analysis-card"><div class="analysis-card-title">✕ Zone de evitat</div><ul class="avoid-list">'+avoidHTML+'</ul></div>':'')+(scenHTML?'<div class="analysis-card"><div class="analysis-card-title">🔑 Scenariile zilei</div>'+scenHTML+'</div>':'')+'</div></div>';}
-
-function selectAnalysis(idx){selectedAnalysis=allAnalyses[idx];renderAll();}
-function toggleSetup(id){var b=document.getElementById('sbody-'+id),c=document.getElementById('schv-'+id);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
-
-// ── SUPABASE SYNC ──────────────────────────────────────────
-function setSyncStatus(s){var el=document.getElementById('syncIndicator');if(!el)return;if(s==='syncing'){el.className='sync-indicator syncing';el.textContent='⟳ Saving...';}else if(s==='synced'){el.className='sync-indicator synced';el.textContent='✓ Synced';}else{el.className='sync-indicator error';el.textContent='⚠ Error';}}
-var _syncTimer=null;
-function schedulSync(){clearTimeout(_syncTimer);_syncTimer=setTimeout(syncToSupabase,1500);}
-
-async function syncToSupabase(){setSyncStatus('syncing');try{var now=new Date().toISOString();var allZ=[],allEv=[];
-  for(var i=0;i<TFS.length;i++){var tf=TFS[i],d=state[tf];
-    await sb.from('smc_context').upsert({pair:currentPair,tf:tf,bias:d.bias,notes:d.notes||'',eqh:d.eqh?parseFloat(d.eqh):null,eql:d.eql?parseFloat(d.eql):null,current_price:state.current_price?parseFloat(state.current_price):null,updated_at:now},{onConflict:'pair,tf'});
-    d.obs.forEach(function(z){allZ.push({z:z,tf:tf,ztype:'ob'});});d.fvgs.forEach(function(z){allZ.push({z:z,tf:tf,ztype:'fvg'});});d.events.forEach(function(ev){allEv.push({ev:ev,tf:tf});});}
-  await sb.from('smc_zones').delete().eq('pair',currentPair).not('id','like','ps_%');
-  for(var j=0;j<allZ.length;j++){var item=allZ[j];var z=item.z,tf=item.tf,ztype=item.ztype;var topV=parseFloat(ztype==='ob'?z.top:z.entry)||null;var btmV=parseFloat(ztype==='ob'?z.btm:z.exit)||null;var detId=zoneUid(currentPair,tf,ztype,z.type||'bear',(topV||0).toFixed(5),(btmV||0).toFixed(5));
-    await sb.from('smc_zones').upsert({id:detId,pair:currentPair,tf:tf,zone_type:ztype,direction:z.type||'bear',top_price:topV,btm_price:btmV,label:z.label||'',status:z.status||'active',formed_date:z.formed_date||null,formed_time:z.formed_time||null,context_note:z.ob_note||z.fvg_note||'',tags:z.tags||[],update_history:z.update_history||[],updated_at:now,mitigated_at:z.mitigated_at||null},{onConflict:'id'});}
-  await sb.from('smc_events').delete().eq('pair',currentPair).not('id','like','ps_%');
-  for(var k=0;k<allEv.length;k++){var item=allEv[k];var ev=item.ev,tf=item.tf;if(!ev.price&&!ev.type)continue;var evId='ev_'+currentPair+'_'+tf+'_'+(ev.type||'')+'_'+(ev.dir||'')+'_'+(ev.price||'0');
-    await sb.from('smc_events').upsert({id:evId,pair:currentPair,tf:tf,event_type:ev.type||'',direction:ev.dir||'bear',price:parseFloat(ev.price)||null,event_time:ev.time||null,event_date:ev.date||null},{onConflict:'id'});}
-  setSyncStatus('synced');}catch(e){console.error(e);setSyncStatus('error');}}
-
-async function loadFromSupabase(pair){setSyncStatus('syncing');try{var s=pairStates[pair];
-  var {data:ctx}=await sb.from('smc_context').select('*').eq('pair',pair);
-  if(ctx&&ctx.length>0)ctx.forEach(function(c){if(!s[c.tf])return;s[c.tf].bias=c.bias||'';s[c.tf].notes=c.notes||'';if(c.tf==='h4'||c.tf==='h1'){s[c.tf].eqh=c.eqh?c.eqh.toString():'';s[c.tf].eql=c.eql?c.eql.toString():'';}if(c.current_price){s.current_price=c.current_price.toString();document.getElementById('currentPrice').value=c.current_price;}});
-  var {data:zones}=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['active','tested']);
-  if(zones&&zones.length>0){TFS.forEach(function(tf){s[tf].obs=[];s[tf].fvgs=[];});zones.forEach(function(z){if(!s[z.tf])return;var detId=zoneUid(pair,z.tf,z.zone_type,z.direction,(z.top_price||0).toString(),(z.btm_price||0).toString());var zone={_id:detId,type:z.direction,status:z.status,label:z.label||'',formed_date:z.formed_date||'',formed_time:z.formed_time||'',tags:z.tags||[],update_history:z.update_history||[],mitigated_at:z.mitigated_at||''};if(z.zone_type==='ob'){zone.top=z.top_price?.toString()||'';zone.btm=z.btm_price?.toString()||'';zone.ob_note=z.context_note||'';s[z.tf].obs.push(zone);}else{zone.entry=z.top_price?.toString()||'';zone.exit=z.btm_price?.toString()||'';zone.fvg_note=z.context_note||'';s[z.tf].fvgs.push(zone);}});}
-  // Load archived zones
-  var {data:archived}=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['mitigated','broken']);
-  archivedZones=archived||[];
-  // Load events
-  var {data:events}=await sb.from('smc_events').select('*').eq('pair',pair);
-  if(events&&events.length>0){TFS.forEach(function(tf){s[tf].events=[];});events.forEach(function(ev){if(!s[ev.tf])return;s[ev.tf].events.push({_id:ev.id,type:ev.event_type,dir:ev.direction,price:ev.price?.toString()||'',time:ev.event_time||'',date:ev.event_date||''});});}
-  // Load analyses
-  var {data:analyses}=await sb.from('smc_analyses').select('*').eq('pair',pair).order('date',{ascending:false}).limit(20);
-  allAnalyses=(analyses||[]).map(function(a){return{id:a.id,pair:a.pair,date:a.date,type:a.type,data:a.data};});
-  if(allAnalyses.length>0&&!selectedAnalysis)selectedAnalysis=allAnalyses[0];
-  setSyncStatus('synced');checkHasData();if(!hasData)appMode='empty';else if(appMode==='empty')appMode='update';renderAll();showToast('✓ '+pair+' incarcat');
-  }catch(e){console.error(e);setSyncStatus('error');renderAll();}}
-
-// ── ZONE ACTIONS ───────────────────────────────────────────
-function toggleZone(id){var ze=document.getElementById('ze-'+id),chv=document.getElementById('chv-'+id);if(ze)ze.classList.toggle('open');if(chv)chv.classList.toggle('open');}
-function showAddForm(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.add('open');}
-function hideAddForm(tf,zt){document.getElementById('addform-'+tf+'-'+zt).classList.remove('open');}
-function commitAdd(tf,zt){var isOB=zt==='ob';var top=document.getElementById('nf-top-'+tf+'-'+zt).value;var btm=document.getElementById('nf-btm-'+tf+'-'+zt).value;if(!top||!btm){showToast('⚠ Completeaza Top si Bottom');return;}var dtype=document.getElementById('nf-type-'+tf+'-'+zt).value;var detId=zoneUid(currentPair,tf,zt,dtype,top,btm);var zone={_id:detId,type:dtype,status:'active',label:document.getElementById('nf-lbl-'+tf+'-'+zt).value,formed_date:document.getElementById('nf-date-'+tf+'-'+zt).value,formed_time:document.getElementById('nf-time-'+tf+'-'+zt).value,tags:[],update_history:[]};if(isOB){zone.top=top;zone.btm=btm;zone.ob_note='';}else{zone.entry=top;zone.exit=btm;zone.fvg_note='';}state[tf][isOB?'obs':'fvgs'].push(zone);renderTF(tf);schedulSync();showToast('✓ Zona adaugata');}
-function removeZone(tf,zt,id){var arr=state[tf][zt==='ob'?'obs':'fvgs'];var i=arr.findIndex(function(z){return z._id===id;});if(i>=0)arr.splice(i,1);sb.from('smc_zones').delete().eq('id',id);renderTF(tf);showToast('✓ Zona stearsa');}
-function findZone(tf,zt,id){return state[tf][zt==='ob'?'obs':'fvgs'].find(function(z){return z._id===id;});}
-function updateZF(tf,zt,id,f,v){var z=findZone(tf,zt,id);if(z)z[f]=v;}
-function updateZP(tf,zt,id,side,v){var z=findZone(tf,zt,id);if(!z)return;if(zt==='ob'){if(side==='top')z.top=v;else z.btm=v;}else{if(side==='top')z.entry=v;else z.exit=v;}schedulSync();}
-function changeStatus(tf,zt,id,newStatus){var z=findZone(tf,zt,id);if(!z)return;z.status=newStatus;if(newStatus==='mitigated'||newStatus==='broken'){var now=new Date();z.mitigated_at=now.toLocaleDateString('en-GB')+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});}renderTF(tf);schedulSync();}
-function saveNote(tf,zt,id){var inp=document.getElementById('upd-'+id);if(!inp||!inp.value.trim())return;var z=findZone(tf,zt,id);if(!z)return;if(!z.update_history)z.update_history=[];var n=new Date();z.update_history.push({date:n.toLocaleDateString('en-GB'),time:n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),note:inp.value.trim()});inp.value='';renderTF(tf);schedulSync();showToast('✓ Nota salvata');}
-function toggleTag(tf,zt,id,tag,btn){var z=findZone(tf,zt,id);if(!z)return;if(!z.tags)z.tags=[];btn.classList.toggle('active');if(btn.classList.contains('active'))z.tags.push(tag);else z.tags=z.tags.filter(function(t){return t!==tag;});schedulSync();}
-
-// ── EVENT ACTIONS ──────────────────────────────────────────
-function addEvent(tf){state[tf].events.push({_id:uid(),type:'choch',dir:'bear',price:'',date:'',time:''});renderTF(tf);schedulSync();}
-function updateEF(tf,id,f,v){var ev=state[tf].events.find(function(e){return e._id===id;});if(ev)ev[f]=v;schedulSync();}
-function removeEvent(tf,id){state[tf].events=state[tf].events.filter(function(e){return e._id!==id;});sb.from('smc_events').delete().eq('id',id);renderTF(tf);}
-
-// ── EXPORT / IMPORT ────────────────────────────────────────
-function exportData(){var now=new Date(),h=now.getHours();var session=h>=10&&h<13?'London':h>=16&&h<20?'NY':h>=9&&h<10?'PreLondon':'OutOfSession';var payload={pair:currentPair,exported_at:now.toISOString(),date:now.toLocaleDateString('en-GB'),time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}),session:session,current_price:state.current_price||''};TFS.forEach(function(tf){var d=state[tf];var out={bias:d.bias,notes:d.notes,obs:d.obs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),fvgs:d.fvgs.map(function(z){var c=Object.assign({},z);delete c._id;return c;}),events:d.events.map(function(e){var c=Object.assign({},e);delete c._id;return c;})};if(tf==='h4'||tf==='h1'){out.eqh=d.eqh;out.eql=d.eql;}payload[tf]=out;});var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=currentPair+'_SMC_'+now.toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);showToast('✓ Exported');}
-function doImport(){try{var data=JSON.parse(document.getElementById('importText').value.trim());if(data.current_price){state.current_price=data.current_price;document.getElementById('currentPrice').value=data.current_price;}TFS.forEach(function(tf){if(!data[tf])return;var d=data[tf];state[tf]={bias:d.bias||'',notes:d.notes||'',obs:(d.obs||[]).map(function(z){var top=z.top||'0',btm=z.btm||'0';return Object.assign({update_history:[]},z,{_id:zoneUid(data.pair||currentPair,tf,'ob',z.type||'bear',top,btm)});}),fvgs:(d.fvgs||[]).map(function(z){var top=z.entry||'0',btm=z.exit||'0';return Object.assign({update_history:[]},z,{_id:zoneUid(data.pair||currentPair,tf,'fvg',z.type||'bear',top,btm)});}),events:(d.events||[]).map(function(e){return Object.assign({_id:uid()},e);})};if(tf==='h4'||tf==='h1'){state[tf].eqh=d.eqh||'';state[tf].eql=d.eql||'';}});closeModal('importModal');appMode='update';renderAll();schedulSync();showToast('✓ JSON loaded');}catch(e){alert('JSON invalid: '+e.message);}}
-
-async function doAnalysisImport(){try{var data=JSON.parse(document.getElementById('analysisImportText').value.trim());var date=data.date||new Date().toLocaleDateString('en-GB');var aId=currentPair+'_'+analysisImportType+'_'+date.replace(/\//g,'-');
-  await sb.from('smc_analyses').upsert({id:aId,pair:currentPair,date:date,type:analysisImportType,data:data},{onConflict:'id'});
-  allAnalyses.unshift({id:aId,pair:currentPair,date:date,type:analysisImportType,data:data});
-  // Dedup
-  var seen={};allAnalyses=allAnalyses.filter(function(a){if(seen[a.id])return false;seen[a.id]=true;return true;});
-  selectedAnalysis=allAnalyses[0];closeModal('analysisImportModal');appMode='analysis';checkHasData();renderAll();showToast('✓ Analiza salvata — '+analysisImportType);}catch(e){alert('JSON invalid: '+e.message);}}
-
-async function deleteAnalysis(aId){if(!confirm('Sterge aceasta analiza?'))return;await sb.from('smc_analyses').delete().eq('id',aId);allAnalyses=allAnalyses.filter(function(a){return a.id!==aId;});selectedAnalysis=allAnalyses.length>0?allAnalyses[0]:null;renderAll();showToast('✓ Analiza stearsa');}
-
-// ── INIT ───────────────────────────────────────────────────
-loadFromSupabase(currentPair);
-</script>
 </body>
 </html>
