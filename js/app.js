@@ -9,6 +9,8 @@ function renderAll(){
     main.innerHTML=renderAnalysisPage();
   }else if(appMode==='archive'){
     main.innerHTML=renderArchivePage();
+  }else if(appMode==='heartbeat'){
+    main.innerHTML=renderHeartbeatPage();
   }else{
     main.innerHTML=renderEmptyState();
   }
@@ -34,7 +36,8 @@ function setMode(m){
   document.querySelectorAll('.mode-btn').forEach(function(b){
     b.classList.toggle('active',b.dataset.mode===m);
   });
-  renderAll();
+  if(m==='heartbeat') loadCandles();
+  else renderAll();
 }
 
 function checkHasData(){
