@@ -37,7 +37,7 @@ function exportCandlesCSV(){
 }
 
 function renderHeartbeatPage(){
-  var tfBtns = ['all','h1','h4','daily','weekly'].map(function(t){
+  var tfBtns = ['all','m1','m15','h1','h4','daily','weekly'].map(function(t){
     var lbl = t === 'all' ? 'ALL' : t.toUpperCase();
     var cls = heartbeatTF === t ? ' active' : '';
     return '<button class="mode-btn' + cls + '" onclick="setHeartbeatTF(\'' + t + '\')">' + lbl + '</button>';
