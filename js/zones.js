@@ -59,7 +59,8 @@ function renderUpdateExp(tf,ztype,zone,id){
   var sOpts=allSt.map(function(s){return '<option value="'+s+'"'+(zone.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';}).join('');
   var hist=zone.update_history||[];
 
-  return '<div class="form-row"><div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')"><option value="bull"'+(zone.type==='bull'?' selected':'')+'>🟢 Bull</option><option value="bear"'+(zone.type==='bear'?' selected':'')+'>🔴 Bear</option></select></div><div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="changeStatus(\''+tf+'\',\''+ztype+'\',\''+id+'\',this.value)">'+sOpts+'</select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div></div>'+
+  var tfOpts=TFS.map(function(t){return '<option value="'+t+'"'+(tf===t?' selected':'')+'>'+t.toUpperCase()+'</option>';}).join('');
+  return '<div class="form-row"><div class="form-col w80"><span class="field-lbl">TF</span><select onchange="moveZoneTF(\''+tf+'\',\''+ztype+'\',\''+id+'\',this.value)">'+tfOpts+'</select></div><div class="form-col w100"><span class="field-lbl">TYPE</span><select onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'type\',this.value);renderTF(\''+tf+'\')"><option value="bull"'+(zone.type==='bull'?' selected':'')+'>🟢 Bull</option><option value="bear"'+(zone.type==='bear'?' selected':'')+'>🔴 Bear</option></select></div><div class="form-col w100"><span class="field-lbl">STATUS</span><select onchange="changeStatus(\''+tf+'\',\''+ztype+'\',\''+id+'\',this.value)">'+sOpts+'</select></div><div class="form-col w80"><span class="field-lbl">TOP</span><input type="number" step="0.00001" value="'+(top||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'top\',this.value)"></div><div class="form-col w80"><span class="field-lbl">BOTTOM</span><input type="number" step="0.00001" value="'+(btm||'')+'" onchange="updateZP(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'btm\',this.value)"></div></div>'+
   '<div class="form-row"><div class="form-col flex1"><span class="field-lbl">LABEL</span><input type="text" value="'+esc(zone.label||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'label\',this.value);schedulSync()"></div></div>'+
   '<div class="form-row"><div class="form-col w120"><span class="field-lbl">DATE FORMED</span><input type="date" value="'+(zone.formed_date||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_date\',this.value);schedulSync()"></div><div class="form-col w80"><span class="field-lbl">TIME</span><input type="time" value="'+(zone.formed_time||'')+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\'formed_time\',this.value);schedulSync()"></div><div class="form-col flex1"><span class="field-lbl">CONTEXT</span><input type="text" value="'+esc(isOB?(zone.ob_note||''):(zone.fvg_note||''))+'" onchange="updateZF(\''+tf+'\',\''+ztype+'\',\''+id+'\',\''+(isOB?'ob_note':'fvg_note')+'\',this.value);schedulSync()"></div></div>'+
   (zone.mitigated_at?'<div style="font-size:10px;color:var(--bear);margin-bottom:6px;">Mitigated: '+zone.mitigated_at+'</div>':'')+
@@ -121,3 +122,17 @@ function markZoneReviewed(tf,zt,id){var z=findZone(tf,zt,id);if(!z)return;if(z.t
 function addEvent(tf){state[tf].events.push({_id:uid(),type:'choch',dir:'bear',price:'',date:'',time:''});renderTF(tf);schedulSync();}
 function updateEF(tf,id,f,v){var ev=state[tf].events.find(function(e){return e._id===id;});if(ev)ev[f]=v;schedulSync();}
 function removeEvent(tf,id){state[tf].events=state[tf].events.filter(function(e){return e._id!==id;});sb.from('smc_events').delete().eq('id',id);renderTF(tf);}
+
+// ── MOVE ZONE TO DIFFERENT TF ──────────────────────────────
+function moveZoneTF(oldTF,zt,id,newTF){
+  if(oldTF===newTF)return;
+  var arr=zt==='ob'?'obs':'fvgs';
+  var idx=state[oldTF][arr].findIndex(function(z){return z._id===id;});
+  if(idx<0)return;
+  var zone=state[oldTF][arr].splice(idx,1)[0];
+  state[newTF][arr].push(zone);
+  // Update TF in DB directly
+  sb.from('smc_zones').update({tf:newTF}).eq('id',id);
+  renderTF(oldTF);renderTF(newTF);schedulSync();
+  showToast('✓ Zona mutata la '+newTF.toUpperCase());
+}
