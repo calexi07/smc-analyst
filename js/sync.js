@@ -66,16 +66,21 @@ async function loadFromSupabase(pair){
       state.h1.direction=ctx.h1_direction||'';
     }
 
+    // Map DB tf values (Pine: '1','4','D','W') to dashboard keys
+    var tfMap={'1':'h1','60':'h1','H1':'h1','h1':'h1','4':'h4','240':'h4','H4':'h4','h4':'h4','D':'daily','1D':'daily','daily':'daily','W':'weekly','1W':'weekly','weekly':'weekly'};
+    function mapTF(raw){return tfMap[raw]||null;}
+
     var {data:zoneRows}=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['active','tested']);
     TFS.forEach(function(tf){state[tf].obs=[];state[tf].fvgs=[];});
     (zoneRows||[]).forEach(function(r){
+      var tf=mapTF(r.tf);if(!tf)return;
       var isOB=r.zone_type==='ob';
       var z={_id:r.id,type:r.direction,status:r.status,label:r.label||'',
         formed_date:r.formed_date||'',formed_time:r.formed_time||'',
         tags:r.tags||[],update_history:r.update_history||[],mitigated_at:r.mitigated_at||null};
       if(isOB){z.top=r.top_price;z.btm=r.btm_price;z.ob_note=r.context_note||'';}
       else{z.entry=r.top_price;z.exit=r.btm_price;z.fvg_note=r.context_note||'';}
-      state[r.tf][isOB?'obs':'fvgs'].push(z);
+      state[tf][isOB?'obs':'fvgs'].push(z);
     });
 
     var {data:archRows}=await sb.from('smc_zones').select('*').eq('pair',pair).in('status',['mitigated','broken']);
@@ -84,7 +89,8 @@ async function loadFromSupabase(pair){
     var {data:evRows}=await sb.from('smc_events').select('*').eq('pair',pair);
     TFS.forEach(function(tf){state[tf].events=[];});
     (evRows||[]).forEach(function(r){
-      state[r.tf].events.push({_id:r.id,type:r.event_type,dir:r.direction,price:r.price||'',date:r.event_date||'',time:r.event_time||''});
+      var tf=mapTF(r.tf);if(!tf)return;
+      state[tf].events.push({_id:r.id,type:r.event_type,dir:r.direction,price:r.price||'',date:r.event_date||'',time:r.event_time||''});
     });
 
     var {data:anRows}=await sb.from('smc_analyses').select('*').eq('pair',pair).order('created_at',{ascending:false});
