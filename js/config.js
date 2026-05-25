@@ -4,7 +4,7 @@ var SUPABASE_KEY='sb_publishable_0mIG5sSi6ueUNELew2G0iQ_7dozolX3';
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 // ── CONSTANTS ──────────────────────────────────────────────
-var TFS=['weekly','daily','h4','h1'];
+var TFS=['weekly','daily','h4'];
 var PAIRS=['EURUSD','GBPUSD','USDJPY','USDCAD','AUDUSD','GBPJPY','AUDCHF','AUDNZD','XAUUSD','NAS100','GER40','EURAUD','GBPAUD','USDCHF'];
 var NEAR=25;
 
