@@ -75,8 +75,12 @@ async function loadFromSupabase(pair){
     (zoneRows||[]).forEach(function(r){
       var tf=mapTF(r.tf);if(!tf)return;
       var isOB=r.zone_type==='ob';
+      // Sanitize formed_time: if ISO string, extract HH:mm
+      var ft=r.formed_time||'';
+      if(ft.indexOf('T')>=0) ft=ft.slice(ft.indexOf('T')+1,ft.indexOf('T')+6);
+      if(ft.length>5) ft=ft.slice(0,5);
       var z={_id:r.id,type:r.direction,status:r.status,label:r.label||'',
-        formed_date:r.formed_date||'',formed_time:r.formed_time||'',
+        formed_date:r.formed_date||'',formed_time:ft,
         tags:r.tags||[],update_history:r.update_history||[],mitigated_at:r.mitigated_at||null};
       if(isOB){z.top=r.top_price;z.btm=r.btm_price;z.ob_note=r.context_note||'';}
       else{z.entry=r.top_price;z.exit=r.btm_price;z.fvg_note=r.context_note||'';}
