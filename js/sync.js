@@ -45,7 +45,7 @@ async function syncToSupabase(){
 async function loadFromSupabase(pair){
   pair=pair||currentPair;
   try{
-    var {data:priceData}=await sb.from('smc_prices').select('*').eq('pair',pair).single();
+    var {data:priceData}=await sb.from('smc_prices').select('*').eq('pair',pair).maybeSingle();
     if(priceData && priceData.price){
       livePrice=parseFloat(priceData.price);
       livePriceTs=priceData.updated_at?new Date(priceData.updated_at):new Date(priceData.ts||Date.now());
@@ -53,7 +53,7 @@ async function loadFromSupabase(pair){
       updatePriceDisplay();
     }
 
-    var {data:ctx}=await sb.from('smc_context').select('*').eq('pair',pair).single();
+    var {data:ctx}=await sb.from('smc_context').select('*').eq('pair',pair).maybeSingle();
     if(ctx){
       state.weekly.bias=ctx.weekly_bias||'';state.daily.bias=ctx.daily_bias||'';
       state.h4.bias=ctx.h4_bias||'';state.h1.bias=ctx.h1_bias||'';
