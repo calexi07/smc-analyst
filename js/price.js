@@ -1,7 +1,7 @@
 // ── PRICE HEARTBEAT ────────────────────────────────────────
 async function fetchLivePrice(){
   try{
-    var {data}=await sb.from('smc_prices').select('*').eq('pair',currentPair).single();
+    var {data}=await sb.from('smc_prices').select('*').eq('pair',currentPair).maybeSingle();
     if(data && data.price){
       livePrice=parseFloat(data.price);
       livePriceTs=data.updated_at?new Date(data.updated_at):new Date(data.ts||Date.now());
