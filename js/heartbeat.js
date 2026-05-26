@@ -4,8 +4,12 @@ var heartbeatTF = 'all';
 var heartbeatCandles = [];
 
 async function loadCandles(){
-  var startD = heartbeatDate + 'T00:00:00Z';
-  var endD   = heartbeatDate + 'T23:59:59Z';
+  // Convert selected date (GMT+3 Bucharest) to UTC range for DB query
+  // 26/05 00:00 GMT+3 = 25/05 21:00 UTC
+  var startLocal = new Date(heartbeatDate + 'T00:00:00+03:00');
+  var endLocal   = new Date(heartbeatDate + 'T23:59:59+03:00');
+  var startD = startLocal.toISOString();
+  var endD   = endLocal.toISOString();
   var query  = sb.from('smc_candles').select('*')
     .eq('pair', currentPair)
     .gte('candle_time', startD)
