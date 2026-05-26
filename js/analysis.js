@@ -1,8 +1,8 @@
 // ── ANALYSIS HELPERS ───────────────────────────────────────
 function getUniqueDays(){
   var days={};
-  allAnalyses.forEach(function(a){if(!days[a.date])days[a.date]={brief:null,debrief:null};days[a.date][a.type]=a;});
-  journalTrades.forEach(function(t){if(t.date && !days[t.date])days[t.date]={brief:null,debrief:null};});
+  allAnalyses.forEach(function(a){if(!days[a.date])days[a.date]={brief:null,interim:null,debrief:null};days[a.date][a.type]=a;});
+  journalTrades.forEach(function(t){if(t.date && !days[t.date])days[t.date]={brief:null,interim:null,debrief:null};});
   var sorted=Object.keys(days).sort(function(a,b){
     var da=a.split('/').reverse().join(''),db=b.split('/').reverse().join('');return db.localeCompare(da);
   });
@@ -17,11 +17,11 @@ function toggleSetup(id){var b=document.getElementById('sbody-'+id),c=document.g
 function renderAnalysisPage(){
   var info=getUniqueDays();var days=info.days,sorted=info.sorted;
   var dayOpts=sorted.map(function(d){
-    var hasBrief=days[d]&&days[d].brief?'☀':'';var hasDebrief=days[d]&&days[d].debrief?'🌙':'';
-    return '<option value="'+d+'"'+(selectedDay===d?' selected':'')+'>'+d+' '+hasBrief+hasDebrief+'</option>';
+    var hasBrief=days[d]&&days[d].brief?'☀':'';var hasInterim=days[d]&&days[d].interim?'⏱':'';var hasDebrief=days[d]&&days[d].debrief?'🌙':'';
+    return '<option value="'+d+'"'+(selectedDay===d?' selected':'')+'>'+d+' '+hasBrief+hasInterim+hasDebrief+'</option>';
   }).join('');
 
-  var html='<div class="analysis-page"><div class="analysis-toolbar"><label>ZI</label><select class="day-select" id="daySelect" onchange="selectDay(this.value)"><option value="">— Selecteaza ziua —</option>'+dayOpts+'</select><div class="analysis-tabs"><button class="atab brief-tab'+(activeAnalysisTab==='brief'?' active':'')+'" onclick="setAnalysisTab(\'brief\')">☀ Brief</button><button class="atab debrief-tab'+(activeAnalysisTab==='debrief'?' active':'')+'" onclick="setAnalysisTab(\'debrief\')">🌙 Debrief</button><button class="atab trades-tab'+(activeAnalysisTab==='trades'?' active':'')+'" onclick="setAnalysisTab(\'trades\')">📝 Trades</button></div><button class="btn btn-green btn-sm" onclick="openAnalysisImportModalFor(activeAnalysisTab===\'trades\'?\'trades\':activeAnalysisTab)">⬆ Import</button></div>';
+  var html='<div class="analysis-page"><div class="analysis-toolbar"><label>ZI</label><select class="day-select" id="daySelect" onchange="selectDay(this.value)"><option value="">— Selecteaza ziua —</option>'+dayOpts+'</select><div class="analysis-tabs"><button class="atab brief-tab'+(activeAnalysisTab==='brief'?' active':'')+'" onclick="setAnalysisTab(\'brief\')">☀ Brief</button><button class="atab interim-tab'+(activeAnalysisTab==='interim'?' active':'')+'" onclick="setAnalysisTab(\'interim\')">⏱ Interim</button><button class="atab debrief-tab'+(activeAnalysisTab==='debrief'?' active':'')+'" onclick="setAnalysisTab(\'debrief\')">🌙 Debrief</button><button class="atab trades-tab'+(activeAnalysisTab==='trades'?' active':'')+'" onclick="setAnalysisTab(\'trades\')">📝 Trades</button></div><button class="btn btn-green btn-sm" onclick="openAnalysisImportModalFor(activeAnalysisTab===\'trades\'?\'trades\':activeAnalysisTab)">⬆ Import</button></div>';
 
   if(!selectedDay){
     html+='<div class="analysis-import-zone"><div class="ai-icon">📊</div><div class="ai-text">Selecteaza o zi</div><div class="ai-sub">Alege o zi din dropdown sau importa o analiza noua.</div></div></div>';
@@ -30,6 +30,9 @@ function renderAnalysisPage(){
   if(activeAnalysisTab==='brief'){
     var briefA=days[selectedDay]&&days[selectedDay].brief;
     html+=briefA?renderBriefContent(briefA):'<div class="analysis-import-zone"><div class="ai-icon">☀</div><div class="ai-text">Niciun Brief pentru '+selectedDay+'</div><div class="ai-sub">Importa un JSON de brief.</div><button class="btn btn-green" onclick="openAnalysisImportModalFor(\'brief\')">⬆ Import Brief</button></div>';
+  }else if(activeAnalysisTab==='interim'){
+    var interimA=days[selectedDay]&&days[selectedDay].interim;
+    html+=interimA?renderInterimContent(interimA):'<div class="analysis-import-zone"><div class="ai-icon">⏱</div><div class="ai-text">Niciun Interim pentru '+selectedDay+'</div><div class="ai-sub">Importa un JSON de analiza intermediara.</div><button class="btn btn-green" onclick="openAnalysisImportModalFor(\'interim\')">⬆ Import Interim</button></div>';
   }else if(activeAnalysisTab==='debrief'){
     var debriefA=days[selectedDay]&&days[selectedDay].debrief;
     html+=debriefA?renderDebriefContent(debriefA):'<div class="analysis-import-zone"><div class="ai-icon">🌙</div><div class="ai-text">Niciun Debrief pentru '+selectedDay+'</div><div class="ai-sub">Importa un JSON de debrief.</div><button class="btn btn-green" onclick="openAnalysisImportModalFor(\'debrief\')">⬆ Import Debrief</button></div>';
@@ -87,6 +90,76 @@ function renderDebriefContent(aObj){
     a.for_tomorrow.forEach(function(f){html+='<li style="padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);">→ '+f+'</li>';});
     html+='</ul></div>';
   }
+  return html;
+}
+
+// ── INTERIM ────────────────────────────────────────────────
+function renderInterimContent(aObj){
+  var a=aObj.data||aObj;
+  var html='<div class="analysis-header"><div class="analysis-header-top"><div class="analysis-title"><span class="analysis-type-badge" style="background:var(--sweep-bg);color:var(--sweep);">⏱ INTERIM</span> '+(a.pair||currentPair)+' — '+(a.date||'')+'</div><div class="analysis-meta">'+(a.timestamp?'<span class="analysis-meta-badge">🕐 '+a.timestamp+'</span>':'')+'<span class="analysis-meta-badge">📍 '+(a.pre_london_analysis&&a.pre_london_analysis.current_price||a.current_price||'')+'</span><button class="btn btn-red btn-sm" onclick="deleteAnalysis(\''+aObj.id+'\')">🗑 Sterge</button></div></div></div>';
+
+  // Pre-London Analysis box
+  var pla=a.pre_london_analysis;
+  if(pla){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">📊 Analiza Pre-Sesiune</div><div class="setup-params"><div class="setup-param"><div class="setup-param-lbl">BIAS</div><div class="setup-param-val" style="font-size:10px;">'+(pla.bias||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">ASIAN HIGH</div><div class="setup-param-val green">'+(pla.asian_high||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">ASIAN LOW</div><div class="setup-param-val red">'+(pla.asian_low||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">RANGE</div><div class="setup-param-val">'+(pla.asian_range||'')+'</div></div></div>';
+    if(pla.key_observations&&pla.key_observations.length>0){
+      html+='<ul style="list-style:none;margin-top:10px;">';
+      pla.key_observations.forEach(function(obs){html+='<li style="padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);color:var(--text2);">⚡ '+obs+'</li>';});
+      html+='</ul>';
+    }
+    html+='</div>';
+  }
+
+  // Sessions (reuse debrief session rendering)
+  if(a.sessions && a.sessions.length>0){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">🗺️ Sesiuni</div>';
+    a.sessions.forEach(function(s){html+='<div class="debrief-session"><div class="debrief-session-name">'+s.name+'</div><div class="debrief-narrative">'+s.narrative+'</div>'+(s.candles&&s.candles.length>0?'<div style="margin-top:6px;">'+s.candles.map(function(c){return '<span class="debrief-candle">'+c+'</span>';}).join(' ')+'</div>':'')+'</div>';});
+    html+='</div>';
+  }
+
+  // Zones touched
+  if(a.zones_touched && a.zones_touched.length>0){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">📍 Zone Atinse</div>';
+    a.zones_touched.forEach(function(zt){
+      html+='<div class="debrief-session"><div class="debrief-session-name">'+zt.zone+'</div>';
+      if(zt.notes)html+='<div style="font-size:11px;color:var(--text2);margin-top:4px;">'+zt.notes+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
+
+  // London Game Plan
+  var gp=a.london_game_plan;
+  if(gp){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">🎯 Game Plan London</div>';
+    var scenarios=[gp.scenario_1,gp.scenario_2,gp.scenario_3].filter(function(s){return s;});
+    scenarios.forEach(function(sc){
+      var borderColor=sc.name&&sc.name.indexOf('LONG')>=0?'var(--bull)':sc.name&&sc.name.indexOf('SHORT')>=0?'var(--bear)':'var(--sweep)';
+      html+='<div class="debrief-session" style="border-left:3px solid '+borderColor+';"><div class="debrief-session-name">'+sc.name+'</div><div style="font-size:12px;color:var(--text2);margin:6px 0;"><strong>Condiție:</strong> '+sc.condition+'</div>';
+      if(sc.entry){
+        html+='<div class="setup-params" style="margin-top:8px;"><div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+(sc.entry||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">SL</div><div class="setup-param-val red">'+(sc.sl||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">TP1</div><div class="setup-param-val green">'+(sc.tp1||'')+'</div></div>'+(sc.tp2?'<div class="setup-param"><div class="setup-param-lbl">TP2</div><div class="setup-param-val green">'+sc.tp2+'</div></div>':'')+'<div class="setup-param"><div class="setup-param-lbl">RISK</div><div class="setup-param-val">'+(sc.risk||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">R:R</div><div class="setup-param-val">'+(sc.rr||'')+'</div></div>'+(sc.confidence?'<div class="setup-param"><div class="setup-param-lbl">CONFIDENCE</div><div class="setup-param-val">'+sc.confidence+'</div></div>':'')+'</div>';
+      }
+      if(sc.action)html+='<div style="font-size:12px;color:var(--text2);margin-top:6px;">→ '+sc.action+'</div>';
+      if(sc.warning)html+='<div class="setup-warning" style="margin-top:8px;">⚠ '+sc.warning+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
+
+  // Watch levels
+  if(a.watch_levels_london && a.watch_levels_london.length>0){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">👀 Nivele de Urmarit</div><ul style="list-style:none;">';
+    a.watch_levels_london.forEach(function(l){html+='<li style="padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);">📌 '+l+'</li>';});
+    html+='</ul></div>';
+  }
+
+  // For tomorrow / next steps
+  if(a.for_tomorrow && a.for_tomorrow.length>0){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">🔮 Pași Urmatori</div><ul style="list-style:none;">';
+    a.for_tomorrow.forEach(function(f){html+='<li style="padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);">→ '+f+'</li>';});
+    html+='</ul></div>';
+  }
+
   return html;
 }
 
