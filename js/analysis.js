@@ -85,6 +85,33 @@ function renderDebriefContent(aObj){
     a.predictions.forEach(function(p){html+='<tr><td>'+p.prediction+'</td><td>'+p.reality+'</td><td class="'+(p.correct?'pred-correct':'pred-wrong')+'">'+(p.verdict||'')+'</td></tr>';});
     html+='</table></div>';
   }
+  if(a.potential_trades && a.potential_trades.length>0){
+    html+='<div class="analysis-card full"><div class="analysis-card-title">💡 Trade-uri Potentiale ale Zilei</div>';
+    a.potential_trades.forEach(function(t){
+      var isBull=t.direction==='long';
+      var resColor=t.result==='TP1'||t.result==='TP2'||t.result==='TP3'?'var(--bull)':t.result==='SL'?'var(--bear)':'var(--sweep)';
+      var dirBadge='<span class="setup-dir '+(isBull?'long':'short')+'" style="font-size:11px;padding:2px 8px;">'+(isBull?'↑ LONG':'↓ SHORT')+'</span>';
+      var activated=t.activated!==false;
+      html+='<div class="debrief-session" style="border-left:4px solid '+(activated?(isBull?'var(--bull)':'var(--bear)'):'var(--border2)')+';opacity:'+(activated?'1':'0.6')+';">';
+      html+='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">'+dirBadge+'<span class="debrief-session-name" style="margin:0;">'+t.label+'</span>'+(t.session?'<span class="analysis-meta-badge" style="font-size:10px;">'+t.session+'</span>':'')+(activated?'':'<span style="font-size:10px;color:var(--text3);padding:2px 8px;background:var(--bg3);border-radius:10px;font-weight:600;">⊘ Nu s-a activat</span>')+'</div>';
+      html+='<div style="font-size:12px;color:var(--text2);margin-bottom:8px;">'+t.logic+'</div>';
+      if(activated){
+        html+='<div class="setup-params">';
+        if(t.entry)html+='<div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val" style="font-family:JetBrains Mono,monospace;">'+t.entry+'</div></div>';
+        if(t.sl)html+='<div class="setup-param"><div class="setup-param-lbl">SL</div><div class="setup-param-val red" style="font-family:JetBrains Mono,monospace;">'+t.sl+'</div></div>';
+        if(t.tp1)html+='<div class="setup-param"><div class="setup-param-lbl">TP1</div><div class="setup-param-val green" style="font-family:JetBrains Mono,monospace;">'+t.tp1+'</div></div>';
+        if(t.tp2)html+='<div class="setup-param"><div class="setup-param-lbl">TP2</div><div class="setup-param-val green" style="font-family:JetBrains Mono,monospace;">'+t.tp2+'</div></div>';
+        if(t.risk_pips)html+='<div class="setup-param"><div class="setup-param-lbl">RISK</div><div class="setup-param-val">'+t.risk_pips+'p</div></div>';
+        if(t.rr)html+='<div class="setup-param"><div class="setup-param-lbl">R:R</div><div class="setup-param-val">'+t.rr+'</div></div>';
+        if(t.pnl)html+='<div class="setup-param"><div class="setup-param-lbl">PIPS</div><div class="setup-param-val" style="color:'+resColor+';font-weight:700;">'+t.pnl+'</div></div>';
+        if(t.result)html+='<div class="setup-param"><div class="setup-param-lbl">RESULT</div><div class="setup-param-val" style="color:'+resColor+';font-weight:700;">'+t.result+'</div></div>';
+        html+='</div>';
+      }
+      if(t.notes)html+='<div style="font-size:11px;color:var(--text2);margin-top:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;">'+t.notes+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
   if(a.for_tomorrow && a.for_tomorrow.length>0){
     html+='<div class="analysis-card full"><div class="analysis-card-title">🔮 Pentru Maine</div><ul style="list-style:none;">';
     a.for_tomorrow.forEach(function(f){html+='<li style="padding:4px 0;font-size:12px;border-bottom:1px solid var(--border);">→ '+f+'</li>';});
