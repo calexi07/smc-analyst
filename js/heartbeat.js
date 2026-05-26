@@ -15,17 +15,18 @@ async function loadCandles(){
   var from = 0;
   var batchSize = 1000;
   while(true){
-    var query = sb.from('smc_candles').select('*')
+    var query = sb.from('smc_candles').select('*', {count: 'exact'})
       .eq('pair', currentPair)
       .gte('candle_time', startD)
       .lte('candle_time', endD)
       .order('candle_time', {ascending: true})
       .range(from, from + batchSize - 1);
     if(heartbeatTF !== 'all') query = query.eq('tf', heartbeatTF);
-    var {data, error} = await query;
+    var {data, error, count} = await query;
     if(error){ console.error('Candles load error:', error); break; }
     if(!data || data.length === 0) break;
     allRows = allRows.concat(data);
+    console.log('Fetched batch:', from, '-', from+data.length, '| Total so far:', allRows.length, '| DB count:', count);
     if(data.length < batchSize) break;
     from += batchSize;
   }
