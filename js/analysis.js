@@ -51,7 +51,26 @@ function renderBriefContent(aObj){
 
   function rSetup(s,pfx){
     var tgts=(s.targets||[]).map(function(t){return '<div class="target-row '+t.tp.toLowerCase()+'"><span class="target-label">'+t.tp+'</span><span class="target-price">'+t.price+'</span><span class="target-pips">'+t.pips+'p</span><span class="target-rr">'+t.rr+'</span><span class="target-size">'+(t.size_pct||'')+'%</span></div>';}).join('');
-    return '<div class="setup-card '+(s.priority||'secondary')+'"><div class="setup-hdr" onclick="toggleSetup(\''+pfx+'-'+s.id+'\')"><span class="setup-id '+pfx+'">'+s.id+'</span><span class="setup-title">'+(s.label||'')+'</span><span class="setup-dir '+(s.direction||'')+'">'+(s.direction==='short'?'↓ SHORT':'↑ LONG')+'</span><span class="setup-chevron" id="schv-'+pfx+'-'+s.id+'">▶</span></div><div class="setup-body" id="sbody-'+pfx+'-'+s.id+'"><div class="setup-logic">'+(s.logic||'')+'</div><div class="setup-condition"><strong>Conditie:</strong> '+(s.condition||'')+'</div>'+(s.warning?'<div class="setup-warning">⚠ '+s.warning+'</div>':'')+'<div class="setup-params"><div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+(s.entry||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">'+(s.sl||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">'+(s.risk_pips||'')+' pips</div></div>'+(s.session?'<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">'+s.session+'</div></div>':'')+'</div><div class="setup-targets">'+tgts+'</div>'+(s.management?'<div class="setup-management">📋 '+s.management+'</div>':'')+(s.invalidation?'<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> '+s.invalidation+'</div>':'')+'</div></div>';
+
+    // Activation checklist
+    var checklistHTML='';
+    if(s.activation_steps && s.activation_steps.length>0){
+      checklistHTML='<div style="margin-top:12px;border:1px solid var(--border);border-radius:8px;overflow:hidden;">' +
+        '<div style="background:var(--bg3);padding:6px 12px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);">✅ Checklist Activare</div>' +
+        '<div style="padding:8px 12px;">';
+      s.activation_steps.forEach(function(step, i){
+        var isLast = i === s.activation_steps.length-1;
+        var stepColor = step.type === 'entry' ? 'var(--bull)' : step.type === 'exit' ? 'var(--bear)' : step.type === 'manage' ? 'var(--neutral)' : 'var(--text2)';
+        var icon = step.type === 'entry' ? '🎯' : step.type === 'exit' ? '🚪' : step.type === 'manage' ? '📋' : step.type === 'watch' ? '👀' : step.type === 'confirm' ? '✔' : '→';
+        checklistHTML += '<div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;'+(isLast?'':'border-bottom:1px solid var(--border)+')+'">' +
+          '<span style="font-size:11px;min-width:18px;text-align:center;flex-shrink:0;margin-top:1px;">'+icon+'</span>' +
+          '<span style="font-size:11px;color:'+stepColor+';font-weight:'+(step.type==='entry'||step.type==='exit'?'700':'400')+';line-height:1.4;">'+step.text+'</span>' +
+        '</div>';
+      });
+      checklistHTML += '</div></div>';
+    }
+
+    return '<div class="setup-card '+(s.priority||'secondary')+'"><div class="setup-hdr" onclick="toggleSetup(\''+pfx+'-'+s.id+'\')"><span class="setup-id '+pfx+'">'+s.id+'</span><span class="setup-title">'+(s.label||'')+'</span><span class="setup-dir '+(s.direction||'')+'">'+(s.direction==='short'?'↓ SHORT':'↑ LONG')+'</span><span class="setup-chevron" id="schv-'+pfx+'-'+s.id+'">▶</span></div><div class="setup-body" id="sbody-'+pfx+'-'+s.id+'"><div class="setup-logic">'+(s.logic||'')+'</div><div class="setup-condition"><strong>Conditie:</strong> '+(s.condition||'')+'</div>'+(s.warning?'<div class="setup-warning">⚠ '+s.warning+'</div>':'')+'<div class="setup-params"><div class="setup-param"><div class="setup-param-lbl">ENTRY</div><div class="setup-param-val">'+(s.entry||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">STOP LOSS</div><div class="setup-param-val red">'+(s.sl||'')+'</div></div><div class="setup-param"><div class="setup-param-lbl">RISC</div><div class="setup-param-val">'+(s.risk_pips||'')+' pips</div></div>'+(s.session?'<div class="setup-param"><div class="setup-param-lbl">SESIUNE</div><div class="setup-param-val" style="font-size:10px">'+s.session+'</div></div>':'')+'</div><div class="setup-targets">'+tgts+'</div>'+(s.management?'<div class="setup-management">📋 '+s.management+'</div>':'')+(s.invalidation?'<div class="setup-condition" style="margin-top:8px;border-left:3px solid var(--bear)"><strong>Invalidare:</strong> '+s.invalidation+'</div>':'')+checklistHTML+'</div></div>';
   }
   var dtHTML=(a.day_trades||[]).map(function(s){return rSetup(s,'dt');}).join('');
   var swHTML=(a.swing_trades||[]).map(function(s){return rSetup(s,'sw');}).join('');
