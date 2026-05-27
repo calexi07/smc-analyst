@@ -12,21 +12,55 @@ function getUniqueDays(){
 function selectDay(d){selectedDay=d||null;renderAll();}
 function setAnalysisTab(t){activeAnalysisTab=t;renderAll();}
 function toggleSetup(id){var b=document.getElementById('sbody-'+id),c=document.getElementById('schv-'+id);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
+function fromInputDate(d){if(!d)return '';var p=d.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:'';}
 
 // ── ANALYSIS PAGE ──────────────────────────────────────────
 function renderAnalysisPage(){
   var info=getUniqueDays();var days=info.days,sorted=info.sorted;
-  var dayOpts=sorted.map(function(d){
-    var hasBrief=days[d]&&days[d].brief?'🇬🇧':'';var hasInterim=days[d]&&days[d].interim?'🇺🇸':'';var hasDebrief=days[d]&&days[d].debrief?'🌙':'';var hasTrades=journalTrades.filter(function(t){return t.date===d;}).length>0?'📝':'';
-    return '<option value="'+d+'"'+(selectedDay===d?' selected':'')+'>'+d+' '+hasBrief+hasInterim+hasDebrief+hasTrades+'</option>';
-  }).join('');
 
-  var html='<div class="analysis-page"><div class="analysis-toolbar"><label>ZI</label><select class="day-select" id="daySelect" onchange="selectDay(this.value)"><option value="">— Selecteaza ziua —</option>'+dayOpts+'</select><div class="analysis-tabs">'+
-    '<button class="atab brief-tab'+(activeAnalysisTab==='brief'?' active':'')+'" onclick="setAnalysisTab(\'brief\')">🇬🇧 Brief London</button>'+
-    '<button class="atab interim-tab'+(activeAnalysisTab==='interim'?' active':'')+'" onclick="setAnalysisTab(\'interim\')">🇺🇸 Brief New York</button>'+
-    '<button class="atab debrief-tab'+(activeAnalysisTab==='debrief'?' active':'')+'" onclick="setAnalysisTab(\'debrief\')">🌙 Debrief</button>'+
-    '<button class="atab trades-tab'+(activeAnalysisTab==='trades'?' active':'')+'" onclick="setAnalysisTab(\'trades\')">📝 Trades</button>'+
-    '</div><button class="btn btn-green btn-sm" onclick="openAnalysisImportModalFor(activeAnalysisTab===\'trades\'?\'trades\':activeAnalysisTab)">⬆ Import</button></div>';
+  // Convert selectedDay (DD/MM/YYYY) to YYYY-MM-DD for input[type=date]
+  function toInputDate(d){
+    if(!d)return '';
+    var p=d.split('/');return p.length===3?p[2]+'-'+p[1]+'-'+p[0]:'';
+  }
+  // Convert YYYY-MM-DD back to DD/MM/YYYY
+  function fromInputDate(d){
+    if(!d)return '';
+    var p=d.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:'';
+  }
+
+  // Prev / Next day navigation among days that have data
+  var currentIdx=sorted.indexOf(selectedDay);
+  var prevDay=currentIdx>0?sorted[currentIdx-1]:null;
+  var nextDay=currentIdx>=0&&currentIdx<sorted.length-1?sorted[currentIdx+1]:null;
+
+  // Badges for selected day
+  var badge='';
+  if(selectedDay&&days[selectedDay]){
+    var dd=days[selectedDay];
+    if(dd.brief)badge+='<span class="analysis-type-badge brief" style="font-size:9px;">🇬🇧</span> ';
+    if(dd.interim)badge+='<span class="analysis-type-badge" style="background:#fff7ed;color:#c2410c;font-size:9px;">🇺🇸</span> ';
+    if(dd.debrief)badge+='<span class="analysis-type-badge debrief" style="font-size:9px;">🌙</span> ';
+    if(journalTrades.filter(function(t){return t.date===selectedDay;}).length>0)badge+='<span class="analysis-type-badge" style="background:var(--neutral-bg);color:var(--neutral);font-size:9px;">📝</span>';
+  }
+
+  var html='<div class="analysis-page"><div class="analysis-toolbar" style="flex-wrap:wrap;gap:8px;">'+
+    '<div style="display:flex;align-items:center;gap:6px;">'+
+      '<button class="btn btn-ghost btn-sm" '+(prevDay?'onclick="selectDay(\''+prevDay+'\')"':'disabled')+' style="padding:5px 8px;">←</button>'+
+      '<input type="date" id="analysisDatePicker" value="'+toInputDate(selectedDay)+'" '+
+        'onchange="selectDay(fromInputDate(this.value))" '+
+        'style="font-weight:700;padding:6px 10px;border:2px solid var(--border2);border-radius:8px;font-size:13px;cursor:pointer;background:var(--bg2);color:var(--text);">'+
+      '<button class="btn btn-ghost btn-sm" '+(nextDay?'onclick="selectDay(\''+nextDay+'\')"':'disabled')+' style="padding:5px 8px;">→</button>'+
+      (badge?'<span style="display:flex;gap:3px;align-items:center;">'+badge+'</span>':'')+
+    '</div>'+
+    '<div class="analysis-tabs">'+
+      '<button class="atab brief-tab'+(activeAnalysisTab==='brief'?' active':'')+'" onclick="setAnalysisTab(\'brief\')">🇬🇧 Brief London</button>'+
+      '<button class="atab interim-tab'+(activeAnalysisTab==='interim'?' active':'')+'" onclick="setAnalysisTab(\'interim\')">🇺🇸 Brief New York</button>'+
+      '<button class="atab debrief-tab'+(activeAnalysisTab==='debrief'?' active':'')+'" onclick="setAnalysisTab(\'debrief\')">🌙 Debrief</button>'+
+      '<button class="atab trades-tab'+(activeAnalysisTab==='trades'?' active':'')+'" onclick="setAnalysisTab(\'trades\')">📝 Trades</button>'+
+    '</div>'+
+    '<button class="btn btn-green btn-sm" onclick="openAnalysisImportModalFor(activeAnalysisTab===\'trades\'?\'trades\':activeAnalysisTab)">⬆ Import</button>'+
+  '</div>';
 
   if(!selectedDay){
     html+='<div class="analysis-import-zone"><div class="ai-icon">📊</div><div class="ai-text">Selecteaza o zi</div><div class="ai-sub">Alege o zi din dropdown sau importa o analiza noua.</div></div></div>';
