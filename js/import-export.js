@@ -33,7 +33,7 @@ function doImport(){
 function openAnalysisImportModalFor(type){
   document.getElementById('analysisImportType').value=type;
   document.getElementById('analysisImportLabel').textContent=
-    type==='brief'?'☀ Import Brief JSON':type==='debrief'?'🌙 Import Debrief JSON':'📝 Import Trades JSON';
+    type==='brief'?'🇬🇧 Import Brief London':type==='interim'?'🇺🇸 Import Brief New York':type==='debrief'?'🌙 Import Debrief':'📝 Import Trades JSON';
   document.getElementById('analysisImportModal').classList.add('active');
 }
 
