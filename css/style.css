@@ -180,7 +180,7 @@ select{cursor:pointer;}
 .atab{padding:8px 18px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);transition:all .15s;border-right:1px solid var(--border);}
 .atab:last-child{border-right:none;}
 .atab.active{background:var(--text);color:#fff;}
-.atab.brief-tab.active{background:var(--bull);}.atab.debrief-tab.active{background:var(--sweep);}.atab.interim-tab.active{background:#7c3aed;}.atab.trades-tab.active{background:var(--neutral);}
+.atab.brief-tab.active{background:var(--bull);}.atab.debrief-tab.active{background:var(--sweep);}.atab.interim-tab.active{background:#c2410c;}.atab.trades-tab.active{background:var(--neutral);}
 .analysis-import-zone{border:2px dashed var(--border2);border-radius:12px;padding:60px 40px;text-align:center;color:var(--text3);}
 .ai-icon{font-size:36px;margin-bottom:12px;}
 .ai-text{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--text2);}
