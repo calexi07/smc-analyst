@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OHLC Heartbeat — SMC Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6f9;--bg2:#fff;--bg3:#f0f2f6;
+  --border:#e2e6ed;--border2:#c8cdd8;
+  --bull:#0a7a54;--bull-bg:#e8f6f0;--bull-b:#9ed4bc;
+  --bear:#b83030;--bear-bg:#fdf0f0;--bear-b:#e8aaaa;
+  --sweep:#c07010;--sweep-bg:#fef6e6;
+  --neutral:#2060b0;--neutral-bg:#eaf2fc;
+  --text:#1a2030;--text2:#5a6478;--text3:#9aa0b0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;min-height:100vh;}
+
+/* ── HEADER ─────────────────────────────────────── */
+.header{background:var(--bg2);border-bottom:2px solid var(--border);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.logo{font-weight:800;font-size:16px;}.logo span{color:var(--bull);}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bull);animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.status-text{font-size:11px;color:var(--text2);font-weight:600;}
+.db-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+
+/* ── TOOLBAR ─────────────────────────────────────── */
+.toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pair-tabs{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;flex-wrap:wrap;}
+.pair-btn{padding:6px 14px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:700;color:var(--text2);transition:all .15s;white-space:nowrap;}
+.pair-btn.active{background:var(--text);color:#fff;}
+.pair-btn.active.bull-pair{background:var(--bull);}
+.pair-btn.active.bear-pair{background:var(--bear);}
+.tf-tabs{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.tf-btn{padding:6px 12px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);transition:all .15s;}
+.tf-btn.active{background:var(--neutral);color:#fff;}
+.separator{width:1px;height:28px;background:var(--border2);flex-shrink:0;}
+.date-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;}
+input[type=date]{background:var(--bg2);border:2px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;outline:none;cursor:pointer;transition:border-color .15s;}
+input[type=date]:focus{border-color:var(--neutral);}
+.range-btns{display:flex;gap:3px;}
+.range-btn{padding:5px 10px;border:1px solid var(--border2);border-radius:5px;background:var(--bg2);cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);transition:all .15s;}
+.range-btn:hover{border-color:var(--neutral);color:var(--neutral);}
+.spacer{flex:1;}
+.count-badge{font-size:11px;font-weight:700;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:4px 10px;border-radius:8px;white-space:nowrap;}
+.btn{padding:6px 13px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+.btn-green{background:var(--bull);color:#fff;}.btn-green:hover{background:#096644;}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2);}.btn-ghost:hover{border-color:var(--neutral);color:var(--neutral);}
+
+/* ── PRICE STRIP ─────────────────────────────────── */
+.price-strip{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:20px;overflow-x:auto;}
+.price-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);flex-shrink:0;}
+.price-chip.active-pair{border-color:var(--neutral);background:var(--neutral-bg);}
+.pc-pair{font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--text3);}
+.pc-price{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--text);}
+.pc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.pc-dot.live{background:var(--bull);animation:pulse 2s infinite;}
+.pc-dot.stale{background:var(--text3);}
+.pc-ago{font-size:9px;color:var(--text3);}
+
+/* ── MAIN ────────────────────────────────────────── */
+.main{max-width:1600px;margin:0 auto;padding:16px;}
+
+/* ── STATS ROW ───────────────────────────────────── */
+.stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;flex:1;min-width:100px;}
+.stat-lbl{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--text3);margin-bottom:4px;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;}
+.stat-val.bull{color:var(--bull);}.stat-val.bear{color:var(--bear);}.stat-val.neutral{color:var(--neutral);}
+
+/* ── TABLE ───────────────────────────────────────── */
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);background:var(--bg3);white-space:nowrap;}
+td{padding:8px 14px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8fafc;}
+.td-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);}
+.td-time{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text);}
+.td-tf{padding:2px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:.5px;display:inline-block;}
+.td-tf.h4{background:var(--sweep-bg);color:var(--sweep);border:1px solid #e8c060;}
+.td-tf.h1{background:var(--neutral-bg);color:var(--neutral);border:1px solid #a0c0e8;}
+.td-tf.m5{background:#f0eafa;color:#6030b0;border:1px solid #c8a8f0;}
+.td-tf.m15{background:#fff7ed;color:#c05520;border:1px solid #fdba74;}
+.td-tf.daily{background:var(--bear-bg);color:var(--bear);border:1px solid var(--bear-b);}
+.td-tf.weekly{background:#f0eafa;color:#6030b0;border:1px solid #c8a8f0;}
+.td-price{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.td-high{color:var(--bull);font-weight:700;}
+.td-low{color:var(--bear);font-weight:700;}
+.td-close{font-weight:800;}
+.td-range{font-weight:600;}
+.td-bull{color:var(--bull);font-size:14px;}
+.td-bear{color:var(--bear);font-size:14px;}
+.td-doji{color:var(--text3);font-size:14px;}
+
+/* ── EMPTY / LOADING ─────────────────────────────── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;color:var(--text3);text-align:center;}
+.empty-icon{font-size:48px;margin-bottom:16px;}
+.empty-title{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+.empty-sub{font-size:12px;max-width:380px;line-height:1.6;}
+.loading{text-align:center;padding:60px 20px;color:var(--text2);font-size:14px;font-weight:600;}
+
+/* ── PAGINATION ──────────────────────────────────── */
+.pagination{display:flex;align-items:center;gap:6px;padding:12px 16px;border-top:1px solid var(--border);background:var(--bg3);}
+.page-btn{padding:4px 10px;border:1px solid var(--border2);border-radius:5px;background:var(--bg2);cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);transition:all .15s;}
+.page-btn:hover:not(:disabled){border-color:var(--neutral);color:var(--neutral);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+.page-info{font-size:11px;font-weight:600;color:var(--text2);}
+.page-sub{font-size:10px;color:var(--text3);}
+
+/* ── TOAST ───────────────────────────────────────── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:#fff;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:300;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ── SETUP NOTE ──────────────────────────────────── */
+.setup-note{background:var(--neutral-bg);border:1px solid #a0c0e8;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:12px;color:var(--neutral);line-height:1.7;}
+.setup-note strong{font-weight:700;color:var(--text);}
+.setup-note code{font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--text);}
+
+@media(max-width:700px){.price-strip{display:none;}.stats-row{gap:6px;}.stat-card{min-width:80px;padding:9px 10px;}.toolbar{padding:8px 12px;gap:6px;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+    <div class="logo">OHLC <span>Heartbeat</span></div>
+    <span class="db-badge" id="dbBadge">⚡ Supabase</span>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span class="live-dot" id="liveDot"></span>
+      <span class="status-text" id="statusText">Connecting...</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span style="font-size:11px;color:var(--text3);" id="lastUpdated"></span>
+    <button class="btn btn-ghost" onclick="loadCandles()" title="Refresh">⟳ Refresh</button>
+    <button class="btn btn-green" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+</div>
+
+<!-- PRICE STRIP -->
+<div class="price-strip" id="priceStrip">
+  <!-- populated by JS -->
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="pair-tabs" id="pairTabs">
+    <!-- populated by JS -->
+  </div>
+  <div class="separator"></div>
+  <div class="tf-tabs" id="tfTabs">
+    <button class="tf-btn active" data-tf="all" onclick="setTF('all',this)">ALL</button>
+    <button class="tf-btn" data-tf="m5"  onclick="setTF('m5',this)">5M</button>
+    <button class="tf-btn" data-tf="h1"  onclick="setTF('h1',this)">1H</button>
+    <button class="tf-btn" data-tf="h4"  onclick="setTF('h4',this)">4H</button>
+    <button class="tf-btn" data-tf="daily" onclick="setTF('daily',this)">D</button>
+  </div>
+  <div class="separator"></div>
+  <span class="date-label">DE LA</span>
+  <input type="date" id="dateFrom" onchange="onDateChange()">
+  <span class="date-label">PÂNĂ LA</span>
+  <input type="date" id="dateTo" onchange="onDateChange()">
+  <div class="range-btns">
+    <button class="range-btn" onclick="setRange(1)">1Z</button>
+    <button class="range-btn" onclick="setRange(3)">3Z</button>
+    <button class="range-btn" onclick="setRange(5)">5Z</button>
+    <button class="range-btn" onclick="setRange(7)">7Z</button>
+  </div>
+  <div class="spacer"></div>
+  <span class="count-badge" id="countBadge">0 candele</span>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div id="statsRow" class="stats-row" style="display:none;"></div>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table id="candleTable">
+        <thead>
+          <tr>
+            <th>Data</th><th>Ora</th><th>TF</th>
+            <th>Open</th><th>High</th><th>Low</th><th>Close</th>
+            <th>Range</th><th>Tip</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="9"><div class="loading">⏳ Loading...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+var SUPABASE_URL = 'https://caenefhnwfyzhmneuyjb.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_0mIG5sSi6ueUNELew2G0iQ_7dozolX3';
+
+var PAIRS = ['EURUSD','GBPUSD','USDJPY','XAUUSD','NAS100','GER40'];
+
+// TF map: what we store in DB vs what Pine sends
+// Pine sends m5/h1/h4 — adjust if your Pine uses different labels
+var TF_MAP = {
+  'm5':   ['m5','5','5m','M5'],
+  'h1':   ['h1','60','1h','H1'],
+  'h4':   ['h4','240','4h','H4'],
+  'daily':['daily','D','1D','d'],
+};
+
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ─────────────────────────────────────────────────
+var currentPair = 'EURUSD';
+var currentTF   = 'all';
+var allCandles  = [];
+var page        = 0;
+var PAGE_SIZE   = 200;
+var livePrices  = {};   // { EURUSD: { price, ts }, ... }
+
+// ── INIT ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  var today = new Date().toISOString().slice(0,10);
+  document.getElementById('dateFrom').value = today;
+  document.getElementById('dateTo').value   = today;
+
+  buildPairTabs();
+  loadCandles();
+  fetchAllPrices();
+  setInterval(fetchAllPrices, 15000);
+});
+
+// ── PAIR TABS ─────────────────────────────────────────────
+function buildPairTabs() {
+  var html = '';
+  PAIRS.forEach(function(p) {
+    var active = p === currentPair ? ' active' : '';
+    html += '<button class="pair-btn'+active+'" data-pair="'+p+'" onclick="setPair(\''+p+'\',this)">'+p+'</button>';
+  });
+  document.getElementById('pairTabs').innerHTML = html;
+}
+
+function setPair(p, el) {
+  currentPair = p;
+  document.querySelectorAll('.pair-btn').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+  page = 0;
+  loadCandles();
+  updatePriceStripActive();
+}
+
+function setTF(tf, el) {
+  currentTF = tf;
+  document.querySelectorAll('.tf-btn').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+  page = 0;
+  renderTable();
+}
+
+function onDateChange() {
+  var from = document.getElementById('dateFrom').value;
+  var to   = document.getElementById('dateTo').value;
+  if (from > to) document.getElementById('dateTo').value = from;
+  page = 0;
+  loadCandles();
+}
+
+function setRange(days) {
+  var today = new Date();
+  var from  = new Date(today);
+  from.setDate(today.getDate() - (days - 1));
+  document.getElementById('dateFrom').value = from.toISOString().slice(0,10);
+  document.getElementById('dateTo').value   = today.toISOString().slice(0,10);
+  page = 0;
+  loadCandles();
+}
+
+// ── LOAD CANDLES ──────────────────────────────────────────
+async function loadCandles() {
+  setStatus('loading');
+  var from = document.getElementById('dateFrom').value;
+  var to   = document.getElementById('dateTo').value;
+
+  // Convert local times to UTC range (EET +3)
+  var startUTC = new Date(from + 'T00:00:00+03:00').toISOString();
+  var endUTC   = new Date(to   + 'T23:59:59+03:00').toISOString();
+
+  var rows = [];
+  var offset = 0;
+  var batchSize = 1000;
+
+  try {
+    while (true) {
+      var q = sb.from('smc_candles')
+        .select('*', {count:'exact'})
+        .eq('pair', currentPair)
+        .gte('candle_time', startUTC)
+        .lte('candle_time', endUTC)
+        .order('candle_time', {ascending: false})
+        .range(offset, offset + batchSize - 1);
+
+      var {data, error} = await q;
+      if (error) { throw error; }
+      if (!data || data.length === 0) break;
+      rows = rows.concat(data);
+      if (data.length < batchSize) break;
+      offset += batchSize;
+    }
+    allCandles = rows;
+    setStatus('ok', rows.length);
+  } catch(e) {
+    console.error('Load candles error:', e);
+    setStatus('error');
+    allCandles = [];
+  }
+
+  page = 0;
+  renderTable();
+  renderStats();
+}
+
+// ── FILTER BY TF ──────────────────────────────────────────
+function filteredCandles() {
+  if (currentTF === 'all') return allCandles;
+  var valid = TF_MAP[currentTF] || [currentTF];
+  return allCandles.filter(function(c) {
+    return valid.indexOf(c.tf) !== -1 || valid.indexOf((c.tf||'').toLowerCase()) !== -1;
+  });
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────
+function renderTable() {
+  var candles = filteredCandles();
+  var total   = candles.length;
+  var start   = page * PAGE_SIZE;
+  var end     = Math.min(start + PAGE_SIZE, total);
+  var slice   = candles.slice(start, end);
+
+  document.getElementById('countBadge').textContent = total + ' candele';
+
+  var tbody = document.getElementById('tableBody');
+  if (total === 0) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="empty-icon">🕯️</div><div class="empty-title">Nicio candelă</div><div class="empty-sub">Pine Script-ul trimite PRICE heartbeat cu OHLC la close-ul fiecărei lumânări. Schimbă data sau verifică că indicatorul rulează pe TradingView.</div></div></td></tr>';
+    document.getElementById('pagination').style.display = 'none';
+    document.getElementById('statsRow').style.display   = 'none';
+    return;
+  }
+
+  var rows = '';
+  slice.forEach(function(c) {
+    var dt = c.candle_time ? new Date(c.candle_time) : null;
+    var dateStr = dt ? dt.toLocaleDateString('en-GB',{timeZone:'Europe/Bucharest',day:'2-digit',month:'2-digit'}) : '';
+    var timeStr = dt ? dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Bucharest'}) : '';
+    var o  = parseFloat(c.open)  || 0;
+    var h  = parseFloat(c.high)  || 0;
+    var l  = parseFloat(c.low)   || 0;
+    var cl = parseFloat(c.close) || 0;
+    var isMetal = currentPair === 'XAUUSD';
+    var isIndex = currentPair === 'NAS100' || currentPair === 'GER40';
+    var dec = isMetal ? 2 : isIndex ? 1 : 5;
+    var pipDiv = isMetal ? 10 : isIndex ? 1 : 10000;
+    var range  = Math.round((h - l) * pipDiv * 10) / 10;
+    var isBull = cl > o;
+    var isDoji = Math.abs(cl - o) < (h - l) * 0.1;
+    var tf = (c.tf || '').toLowerCase();
+    var tfClass = tf === 'm5' || tf === '5' ? 'm5'
+                : tf === 'h1' || tf === '60' ? 'h1'
+                : tf === 'h4' || tf === '240' ? 'h4'
+                : tf === 'daily' || tf === 'd' ? 'daily'
+                : tf === 'weekly' || tf === 'w' ? 'weekly' : 'm5';
+
+    var tip = isDoji ? '<span class="td-doji" title="Doji">—</span>'
+            : isBull ? '<span class="td-bull">▲</span>'
+            :           '<span class="td-bear">▼</span>';
+
+    rows += '<tr>'
+      + '<td class="td-date">'+dateStr+'</td>'
+      + '<td class="td-time">'+timeStr+'</td>'
+      + '<td><span class="td-tf '+tfClass+'">'+tfClass.toUpperCase()+'</span></td>'
+      + '<td class="td-price">'+o.toFixed(dec)+'</td>'
+      + '<td class="td-price td-high">'+h.toFixed(dec)+'</td>'
+      + '<td class="td-price td-low">'+l.toFixed(dec)+'</td>'
+      + '<td class="td-price td-close"'+(!isDoji?' style="color:var(--'+(isBull?'bull':'bear')+')"':'')+'>' + cl.toFixed(dec)+'</td>'
+      + '<td class="td-range">'+range+'p</td>'
+      + '<td>'+tip+'</td>'
+      + '</tr>';
+  });
+  tbody.innerHTML = rows;
+
+  renderPagination(total, start, end);
+}
+
+// ── RENDER STATS ──────────────────────────────────────────
+function renderStats() {
+  var candles = filteredCandles();
+  if (candles.length === 0) {
+    document.getElementById('statsRow').style.display = 'none';
+    return;
+  }
+  var isMetal = currentPair === 'XAUUSD';
+  var isIndex = currentPair === 'NAS100' || currentPair === 'GER40';
+  var dec     = isMetal ? 2 : isIndex ? 1 : 5;
+  var pipDiv  = isMetal ? 10 : isIndex ? 1 : 10000;
+
+  var totalRange=0, bulls=0, bears=0, highH=-Infinity, lowL=Infinity;
+  candles.forEach(function(c) {
+    var h=parseFloat(c.high)||0, l=parseFloat(c.low)||0;
+    var o=parseFloat(c.open)||0, cl=parseFloat(c.close)||0;
+    totalRange += (h - l);
+    if (cl >= o) bulls++; else bears++;
+    if (h > highH) highH = h;
+    if (l > 0 && l < lowL) lowL = l;
+  });
+  var avgRange = Math.round((totalRange / candles.length) * pipDiv * 10) / 10;
+  var dayRange = highH !== -Infinity ? Math.round((highH - lowL) * pipDiv * 10) / 10 : 0;
+
+  var from = document.getElementById('dateFrom').value;
+  var to   = document.getElementById('dateTo').value;
+  var rangeLabel = from === to ? 'DAY RANGE' : 'PERIOD RANGE';
+
+  var html = ''
+    + stat(rangeLabel, dayRange.toFixed(1)+'p', 'neutral')
+    + stat('AVG CANDLE', avgRange.toFixed(1)+'p', 'neutral')
+    + stat('BULL ▲', bulls, 'bull')
+    + stat('BEAR ▼', bears, 'bear')
+    + stat('HIGH', highH !== -Infinity ? highH.toFixed(dec) : '—', 'bull')
+    + stat('LOW', lowL !== Infinity ? lowL.toFixed(dec) : '—', 'bear')
+    + stat('CANDLES', candles.length, 'neutral');
+
+  document.getElementById('statsRow').innerHTML = html;
+  document.getElementById('statsRow').style.display = 'flex';
+}
+
+function stat(lbl, val, cls) {
+  return '<div class="stat-card"><div class="stat-lbl">'+lbl+'</div><div class="stat-val '+cls+'">'+val+'</div></div>';
+}
+
+// ── PAGINATION ────────────────────────────────────────────
+function renderPagination(total, start, end) {
+  var totalPages = Math.ceil(total / PAGE_SIZE) || 1;
+  var pag = document.getElementById('pagination');
+  if (totalPages <= 1) { pag.style.display = 'none'; return; }
+  pag.style.display = 'flex';
+  pag.innerHTML = ''
+    + '<button class="page-btn" onclick="goPage(0)" '+(page===0?'disabled':'')+'>⟨⟨</button>'
+    + '<button class="page-btn" onclick="goPage('+(page-1)+')" '+(page===0?'disabled':'')+'>← Prev</button>'
+    + '<span class="page-info">Pagina '+(page+1)+' / '+totalPages+'</span>'
+    + '<span class="page-sub">— '+(start+1)+'–'+end+' din '+total+'</span>'
+    + '<button class="page-btn" onclick="goPage('+(page+1)+')" '+(page>=totalPages-1?'disabled':'')+'>Next →</button>'
+    + '<button class="page-btn" onclick="goPage('+(totalPages-1)+')" '+(page>=totalPages-1?'disabled':'')+'>⟩⟩</button>';
+}
+
+function goPage(p) {
+  var candles = filteredCandles();
+  var max = Math.ceil(candles.length / PAGE_SIZE) - 1;
+  page = Math.max(0, Math.min(p, max));
+  renderTable();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ── LIVE PRICES ───────────────────────────────────────────
+async function fetchAllPrices() {
+  try {
+    var {data} = await sb.from('smc_prices').select('*').in('pair', PAIRS);
+    if (data) {
+      data.forEach(function(r) {
+        livePrices[r.pair] = {
+          price: parseFloat(r.price),
+          ts: r.updated_at ? new Date(r.updated_at) : new Date(r.ts || Date.now())
+        };
+      });
+      renderPriceStrip();
+    }
+  } catch(e) { console.log('Price fetch err:', e); }
+}
+
+function renderPriceStrip() {
+  var html = '';
+  PAIRS.forEach(function(p) {
+    var lp   = livePrices[p];
+    var isMetal = p === 'XAUUSD';
+    var isIndex = p === 'NAS100' || p === 'GER40';
+    var dec  = isMetal ? 2 : isIndex ? 1 : 5;
+    var price = lp ? lp.price.toFixed(dec) : '—';
+    var ago   = '';
+    var dotCls = 'stale';
+    if (lp && lp.ts) {
+      var sec = Math.floor((Date.now() - lp.ts.getTime()) / 1000);
+      ago = sec < 60 ? sec+'s' : Math.floor(sec/60)+'m';
+      dotCls = sec < 120 ? 'live' : 'stale';
+    }
+    var isActive = p === currentPair ? ' active-pair' : '';
+    html += '<div class="price-chip'+isActive+'" onclick="setPairFromStrip(\''+p+'\')" style="cursor:pointer;">'
+          + '<span class="pc-pair">'+p+'</span>'
+          + '<span class="pc-dot '+dotCls+'"></span>'
+          + '<span class="pc-price">'+price+'</span>'
+          + (ago ? '<span class="pc-ago">'+ago+'</span>' : '')
+          + '</div>';
+  });
+  document.getElementById('priceStrip').innerHTML = html;
+  document.getElementById('lastUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+
+function updatePriceStripActive() {
+  document.querySelectorAll('.price-chip').forEach(function(el) {
+    el.classList.toggle('active-pair', el.textContent.trim().startsWith(currentPair));
+  });
+}
+
+function setPairFromStrip(p) {
+  currentPair = p;
+  document.querySelectorAll('.pair-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.pair === p);
+  });
+  page = 0;
+  loadCandles();
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────
+function exportCSV() {
+  var candles = filteredCandles();
+  if (candles.length === 0) { showToast('⚠ Nicio candelă de exportat'); return; }
+  var isMetal = currentPair === 'XAUUSD';
+  var isIndex = currentPair === 'NAS100' || currentPair === 'GER40';
+  var dec = isMetal ? 2 : isIndex ? 1 : 5;
+
+  var header = 'Pair,TF,Time (EET),Open,High,Low,Close,Range_pips\n';
+  var rows = candles.map(function(c) {
+    var dt = c.candle_time ? new Date(c.candle_time) : null;
+    var timeStr = dt ? dt.toLocaleString('en-GB',{hour12:false,timeZone:'Europe/Bucharest'}) : c.ts||'';
+    var h=parseFloat(c.high)||0, l=parseFloat(c.low)||0;
+    var pipDiv = isMetal ? 10 : isIndex ? 1 : 10000;
+    var range = Math.round((h-l)*pipDiv*10)/10;
+    return [c.pair, c.tf, timeStr,
+            parseFloat(c.open).toFixed(dec),
+            h.toFixed(dec), l.toFixed(dec),
+            parseFloat(c.close).toFixed(dec),
+            range].join(',');
+  }).join('\n');
+
+  var from = document.getElementById('dateFrom').value;
+  var to   = document.getElementById('dateTo').value;
+  var fname = currentPair+'_OHLC_'+(from===to?from:from+'_to_'+to)+(currentTF!=='all'?'_'+currentTF.toUpperCase():'')+'.csv';
+  var blob = new Blob([header+rows], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  a.click();
+  showToast('✓ Exportat — '+candles.length+' candele');
+}
+
+// ── STATUS ────────────────────────────────────────────────
+function setStatus(s, count) {
+  var dot  = document.getElementById('liveDot');
+  var text = document.getElementById('statusText');
+  if (s === 'ok') {
+    dot.style.background = 'var(--bull)';
+    text.textContent = 'Connected · '+count+' rânduri';
+    text.style.color = 'var(--bull)';
+  } else if (s === 'loading') {
+    dot.style.background = 'var(--sweep)';
+    text.textContent = 'Loading...';
+    text.style.color = 'var(--sweep)';
+  } else {
+    dot.style.background = 'var(--bear)';
+    text.textContent = 'Error — check console';
+    text.style.color = 'var(--bear)';
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+</script>
+</body>
+</html>
