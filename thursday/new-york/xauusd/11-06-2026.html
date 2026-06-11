@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XAUUSD · NY Session · 11 Jun 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:        #0a0b0d;
+    --surface:   #10131a;
+    --card:      #141820;
+    --border:    #1e2535;
+    --border2:   #252d3d;
+    --bear:      #e05454;
+    --bear-dim:  #3a1c1c;
+    --bull:      #3dba7e;
+    --bull-dim:  #1a3328;
+    --warn:      #e8a93a;
+    --warn-dim:  #3a2a10;
+    --accent:    #4a8fe8;
+    --accent-dim:#162038;
+    --muted:     #4a5568;
+    --dim:       #6b7a99;
+    --text:      #c8d0e0;
+    --text-hi:   #e8ecf4;
+    --mono:      'IBM Plex Mono', monospace;
+    --sans:      'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .header-left h1 {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-hi);
+    letter-spacing: 0.04em;
+  }
+  .header-left p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+  }
+  .header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-bear   { background: var(--bear-dim);   color: var(--bear);   border: 1px solid var(--bear); }
+  .badge-bull   { background: var(--bull-dim);   color: var(--bull);   border: 1px solid var(--bull); }
+  .badge-warn   { background: var(--warn-dim);   color: var(--warn);   border: 1px solid var(--warn); }
+  .badge-accent { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+  .badge-neutral{ background: #1a1f2e;           color: var(--dim);    border: 1px solid var(--border2); }
+
+  /* ── ALERT BANNER ── */
+  .alert {
+    background: var(--bear-dim);
+    border: 1px solid var(--bear);
+    border-left: 4px solid var(--bear);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--bear);
+    letter-spacing: 0.04em;
+  }
+  .alert strong { color: #f07070; font-weight: 600; }
+
+  .alert-green {
+    background: var(--bull-dim);
+    border: 1px solid var(--bull);
+    border-left: 4px solid var(--bull);
+    color: var(--bull);
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+  .section-title span {
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+  }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-value {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-hi);
+  }
+  .card-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    margin-top: 3px;
+  }
+  .card-bear .card-value { color: var(--bear); }
+  .card-bull .card-value { color: var(--bull); }
+  .card-warn .card-value { color: var(--warn); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  th {
+    text-align: left;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #161c27; }
+  .bear-text { color: var(--bear); font-weight: 600; }
+  .bull-text { color: var(--bull); font-weight: 600; }
+  .warn-text { color: var(--warn); font-weight: 600; }
+  .accent-text { color: var(--accent); font-weight: 600; }
+  .dim-text { color: var(--dim); }
+
+  /* ── PROBABILITY BAR ── */
+  .prob-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .prob-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .prob-fill { height: 100%; border-radius: 3px; }
+  .prob-fill-bear  { background: var(--bear); }
+  .prob-fill-bull  { background: var(--bull); }
+  .prob-fill-warn  { background: var(--warn); }
+  .prob-fill-accent{ background: var(--accent); }
+  .prob-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* ── SETUP CARD ── */
+  .setup-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .setup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .setup-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-hi);
+    letter-spacing: 0.06em;
+  }
+  .setup-meta { display: flex; gap: 8px; align-items: center; }
+  .setup-body { padding: 12px 14px; }
+  .setup-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .setup-row:last-child { border-bottom: none; }
+  .setup-row-label { color: var(--dim); }
+  .setup-row-value { color: var(--text-hi); font-weight: 500; }
+  .setup-rationale {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: var(--surface);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--dim);
+    font-family: var(--sans);
+    border-left: 2px solid var(--border2);
+  }
+
+  /* ── GRADE ── */
+  .grade {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .grade-aplus { background: #1f3a1f; color: #5aef8a; border: 1px solid #3dba7e; }
+  .grade-a     { background: #1a2e3a; color: #5ab4e8; border: 1px solid #4a8fe8; }
+  .grade-b     { background: var(--warn-dim); color: var(--warn); border: 1px solid var(--warn); }
+  .grade-c     { background: #2a1f1f; color: #a07070; border: 1px solid #6a4040; }
+
+  /* ── LEVEL ROW ── */
+  .level-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .level-row:last-child { border-bottom: none; }
+  .level-price { font-weight: 600; color: var(--text-hi); min-width: 72px; }
+  .level-type { color: var(--dim); flex: 1; padding: 0 10px; }
+  .level-prob {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .lp-high   { background: #1f3a1f; color: #5aef8a; }
+  .lp-medium { background: var(--warn-dim); color: var(--warn); }
+  .lp-low    { background: #1a1f2e; color: var(--dim); }
+
+  /* ── SESSION STAT ROW ── */
+  .stat-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-date { color: var(--dim); min-width: 90px; }
+  .stat-dir  { min-width: 50px; }
+  .stat-pattern { flex: 1; color: var(--text); }
+  .stat-time { color: var(--accent); font-size: 10px; }
+
+  /* ── CONCLUSION BLOCK ── */
+  .scenario-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .scenario-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .scenario-text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── BEST TRADE HERO ── */
+  .best-trade {
+    background: linear-gradient(135deg, #0f1e12 0%, #0c1520 100%);
+    border: 1px solid var(--bull);
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin-top: 16px;
+  }
+  .best-trade-header {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--bull);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .best-trade-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .bt-item-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .bt-item-value {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-hi);
+  }
+  .bt-item-value.bear { color: var(--bear); }
+  .bt-item-value.bull { color: var(--bull); }
+  .bt-item-value.warn { color: var(--warn); }
+  .bt-rationale {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.65;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    font-family: var(--sans);
+  }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* ── STAT PILL ── */
+  .stat-pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 3px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  /* ── 4H RANGE VIZ ── */
+  .range-viz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+  .range-bar-outer {
+    width: 100%;
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    margin: 10px 0;
+    position: relative;
+  }
+  .range-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--bear), #a03030);
+  }
+  .range-marker {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 18px;
+    background: var(--warn);
+    border-radius: 1px;
+  }
+  .range-labels {
+    display: flex;
+    justify-content: space-between;
+    color: var(--dim);
+  }
+  .range-current {
+    text-align: center;
+    margin-top: 6px;
+    color: var(--warn);
+    font-weight: 600;
+  }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .best-trade-grid { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<div class="header">
+  <div class="header-left">
+    <h1>XAUUSD / GOLD</h1>
+    <p>INSTITUTIONAL SMC · NEW YORK SESSION ANALYSIS · 15:00 EET RUN · 11 JUN 2026</p>
+  </div>
+  <div class="header-right">
+    <span class="badge badge-bear">4H BEARISH</span>
+    <span class="badge badge-bear">MACRO BEAR</span>
+    <span class="badge badge-warn">NY OPEN IMMINENT</span>
+    <span class="badge badge-neutral">~4088</span>
+  </div>
+</div>
+
+<!-- ══════════════════════ ALERT ══════════════════════ -->
+<div class="alert">
+  <strong>⚠ ACTIVE INSTITUTIONAL SIGNAL</strong> &nbsp;|&nbsp;
+  London closed BEARISH. 5/5 historical precedent: bearish London = NY direct continuation lower.
+  Primary draw: Asia low <strong>4023.86</strong>. NY opens in &lt;25 min. Setup DT-01 is live NOW.
+</div>
+
+<!-- ══════════════════════ EXECUTIVE SUMMARY ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>01</span>Executive Summary</div>
+  <div class="grid-4">
+    <div class="card card-bear">
+      <div class="card-label">4H Bias</div>
+      <div class="card-value">BEARISH</div>
+      <div class="card-sub">Macro trend intact</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Current Price</div>
+      <div class="card-value" style="color:var(--warn)">~4088</div>
+      <div class="card-sub">Inside 1H bearish FVG</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Main Draw (SSL)</div>
+      <div class="card-value" style="color:var(--bear)">4023.86</div>
+      <div class="card-sub">Asia session low — today</div>
+    </div>
+    <div class="card">
+      <div class="card-label">NY Stat Bias</div>
+      <div class="card-value" style="color:var(--bear)">8 / 8</div>
+      <div class="card-sub">Bearish · 100% dataset</div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px; padding:12px 14px; background:var(--card); border:1px solid var(--border); border-radius:5px; font-size:12px; line-height:1.7;">
+    4H macro bear unbroken since May 29 swing high. Today's Asia session extended the dataset low to <strong style="color:var(--bear)">4023.86</strong>, then recovered to 4118.23 before London opened. London rejected from 4112.72 — a <strong style="color:var(--bear)">lower high vs Asia 4118.23</strong> — confirming 1H bearish CHoCH. Price is now compressing inside a 1H bearish FVG (4084–4097) with NY opening in minutes. Intraday behavior model (8 days) shows NY bearish on every single day; when London closed bearish, NY went direct continuation lower 5/5 times. Probability strongly favors a breakdown through London low 4076.53 targeting the Asia session low at 4023.86.
+  </div>
+</div>
+
+<!-- ══════════════════════ 4H BIAS ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>02</span>4H Bias</div>
+
+  <div class="grid-2" style="margin-bottom:12px">
+    <div>
+      <div class="range-viz">
+        <div style="display:flex;justify-content:space-between;color:var(--dim)">
+          <span>RANGE HIGH &nbsp;4363.52</span>
+          <span style="color:var(--warn)">MID 4193.69</span>
+          <span>RANGE LOW &nbsp;4023.86</span>
+        </div>
+        <div class="range-bar-outer">
+          <div class="range-bar-fill" style="width:100%"></div>
+          <div class="range-marker" style="left:calc(((4193.69-4023.86)/(4363.52-4023.86))*100%)"></div>
+          <div class="range-marker" style="left:calc(((4088-4023.86)/(4363.52-4023.86))*100%);background:var(--accent)"></div>
+        </div>
+        <div class="range-labels"><span style="color:var(--bear)">PREMIUM</span><span style="color:var(--bull)">DISCOUNT</span></div>
+        <div class="range-current">▲ CURRENT ~4088 · DEEP DISCOUNT (macro) · Premium on micro range</div>
+      </div>
+    </div>
+    <div>
+      <table>
+        <thead><tr><th>Zone</th><th>Level</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>4H Bearish OB</td><td class="bear-text">4100–4120</td><td>Jun 10 17:00 candle body</td></tr>
+          <tr><td>4H FVG (unfilled)</td><td class="bear-text">4120–4188</td><td>Jun 10 breakdown gap</td></tr>
+          <tr><td>HTF Wick BSL</td><td class="dim-text">4120.52</td><td>Jun 10 overnight high</td></tr>
+          <tr><td>Asia BSL today</td><td class="dim-text">4118.23</td><td>Session high — key sweep</td></tr>
+          <tr><td>London High BSL</td><td class="dim-text">4112.72</td><td>Lower high → bearish CHoCH</td></tr>
+          <tr><td>London Low SSL</td><td class="warn-text">4076.53</td><td>First NY break target</td></tr>
+          <tr><td class="accent-text">Asia Low SSL ★</td><td class="bear-text">4023.86</td><td>Main draw — primary target</td></tr>
+          <tr><td>Round SSL</td><td class="bear-text">4000.00</td><td>Extension target</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:11px;font-family:var(--mono)">
+    <span style="color:var(--dim)">BOS CHAIN ▸ </span>
+    <span style="color:var(--bear)">Jun 5 breakdown</span>
+    <span style="color:var(--muted)"> → </span>
+    <span style="color:var(--bear)">Jun 9 NY flush (4363→4260)</span>
+    <span style="color:var(--muted)"> → </span>
+    <span style="color:var(--bear)">Jun 10 cascade (4260→4072)</span>
+    <span style="color:var(--muted)"> → </span>
+    <span style="color:var(--bear)">Jun 11 Asia new low 4023.86</span>
+    <span style="color:var(--muted)"> · No CHoCH on 4H · </span>
+    <span style="color:var(--bear)">SELL BIAS CONFIRMED</span>
+  </div>
+</div>
+
+<!-- ══════════════════════ 1H EXECUTION ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>03</span>1H Execution</div>
+  <div class="grid-2">
+    <div>
+      <table>
+        <thead><tr><th>Hour (EET)</th><th>High</th><th>Low</th><th>Close</th><th>Dir</th></tr></thead>
+        <tbody>
+          <tr><td class="dim-text">03:00</td><td>4064.67</td><td class="bear-text">4023.86 ↙ ASIA LOW</td><td>4047.26</td><td class="bear-text">BEAR</td></tr>
+          <tr><td class="dim-text">05:00</td><td class="bull-text">4118.23 ↗ ASIA HIGH</td><td>4066.59</td><td>4102.09</td><td class="bull-text">BULL</td></tr>
+          <tr><td class="dim-text">09:00</td><td>4106.36</td><td>4072.70</td><td>4094.36</td><td class="bull-text">BULL</td></tr>
+          <tr><td style="color:var(--warn)">10:00 ★ LDN</td><td>4097.64</td><td>4076.53</td><td>4094.47</td><td class="dim-text">RANGE</td></tr>
+          <tr><td class="dim-text">11:00</td><td>4110.65</td><td>4091.76</td><td>4105.06</td><td class="bull-text">BULL</td></tr>
+          <tr><td class="bear-text">12:00 ★ OB</td><td class="bear-text">4112.72</td><td>4084.66</td><td class="bear-text">4084.66</td><td class="bear-text">BEAR</td></tr>
+          <tr><td class="dim-text">13:00</td><td>4096.56</td><td>4077.66</td><td>4091.70</td><td class="bull-text">BULL</td></tr>
+          <tr><td style="color:var(--warn)">14:00 (live)</td><td>4094.59</td><td>4086.71</td><td>~4088</td><td class="bear-text">BEAR</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-label">1H Bearish OB (Active)</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--bear)">4096 – 4112</div>
+        <div class="card-sub">12:00 candle — impulsive bear rejection from London high</div>
+      </div>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-label">1H Bearish FVG (Price inside now)</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--warn)">4084 – 4097</div>
+        <div class="card-sub">Current price ~4088 is inside this imbalance — distribution zone</div>
+      </div>
+      <div class="card card-bear">
+        <div class="card-label">1H Draw on Liquidity</div>
+        <div class="card-value">4023.86</div>
+        <div class="card-sub">Asia low SSL · Unmitigated · Primary target</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ LIQUIDITY MAP ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>04</span>Liquidity Map</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:5px;overflow:hidden">
+    <div class="level-row" style="background:var(--surface)">
+      <span class="level-price" style="color:var(--dim)">PRICE ▲</span>
+      <span class="level-type" style="color:var(--dim)">Zone / Type</span>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--dim);font-weight:700;letter-spacing:.08em">SWEEP PROB</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4188</span>
+      <span class="level-type">4H FVG top — major gap fill zone</span>
+      <span class="level-prob lp-low">LOW</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4120.52</span>
+      <span class="level-type bear-text">HTF wick BSL — Jun 10 overnight</span>
+      <span class="level-prob lp-low">LOW</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4118.23</span>
+      <span class="level-type">Asia BSL today — Judas target only</span>
+      <span class="level-prob lp-low">LOW</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4112.72</span>
+      <span class="level-type warn-text">London swing BSL — NY Judas scenario</span>
+      <span class="level-prob lp-medium">MEDIUM 45%</span>
+    </div>
+    <div class="level-row" style="background:#161c27">
+      <span class="level-price warn-text">~4088–4096</span>
+      <span class="level-type" style="color:var(--warn)">CURRENT — inside 1H FVG / 5M OB cluster</span>
+      <span class="level-prob" style="background:#2a2a10;color:var(--warn)">NOW</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4076.53</span>
+      <span class="level-type bear-text">London low SSL — first NY break target</span>
+      <span class="level-prob lp-high">HIGH</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4052.72</span>
+      <span class="level-type">Intermediate SSL — Asia session wick</span>
+      <span class="level-prob lp-high">HIGH</span>
+    </div>
+    <div class="level-row" style="background:#1a0f0f;border-top:1px solid var(--bear)">
+      <span class="level-price" style="color:var(--bear)">4023.86 ★</span>
+      <span class="level-type bear-text">MAIN DRAW — Asia low SSL · Unmitigated · Institutional target</span>
+      <span class="level-prob lp-high" style="background:#2a1010;color:#f07070">HIGHEST</span>
+    </div>
+    <div class="level-row">
+      <span class="level-price">4000.00</span>
+      <span class="level-type">Round number SSL — extension below 4023 break</span>
+      <span class="level-prob lp-medium">MEDIUM</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ INTRADAY BEHAVIOR ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>05</span>Intraday Institutional Behavior (8-day model · Jun 1–10)</div>
+
+  <div class="grid-3" style="margin-bottom:14px">
+    <div class="card card-bear">
+      <div class="card-label">NY Direction (all 8 days)</div>
+      <div class="card-value">8 / 8</div>
+      <div class="card-sub">BEARISH · 100% of dataset</div>
+    </div>
+    <div class="card card-bear">
+      <div class="card-label">London BEAR → NY Pattern</div>
+      <div class="card-value">5 / 5</div>
+      <div class="card-sub">Direct continuation lower · 100%</div>
+    </div>
+    <div class="card card-warn">
+      <div class="card-label">London BULL → NY Pattern</div>
+      <div class="card-value">3 / 3</div>
+      <div class="card-sub">Judas high sweep first · 100%</div>
+    </div>
+  </div>
+
+  <table style="margin-bottom:14px">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>London Dir</th>
+        <th>London Pattern</th>
+        <th>NY Dir</th>
+        <th>NY Pattern</th>
+        <th>London Lo Swept</th>
+        <th>Sweep Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="dim-text">01 Jun Mon</td>
+        <td class="bull-text">BULL</td>
+        <td>Low Sweep Judas</td>
+        <td class="bear-text">BEAR</td>
+        <td class="bear-text">Direct Lower</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:10</td>
+      </tr>
+      <tr>
+        <td class="dim-text">02 Jun Tue</td>
+        <td class="bear-text">BEAR</td>
+        <td>High Sweep Judas</td>
+        <td class="bear-text">BEAR</td>
+        <td class="bear-text">Direct Lower</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:00</td>
+      </tr>
+      <tr>
+        <td class="dim-text">03 Jun Wed</td>
+        <td class="bear-text">BEAR</td>
+        <td>Continuation</td>
+        <td class="bear-text">BEAR</td>
+        <td class="bear-text">Direct Lower</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:40</td>
+      </tr>
+      <tr>
+        <td class="dim-text">04 Jun Thu</td>
+        <td class="bull-text">BULL</td>
+        <td>Continuation</td>
+        <td class="bear-text">BEAR</td>
+        <td class="warn-text">Judas Hi → Sell</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:40 / 17:50</td>
+      </tr>
+      <tr>
+        <td class="dim-text">05 Jun Fri</td>
+        <td class="bear-text">BEAR</td>
+        <td>High Sweep Judas</td>
+        <td class="bear-text">BEAR</td>
+        <td class="bear-text">Direct Lower</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:00</td>
+      </tr>
+      <tr>
+        <td class="dim-text">08 Jun Mon</td>
+        <td class="bull-text">BULL</td>
+        <td>Inside Range</td>
+        <td class="bear-text">BEAR</td>
+        <td class="warn-text">Judas Hi → Sell</td>
+        <td>NO</td>
+        <td class="accent-text">16:30</td>
+      </tr>
+      <tr>
+        <td class="dim-text">09 Jun Tue</td>
+        <td class="bull-text">BULL</td>
+        <td>Inside Range</td>
+        <td class="bear-text">BEAR</td>
+        <td class="warn-text">Judas Hi → Sell</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">16:00 / 17:10</td>
+      </tr>
+      <tr style="background:#1a0f0f">
+        <td class="dim-text">10 Jun Wed</td>
+        <td class="bear-text">BEAR</td>
+        <td>Continuation</td>
+        <td class="bear-text">BEAR</td>
+        <td class="bear-text">Direct Lower</td>
+        <td class="bear-text">YES</td>
+        <td class="accent-text">17:55</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert" style="margin-bottom:0">
+    <strong>TODAY (11 Jun Thu)</strong> — London = <strong>BEARISH / INSIDE RANGE</strong> (failed to sweep either Asia extreme · compression building) ·
+    Historical match: London BEAR → NY DIRECT CONTINUATION LOWER · <strong>5/5 precedents (100%)</strong> ·
+    NY sweep of London low (4076.53) expected within <strong>16:00–17:55 EET window</strong>
+  </div>
+</div>
+
+<!-- ══════════════════════ DAY TRADES ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>06</span>Day Trades · NY Session</div>
+
+  <!-- DT-01 -->
+  <div class="setup-card">
+    <div class="setup-header" style="border-left:3px solid var(--bull)">
+      <div class="setup-id">DT-01 &nbsp;·&nbsp; SHORT &nbsp;·&nbsp; NY SESSION</div>
+      <div class="setup-meta">
+        <span class="grade grade-aplus">A+</span>
+        <div class="prob-bar-wrap" style="width:140px">
+          <div class="prob-bar"><div class="prob-fill prob-fill-bear" style="width:72%"></div></div>
+          <span class="prob-label bear-text">72%</span>
+        </div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="grid-2">
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Entry Zone</span><span class="setup-row-value warn-text">4090 – 4095 &nbsp;(5M OB / 1H FVG retest)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Invalidation</span><span class="setup-row-value">4113 &nbsp;(above London high 4112.72)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target 1</span><span class="setup-row-value bear-text">4076.53 &nbsp;(London low SSL)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target 2</span><span class="setup-row-value bear-text">4052 &nbsp;(intermediate SSL)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target 3 ★</span><span class="setup-row-value bear-text">4023.86 &nbsp;(Asia low · main draw)</span></div>
+        </div>
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Session</span><span class="setup-row-value accent-text">NY · Enter at 16:00 EET open</span></div>
+          <div class="setup-row"><span class="setup-row-label">Risk (pips)</span><span class="setup-row-value">~18–23</span></div>
+          <div class="setup-row"><span class="setup-row-label">Reward (pips)</span><span class="setup-row-value bear-text">~67–70 (to 4023)</span></div>
+          <div class="setup-row"><span class="setup-row-label">RR Ratio</span><span class="setup-row-value bull-text">1:3.5 → 1:5</span></div>
+          <div class="setup-row"><span class="setup-row-label">Status</span><span class="setup-row-value" style="color:#5aef8a">● LIVE · ENTRY ZONE ACTIVE NOW</span></div>
+        </div>
+      </div>
+      <div class="setup-rationale">
+        4H macro bear + 1H lower high (4112.72 vs 4118.23) = CHoCH confirmed · Current price inside 1H bearish FVG (4084–4097) and below 1H OB (4096–4112) · 5M structure: lower highs compressing · London closed bearish = 5/5 historical match for NY direct continuation lower · Enter on first 5M bearish impulse from this zone at NY open
+      </div>
+    </div>
+  </div>
+
+  <!-- DT-02 -->
+  <div class="setup-card">
+    <div class="setup-header" style="border-left:3px solid var(--accent)">
+      <div class="setup-id">DT-02 &nbsp;·&nbsp; SHORT (JUDAS) &nbsp;·&nbsp; NY SESSION</div>
+      <div class="setup-meta">
+        <span class="grade grade-a">A</span>
+        <div class="prob-bar-wrap" style="width:140px">
+          <div class="prob-bar"><div class="prob-fill prob-fill-bear" style="width:45%"></div></div>
+          <span class="prob-label bear-text">45%</span>
+        </div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="grid-2">
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Entry Zone</span><span class="setup-row-value warn-text">4112 – 4118 &nbsp;(sweep of London / Asia BSL cluster)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Invalidation</span><span class="setup-row-value">4123 &nbsp;(sustained hold above Asia high)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target 1</span><span class="setup-row-value bear-text">4076.53</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target 2</span><span class="setup-row-value bear-text">4023.86</span></div>
+        </div>
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Session</span><span class="setup-row-value accent-text">NY · Window 16:00–16:30 EET only</span></div>
+          <div class="setup-row"><span class="setup-row-label">Risk</span><span class="setup-row-value">~5–11 pips</span></div>
+          <div class="setup-row"><span class="setup-row-label">Reward</span><span class="setup-row-value bear-text">~88–95 pips</span></div>
+          <div class="setup-row"><span class="setup-row-label">RR Ratio</span><span class="setup-row-value bull-text">1:9 – 1:12</span></div>
+        </div>
+      </div>
+      <div class="setup-rationale">
+        If NY opens with Judas spike into BSL cluster (4112–4118), trapping late longs — sharp reversal expected. Only monitor if DT-01 entry missed. Window closes at 16:30 EET. Pattern matches Jun 8 Mon and Jun 9 Tue (London BULL → Judas sweep). Today London was BEAR so probability is reduced — treat as secondary only.
+      </div>
+    </div>
+  </div>
+
+  <!-- DT-03 -->
+  <div class="setup-card">
+    <div class="setup-header" style="border-left:3px solid var(--warn)">
+      <div class="setup-id">DT-03 &nbsp;·&nbsp; SHORT (BOS RETEST) &nbsp;·&nbsp; NY SESSION</div>
+      <div class="setup-meta">
+        <span class="grade grade-b">B</span>
+        <div class="prob-bar-wrap" style="width:140px">
+          <div class="prob-bar"><div class="prob-fill prob-fill-bear" style="width:58%"></div></div>
+          <span class="prob-label bear-text">58%</span>
+        </div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="grid-2">
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Entry Zone</span><span class="setup-row-value warn-text">4076 – 4080 &nbsp;(retest of broken London low)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Invalidation</span><span class="setup-row-value">4090</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target</span><span class="setup-row-value bear-text">4023.86</span></div>
+          <div class="setup-row"><span class="setup-row-label">RR Ratio</span><span class="setup-row-value bull-text">1:3.5</span></div>
+        </div>
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Session</span><span class="setup-row-value accent-text">NY · Post-structure break entry</span></div>
+          <div class="setup-row"><span class="setup-row-label">Trigger</span><span class="setup-row-value">Clean 5M BOS below 4076.53</span></div>
+          <div class="setup-row"><span class="setup-row-label">Risk</span><span class="setup-row-value">~10–14 pips</span></div>
+          <div class="setup-row"><span class="setup-row-label">Reward</span><span class="setup-row-value bear-text">~52–54 pips</span></div>
+        </div>
+      </div>
+      <div class="setup-rationale">
+        Break and retest of London low (4076.53) confirms 1H BOS bearish. Entry for missed DT-01. Waits for structural confirmation before entering — lower risk but slightly later fill and smaller reward window.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SWING TRADES ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>07</span>Swing Trades</div>
+
+  <!-- SW-01 -->
+  <div class="setup-card">
+    <div class="setup-header" style="border-left:3px solid var(--accent)">
+      <div class="setup-id">SW-01 &nbsp;·&nbsp; SHORT &nbsp;·&nbsp; 4H OB RETEST &nbsp;·&nbsp; MULTI-SESSION</div>
+      <div class="setup-meta">
+        <span class="grade grade-a">A</span>
+        <div class="prob-bar-wrap" style="width:140px">
+          <div class="prob-bar"><div class="prob-fill prob-fill-accent" style="width:65%"></div></div>
+          <span class="prob-label accent-text">65%</span>
+        </div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="grid-2">
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Entry Zone</span><span class="setup-row-value warn-text">4100 – 4120 &nbsp;(4H bearish OB)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Invalidation</span><span class="setup-row-value">4145 &nbsp;(top of 4H FVG)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target</span><span class="setup-row-value bear-text">4000 – 4020 &nbsp;(major SSL cluster)</span></div>
+          <div class="setup-row"><span class="setup-row-label">RR Ratio</span><span class="setup-row-value bull-text">1:5+</span></div>
+        </div>
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Session</span><span class="setup-row-value accent-text">Any — multi-session hold</span></div>
+          <div class="setup-row"><span class="setup-row-label">Horizon</span><span class="setup-row-value">1–3 sessions</span></div>
+          <div class="setup-row"><span class="setup-row-label">OB Quality</span><span class="setup-row-value bull-text">High — Jun 10 17:00 candle</span></div>
+        </div>
+      </div>
+      <div class="setup-rationale">
+        Any return to the 4H bearish OB (4100–4120) from below in a confirmed macro bear = institutional grade short. This is the optimal entry for the multi-session continuation targeting the 4000 area.
+      </div>
+    </div>
+  </div>
+
+  <!-- SW-02 -->
+  <div class="setup-card">
+    <div class="setup-header" style="border-left:3px solid var(--bear)">
+      <div class="setup-id">SW-02 &nbsp;·&nbsp; SHORT &nbsp;·&nbsp; NEW LOW EXTENSION &nbsp;·&nbsp; NY / ASIA</div>
+      <div class="setup-meta">
+        <span class="grade grade-a">A</span>
+        <div class="prob-bar-wrap" style="width:140px">
+          <div class="prob-bar"><div class="prob-fill prob-fill-bear" style="width:55%"></div></div>
+          <span class="prob-label bear-text">55%</span>
+        </div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="grid-2">
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Entry Zone</span><span class="setup-row-value warn-text">4018 – 4023 &nbsp;(retest of broken Asia low)</span></div>
+          <div class="setup-row"><span class="setup-row-label">Trigger</span><span class="setup-row-value">Clean break below 4023.86</span></div>
+          <div class="setup-row"><span class="setup-row-label">Invalidation</span><span class="setup-row-value">4050</span></div>
+          <div class="setup-row"><span class="setup-row-label">Target</span><span class="setup-row-value bear-text">3980 – 4000</span></div>
+          <div class="setup-row"><span class="setup-row-label">RR Ratio</span><span class="setup-row-value bull-text">1:3</span></div>
+        </div>
+        <div>
+          <div class="setup-row"><span class="setup-row-label">Session</span><span class="setup-row-value accent-text">NY or next Asia</span></div>
+          <div class="setup-row"><span class="setup-row-label">Condition</span><span class="setup-row-value">Requires DT-01 or DT-03 to play out first</span></div>
+        </div>
+      </div>
+      <div class="setup-rationale">
+        Post-4023 break extension. Targets psychological 4000 round number and the 3980 institutional cluster. Sequential — only becomes active after primary draw (4023.86) is swept.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ CONCLUSION ══════════════════════ -->
+<div class="section">
+  <div class="section-title"><span>08</span>Conclusion</div>
+
+  <div class="scenario-block" style="border-left:3px solid var(--bear)">
+    <div class="scenario-label bear-text">▶ MOST LIKELY SCENARIO — 68%</div>
+    <div class="scenario-text">
+      NY opens (16:00 EET), price compresses briefly near 4088–4095 (inside 1H FVG). Minor sweep of intraday BSL at 4093–4096 serves as micro Judas. First impulsive 5M bearish candle triggers DT-01 entry. Price breaks through London low <strong>4076.53</strong> — 1H BOS confirmed bearish. Continuation sell toward <strong>4052</strong> then <strong>4023.86</strong> (Asia low / main draw). Full sequence within NY session.
+    </div>
+  </div>
+
+  <div class="scenario-block" style="border-left:3px solid var(--warn)">
+    <div class="scenario-label warn-text">▶ ALTERNATIVE SCENARIO — 22%</div>
+    <div class="scenario-text">
+      NY opens with aggressive Judas spike into <strong>4112–4118</strong> BSL cluster (sweeping London high + Asia high simultaneously). Traps breakout longs, sharp reversal follows. DT-02 entry triggered. Same downside target (4023.86) but delayed 30–45 min. Monitor 16:00–16:30 EET window only.
+    </div>
+  </div>
+
+  <div class="scenario-block" style="border-left:3px solid var(--muted)">
+    <div class="scenario-label dim-text">▶ LOW PROBABILITY SCENARIO — 10%</div>
+    <div class="scenario-text">
+      NY sustains a close above <strong>4118.23</strong>, creating a genuine 1H bullish CHoCH. This triggers a multi-session correction to the 4H FVG zone (4145–4188). Does NOT invalidate the macro bear — would be treated as a retest of the 4H OB zone before resuming lower. Zero structural reason to expect this given the current 1H lower high and bearish London close.
+    </div>
+  </div>
+
+  <!-- BEST TRADE -->
+  <div class="best-trade">
+    <div class="best-trade-header">⭐ BEST SINGLE TRADE IDEA</div>
+    <div class="best-trade-grid">
+      <div>
+        <div class="bt-item-label">Direction</div>
+        <div class="bt-item-value bear">SHORT</div>
+      </div>
+      <div>
+        <div class="bt-item-label">Entry</div>
+        <div class="bt-item-value warn">4090 – 4095</div>
+      </div>
+      <div>
+        <div class="bt-item-label">Stop Loss</div>
+        <div class="bt-item-value">4113</div>
+      </div>
+      <div>
+        <div class="bt-item-label">Target</div>
+        <div class="bt-item-value bear">4023.86</div>
+      </div>
+      <div>
+        <div class="bt-item-label">RR Ratio</div>
+        <div class="bt-item-value bull">1 : 3.5</div>
+      </div>
+    </div>
+    <div class="bt-rationale">
+      SHORT from 4090–4095 at NY open (16:00 EET) on the first 5M bearish impulse from the current 1H FVG zone.
+      Risk ~18–23 pips · Reward ~67–70 pips to Asia low 4023.86.
+      This is the statistically strongest entry in the dataset: London closed bearish → NY went direct continuation lower
+      on <strong style="color:var(--bull)">5 out of 5</strong> matching days (100%). Price is already inside the entry zone. 
+      The draw (4023.86) is a fresh, unmitigated institutional sell-side liquidity pool formed this morning. 
+      No CHoCH, no BOS to upside, no reason to wait.
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.06em">
+  <span>XAUUSD · SMC INSTITUTIONAL ANALYSIS · NY SESSION 15:00 EET RUN</span>
+  <span>11 JUN 2026 · DATA: SUPPLIED OHLC ONLY · NO EXTERNAL SOURCES</span>
+</div>
+
+</body>
+</html>
