@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EURUSD — Institutional SMC Report · 12 Jun 2026 · 07:20 EET</title>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --panel: #13161d;
+    --border: #1e2330;
+    --accent: #00d4ff;
+    --bull: #00e5a0;
+    --bear: #ff4d6d;
+    --warn: #ffb347;
+    --neutral: #8898b0;
+    --text: #d0daea;
+    --muted: #5a6a80;
+    --gold: #f0c040;
+    --purple: #b48aff;
+    --aplus: #00e5a0;
+    --a: #4ddfb5;
+    --b: #ffb347;
+    --c: #ff7b52;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.5; }
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+
+  /* Header */
+  .report-header { background: linear-gradient(135deg, #0a1a2e 0%, #0d1622 100%); border: 1px solid #1a2840; border-radius: 10px; padding: 20px 24px 16px; margin-bottom: 18px; }
+  .report-header h1 { font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+  .report-header .meta { margin-top: 6px; color: var(--muted); font-size: 11px; letter-spacing: 0.5px; }
+  .report-header .meta span { color: var(--warn); font-weight: 600; }
+  .status-bar { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .status-pill { background: #0d1622; border: 1px solid #1e2d45; border-radius: 20px; padding: 4px 14px; font-size: 11px; color: var(--neutral); }
+  .status-pill b { color: var(--accent); }
+  .status-pill.bull b { color: var(--bull); }
+  .status-pill.bear b { color: var(--bear); }
+  .status-pill.warn b { color: var(--warn); }
+
+  /* Section headers */
+  .section { margin-bottom: 18px; }
+  .section-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 12px; }
+
+  /* Cards */
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .card-grid { display: grid; gap: 12px; }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card h4 { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+  /* Bias block */
+  .bias-tag { display: inline-block; padding: 3px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+  .bias-tag.bull { background: rgba(0,229,160,0.15); color: var(--bull); border: 1px solid rgba(0,229,160,0.3); }
+  .bias-tag.bear { background: rgba(255,77,109,0.15); color: var(--bear); border: 1px solid rgba(255,77,109,0.3); }
+  .bias-tag.neutral { background: rgba(136,152,176,0.15); color: var(--neutral); border: 1px solid rgba(136,152,176,0.3); }
+
+  /* Level rows */
+  .level-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #161b24; }
+  .level-row:last-child { border-bottom: none; }
+  .level-label { color: var(--muted); font-size: 11px; }
+  .level-value { font-weight: 700; font-size: 13px; font-family: monospace; }
+  .bull-val { color: var(--bull); }
+  .bear-val { color: var(--bear); }
+  .warn-val { color: var(--warn); }
+  .accent-val { color: var(--accent); }
+  .purple-val { color: var(--purple); }
+  .gold-val { color: var(--gold); }
+  .text-val { color: var(--text); }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.5px; }
+  .tag-bull { background: rgba(0,229,160,0.15); color: var(--bull); }
+  .tag-bear { background: rgba(255,77,109,0.15); color: var(--bear); }
+  .tag-warn { background: rgba(255,179,71,0.15); color: var(--warn); }
+  .tag-accent { background: rgba(0,212,255,0.12); color: var(--accent); }
+  .tag-purple { background: rgba(180,138,255,0.12); color: var(--purple); }
+  .tag-neutral { background: rgba(136,152,176,0.12); color: var(--neutral); }
+
+  /* Probability bar */
+  .prob-bar-wrap { background: #0a0d12; border-radius: 3px; height: 5px; width: 100%; margin-top: 4px; }
+  .prob-bar { height: 5px; border-radius: 3px; }
+  .prob-high { background: linear-gradient(90deg, var(--bull), #00ffcc); }
+  .prob-med { background: linear-gradient(90deg, var(--warn), #ffdd80); }
+  .prob-low { background: linear-gradient(90deg, var(--bear), #ff8080); }
+
+  /* Liquidity map */
+  .liq-table { width: 100%; border-collapse: collapse; }
+  .liq-table th { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-align: left; padding: 4px 8px; background: #0d0f14; }
+  .liq-table td { padding: 6px 8px; border-bottom: 1px solid #161b24; font-size: 12px; }
+  .liq-table tr:last-child td { border-bottom: none; }
+  .liq-table .price { font-family: monospace; font-weight: 700; }
+
+  /* Setup cards */
+  .setup-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; position: relative; overflow: hidden; }
+  .setup-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .setup-card.bull::before { background: var(--bull); }
+  .setup-card.bear::before { background: var(--bear); }
+  .setup-card .setup-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .setup-card .setup-id { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .setup-card .setup-dir { font-size: 13px; font-weight: 700; }
+  .setup-card .grade { font-size: 14px; font-weight: 800; }
+  .grade-aplus { color: var(--aplus); }
+  .grade-a { color: var(--a); }
+  .grade-b { color: var(--b); }
+  .grade-c { color: var(--c); }
+  .setup-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px; }
+  .setup-field label { display: block; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .setup-field .val { font-family: monospace; font-size: 12px; font-weight: 700; }
+  .setup-rationale { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px; color: var(--neutral); }
+
+  /* Behavior model table */
+  .beh-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .beh-table th { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-align: center; padding: 5px 6px; background: #0a0c10; border-bottom: 1px solid var(--border); }
+  .beh-table th:first-child { text-align: left; }
+  .beh-table td { padding: 5px 6px; border-bottom: 1px solid #161b24; text-align: center; }
+  .beh-table td:first-child { text-align: left; color: var(--neutral); }
+  .beh-table tr:last-child td { border-bottom: none; }
+  .beh-table .price-cell { font-family: monospace; font-size: 11px; }
+  .beh-table tr:hover td { background: #161b24; }
+
+  /* Stat boxes */
+  .stat-boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stat-box { background: #0d0f14; border: 1px solid var(--border); border-radius: 6px; padding: 10px; text-align: center; }
+  .stat-box .sval { font-size: 20px; font-weight: 800; font-family: monospace; }
+  .stat-box .slabel { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+  /* Conclusion */
+  .scenario-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .scenario-card .sc-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .scenario-card .sc-text { font-size: 12px; color: var(--text); line-height: 1.6; }
+  .best-trade { background: linear-gradient(135deg, rgba(0,229,160,0.08) 0%, rgba(0,212,255,0.05) 100%); border: 1px solid rgba(0,229,160,0.3); border-radius: 8px; padding: 16px; }
+  .best-trade h3 { font-size: 11px; letter-spacing: 1.5px; color: var(--bull); text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Asia session visual */
+  .asia-range-visual { background: #0a0c10; border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; margin-top: 10px; }
+  .range-bar-container { position: relative; height: 32px; background: #0d1020; border-radius: 4px; margin: 10px 0; }
+  .range-bar-fill { position: absolute; top: 4px; bottom: 4px; background: rgba(0,212,255,0.15); border: 1px solid rgba(0,212,255,0.3); border-radius: 3px; }
+  .range-bar-price { position: absolute; top: 4px; bottom: 4px; width: 3px; background: var(--warn); border-radius: 2px; }
+  .range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); font-family: monospace; }
+
+  /* Executive summary */
+  .exec-summary { background: linear-gradient(135deg, #0a1520 0%, #0d1018 100%); border: 1px solid #1e3050; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+  .exec-summary p { font-size: 12px; color: var(--text); line-height: 1.7; }
+  .exec-summary p + p { margin-top: 8px; }
+
+  /* Weight bar */
+  .weight-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .weight-label { font-size: 10px; color: var(--muted); width: 130px; flex-shrink: 0; }
+  .weight-bar { flex: 1; height: 4px; background: #0d0f14; border-radius: 2px; }
+  .weight-fill { height: 4px; border-radius: 2px; background: var(--accent); }
+  .weight-pct { font-size: 10px; color: var(--accent); width: 28px; text-align: right; }
+
+  @media (max-width: 700px) {
+    .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+    .setup-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-boxes { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- ═══════════════════════════════════════════════════════════ HEADER -->
+<div class="report-header">
+  <h1>EURUSD · INSTITUTIONAL SMC ANALYSIS</h1>
+  <div class="meta">12 June 2026 &nbsp;·&nbsp; <span>07:20 EET — Asia Development · Pre-London</span> &nbsp;·&nbsp; Timeframe Stack: 4H → 1H → 5M</div>
+  <div class="status-bar">
+    <div class="status-pill bull">HTF Bias: <b>BULLISH</b></div>
+    <div class="status-pill">Current Price: <b>1.15718</b></div>
+    <div class="status-pill warn">Session: <b>ASIA (ends 10:00)</b></div>
+    <div class="status-pill">Asia High: <b>1.15866</b></div>
+    <div class="status-pill">Asia Low: <b>1.15616</b></div>
+    <div class="status-pill">Next: <b>London 10:00 EET</b></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ EXEC SUMMARY -->
+<div class="section">
+  <div class="section-title">Executive Summary</div>
+  <div class="exec-summary">
+    <p>Jun 11 NY session produced a decisive <b style="color:var(--bull)">CHoCH</b> — a 80-pip sweep reversal from <b>1.15029</b> to <b>1.15899</b> — ending the 2-week bearish leg from 1.16650 and confirming HTF bullish intent. The 4H structure has flipped. Price is now consolidating within the Asia range (1.15616–1.15866), compressing energy ahead of London.</p>
+    <p>Current Asia behavior is a <b>bearish drift</b> from the high (1.15866 at 02:05) with partial recovery. Based on 9-day EURUSD intraday behavior model, the highest probability London pattern is a <b style="color:var(--warn)">LOW SWEEP JUDAS</b> (sweep below 1.15616) followed by a bullish continuation targeting 1.15866–1.15899+ BSL. Prepare entries in the 1.15580–1.15620 discount zone at London open.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ 4H BIAS -->
+<div class="section">
+  <div class="section-title">4H Bias — HTF Macro Structure</div>
+  <div class="card-grid card-grid-2">
+
+    <div class="card">
+      <h4>Structural State</h4>
+      <div class="level-row">
+        <span class="level-label">4H Bias</span>
+        <span class="bias-tag bull">BULLISH</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">CHoCH Event</span>
+        <span class="level-value bull-val">Jun 11 20:00 — 1.15029→1.15899</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Prior Structure</span>
+        <span class="level-value bear-val">Bearish 1.16650→1.14998</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Reversal Candle (H4)</span>
+        <span class="level-value bull-val">O:1.15091 H:1.15899 L:1.15029 C:1.15786</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Reversal Range</span>
+        <span class="level-value accent-val">87 pips</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Dealing Range</h4>
+      <div class="level-row">
+        <span class="level-label">Range High (HTF)</span>
+        <span class="level-value bear-val">1.16650 <span class="tag tag-bear">BSL</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Range Low (HTF)</span>
+        <span class="level-value bull-val">1.14998 <span class="tag tag-bull">SSL Swept</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Equilibrium (50%)</span>
+        <span class="level-value accent-val">1.15824</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Current Price</span>
+        <span class="level-value warn-val">1.15718 <span class="tag tag-warn">DISCOUNT</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Mini Range (Jun 11)</span>
+        <span class="level-value text-val">1.15029 – 1.15899</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Mini Equilibrium</span>
+        <span class="level-value accent-val">1.15464</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Price vs Mini Range</span>
+        <span class="level-value bull-val">PREMIUM (bullish)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Key Liquidity Zones</h4>
+      <div class="level-row">
+        <span class="level-label">BSL #1 (Jun 11 NY High)</span>
+        <span class="level-value bear-val">1.15899 <span class="tag tag-accent">HIGH PROB</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">BSL #2 (Asia/H4 Today)</span>
+        <span class="level-value bear-val">1.15866</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">BSL #3 (Jun 4 High)</span>
+        <span class="level-value bear-val">1.16453 <span class="tag tag-neutral">SWING</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">SSL #1 (Asia Low Today)</span>
+        <span class="level-value bull-val">1.15616 <span class="tag tag-warn">WATCH</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">SSL #2 (Jun 11 London Low)</span>
+        <span class="level-value bull-val">1.15164</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">SSL #3 (Jun 11 Sweep Low)</span>
+        <span class="level-value bull-val">1.15029</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>4H OBs &amp; FVGs</h4>
+      <div class="level-row">
+        <span class="level-label">H4 Bullish OB (Jun 11 16:00)</span>
+        <span class="level-value bull-val">1.15073–1.15406</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">H4 Bearish OB (Jun 11 reversal)</span>
+        <span class="level-value bear-val">1.15866–1.15899</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">H4 Current (Jun 12 00:00)</span>
+        <span class="level-value text-val">O:1.15786 H:1.15866 L:1.15662 C:1.15698</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">H4 Current (Jun 12 04:00)</span>
+        <span class="level-value text-val">O:1.15698 H:1.15753 L:1.15616 C:1.15688</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">H4 FVG (Jun 11 reversal)</span>
+        <span class="level-value bull-val">1.15162–1.15414 <span class="tag tag-bull">SUPPORT</span></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ 1H EXECUTION -->
+<div class="section">
+  <div class="section-title">1H Execution — Intraday Structure</div>
+  <div class="card-grid card-grid-2">
+
+    <div class="card">
+      <h4>1H Structure Today (Jun 12)</h4>
+      <div class="level-row">
+        <span class="level-label">00:00</span>
+        <span class="level-value text-val">O:1.15786 H:1.15803 L:1.15762 C:1.15774</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">01:00</span>
+        <span class="level-value bull-val">O:1.15774 H:1.15852 L:1.15732 C:1.15850 ↑</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">02:00 (Asia open)</span>
+        <span class="level-value bull-val">O:1.15850 H:1.15866 L:1.15744 C:1.15755</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">03:00</span>
+        <span class="level-value bear-val">O:1.15755 H:1.15766 L:1.15662 C:1.15698 ↓</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">04:00</span>
+        <span class="level-value bear-val">O:1.15698 H:1.15703 L:1.15616 C:1.15635 ↓</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">05:00</span>
+        <span class="level-value bull-val">O:1.15635 H:1.15705 L:1.15628 C:1.15667 ↑</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">06:00</span>
+        <span class="level-value bull-val">O:1.15667 H:1.15754 L:1.15651 C:1.15722 ↑</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">07:00 (current)</span>
+        <span class="level-value bear-val">O:1.15722 H:1.15727 L:1.15687 C:1.15691 ↓</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>1H Execution Zones</h4>
+      <div class="level-row">
+        <span class="level-label">1H Bearish OB (Supply)</span>
+        <span class="level-value bear-val">1.15850–1.15866 <span class="tag tag-bear">RESIST</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">1H Bullish OB (Demand)</span>
+        <span class="level-value bull-val">1.15616–1.15703 <span class="tag tag-bull">SUPPORT</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Draw on Liquidity</span>
+        <span class="level-value accent-val">1.15866 → 1.15899 (BSL)</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">1H Internal CHoCH</span>
+        <span class="level-value warn-val">Micro-bearish 02:00→04:00</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">1H BOS (upside)</span>
+        <span class="level-value bull-val">Above 1.15866 confirms London bid</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">1H FVG (bullish)</span>
+        <span class="level-value bull-val">1.15414–1.15614 (deep support)</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">Current Pattern</span>
+        <span class="level-value text-val">Compression inside Asia range</span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">London Trigger Zone</span>
+        <span class="level-value warn-val">10:00–11:00 EET — WATCH</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Asia range visual -->
+  <div class="asia-range-visual" style="margin-top:12px;">
+    <div style="font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Asia Session Range — 02:00–07:20 EET</div>
+    <div class="range-labels">
+      <span>1.15500</span><span>1.15600</span><span>1.15700</span><span>1.15800</span><span>1.15900</span>
+    </div>
+    <div class="range-bar-container">
+      <!-- Asia range: 1.15616-1.15866 on scale 1.15500-1.15900 (400 pips wide) -->
+      <!-- Fill: left=(1.15616-1.15500)/400*100=29%, right=(1.15900-1.15866)/400*100=8.5%, width=66.5% -->
+      <div class="range-bar-fill" style="left:29%; width:62.5%; background:rgba(0,212,255,0.12); border-color:rgba(0,212,255,0.25);"></div>
+      <!-- SSL zone: 1.15616 = 29% -->
+      <div style="position:absolute; left:29%; top:0; bottom:0; width:1px; background:var(--bull); opacity:0.7;"></div>
+      <div style="position:absolute; left:29.5%; top:8px; font-size:9px; color:var(--bull);">SSL 1.15616</div>
+      <!-- BSL zone: 1.15866 = 91.5% -->
+      <div style="position:absolute; left:91.5%; top:0; bottom:0; width:1px; background:var(--bear); opacity:0.7;"></div>
+      <div style="position:absolute; right:1%; top:8px; font-size:9px; color:var(--bear);">BSL 1.15866</div>
+      <!-- Current price: 1.15718 = (1.15718-1.155)/0.004*100 = 54.5% -->
+      <div class="range-bar-price" style="left:54.5%;"></div>
+      <div style="position:absolute; left:47%; bottom:-14px; font-size:9px; color:var(--warn);">NOW 1.15718</div>
+    </div>
+    <div style="height:14px;"></div>
+    <div style="font-size:10px; color:var(--muted);">Price sitting at <span style="color:var(--warn);">54% of Asia range</span> — mid zone, neither premium nor discount relative to Asia. London sweep of either extreme probable.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ LIQUIDITY MAP -->
+<div class="section">
+  <div class="section-title">Liquidity Map</div>
+  <div class="card">
+    <table class="liq-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Level</th>
+          <th>Description</th>
+          <th>Probability</th>
+          <th>Session Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-bear">BSL</span></td>
+          <td class="price bear-val">1.15899</td>
+          <td>Jun 11 NY Session High — major equal high with Jun 09</td>
+          <td>
+            <span style="color:var(--bull);">HIGH</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-high" style="width:85%;"></div></div>
+          </td>
+          <td><span class="tag tag-accent">London–NY</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bear">BSL</span></td>
+          <td class="price bear-val">1.15866</td>
+          <td>Asia high today / H4 intraday high — Equal Asia high</td>
+          <td>
+            <span style="color:var(--bull);">HIGH</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-high" style="width:80%;"></div></div>
+          </td>
+          <td><span class="tag tag-accent">London</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bear">BSL</span></td>
+          <td class="price bear-val">1.16068</td>
+          <td>Jun 4 swing high — old premium zone</td>
+          <td>
+            <span style="color:var(--warn);">MEDIUM</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-med" style="width:50%;"></div></div>
+          </td>
+          <td><span class="tag tag-neutral">Swing</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bull">SSL</span></td>
+          <td class="price bull-val">1.15616</td>
+          <td>Asia low today — primary Judas sweep target</td>
+          <td>
+            <span style="color:var(--bull);">HIGH</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-high" style="width:78%;"></div></div>
+          </td>
+          <td><span class="tag tag-warn">London open</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bull">SSL</span></td>
+          <td class="price bull-val">1.15550</td>
+          <td>1H OB zone bottom — demand confluence below Asia low</td>
+          <td>
+            <span style="color:var(--warn);">MEDIUM</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-med" style="width:55%;"></div></div>
+          </td>
+          <td><span class="tag tag-warn">London</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bull">SSL</span></td>
+          <td class="price bull-val">1.15414</td>
+          <td>1H FVG upper boundary — deep discount area</td>
+          <td>
+            <span style="color:var(--warn);">MEDIUM</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-med" style="width:42%;"></div></div>
+          </td>
+          <td><span class="tag tag-neutral">NY / swing</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bull">SSL</span></td>
+          <td class="price bull-val">1.15164</td>
+          <td>Jun 11 London low — major structural SSL</td>
+          <td>
+            <span style="color:var(--bear);">LOW</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-low" style="width:22%;"></div></div>
+          </td>
+          <td><span class="tag tag-neutral">Swing stop</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-bull">EQL</span></td>
+          <td class="price accent-val">1.15754</td>
+          <td>Equal highs on 5M (06:35–06:45 cluster)</td>
+          <td>
+            <span style="color:var(--warn);">MEDIUM</span>
+            <div class="prob-bar-wrap"><div class="prob-bar prob-med" style="width:60%;"></div></div>
+          </td>
+          <td><span class="tag tag-warn">Immediate</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ INTRADAY BEHAVIOR -->
+<div class="section">
+  <div class="section-title">EURUSD Intraday Institutional Behavior Model — Jun 2026 (9 Days)</div>
+
+  <!-- Stats -->
+  <div class="stat-boxes">
+    <div class="stat-box">
+      <div class="sval" style="color:var(--accent)">23.3p</div>
+      <div class="slabel">Avg Asia Range</div>
+    </div>
+    <div class="stat-box">
+      <div class="sval" style="color:var(--warn)">37.9p</div>
+      <div class="slabel">Avg London Range</div>
+    </div>
+    <div class="stat-box">
+      <div class="sval" style="color:var(--purple)">47.4p</div>
+      <div class="slabel">Avg NY Range</div>
+    </div>
+    <div class="stat-box">
+      <div class="sval" style="color:var(--bull)">78%</div>
+      <div class="slabel">Asia Bull Sessions</div>
+    </div>
+  </div>
+
+  <!-- Behavior data table -->
+  <div class="card" style="overflow-x:auto;">
+    <table class="beh-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>HTF</th>
+          <th>Asia H</th>
+          <th>Asia L</th>
+          <th>Asia Dir</th>
+          <th>Asia Rng</th>
+          <th>Lon Dir</th>
+          <th>Lon Rng</th>
+          <th>London Judas</th>
+          <th>Sweep Time</th>
+          <th>NY Dir</th>
+          <th>NY Rng</th>
+          <th>NY Pattern</th>
+          <th>NY Sweep Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mon 01/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.16650</td>
+          <td class="price-cell bull-val">1.16416</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>23.3p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>23.1p</td>
+          <td><span class="tag tag-neutral">INSIDE</span></td>
+          <td>—</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>41.4p</td>
+          <td><span class="tag tag-bear">CONT LOWER</span></td>
+          <td>16:05 (L)</td>
+        </tr>
+        <tr>
+          <td>Tue 02/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.16523</td>
+          <td class="price-cell bull-val">1.16286</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>23.6p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>17.2p</td>
+          <td><span class="tag tag-warn">HIGH SWEEP</span></td>
+          <td>11:05 (H)</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>38.8p</td>
+          <td><span class="tag tag-bear">CONT LOWER</span></td>
+          <td>17:00 (L)</td>
+        </tr>
+        <tr>
+          <td>Wed 03/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.16336</td>
+          <td class="price-cell bull-val">1.16124</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>21.2p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>27.9p</td>
+          <td><span class="tag tag-bull">LOW SWEEP</span></td>
+          <td>11:10 (L)</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>18.1p</td>
+          <td><span class="tag tag-bear">CONT LOWER</span></td>
+          <td>17:40 (L)</td>
+        </tr>
+        <tr>
+          <td>Thu 04/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.16152</td>
+          <td class="price-cell bull-val">1.16016</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>13.5p</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>46.6p</td>
+          <td><span class="tag tag-purple">BOTH SWEEP</span></td>
+          <td>L:10:35 → H:12:00</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>29.5p</td>
+          <td><span class="tag tag-neutral">INSIDE REV</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Fri 05/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.16229</td>
+          <td class="price-cell bull-val">1.16098</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>13.1p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>58.2p</td>
+          <td><span class="tag tag-purple">BOTH SWEEP</span></td>
+          <td>H:10:00 → L:15:35</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>81.5p</td>
+          <td><span class="tag tag-bear">CONT LOWER</span></td>
+          <td>16:00 (L)</td>
+        </tr>
+        <tr>
+          <td>Mon 08/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.15398</td>
+          <td class="price-cell bull-val">1.15119</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>28.0p</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>44.1p</td>
+          <td><span class="tag tag-purple">BOTH SWEEP</span></td>
+          <td>L:11:40 → H:14:20</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>27.1p</td>
+          <td><span class="tag tag-warn">JUDAS HIGH→SELL</span></td>
+          <td>16:00 (H)</td>
+        </tr>
+        <tr>
+          <td>Tue 09/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.15535</td>
+          <td class="price-cell bull-val">1.15272</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>26.3p</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>38.5p</td>
+          <td><span class="tag tag-warn">HIGH SWEEP</span></td>
+          <td>12:00 (H)</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>49.7p</td>
+          <td><span class="tag tag-warn">JUDAS HIGH→SELL</span></td>
+          <td>16:00 (H)</td>
+        </tr>
+        <tr>
+          <td>Wed 10/06</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td class="price-cell bear-val">1.15583</td>
+          <td class="price-cell bull-val">1.15331</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>25.2p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>29.4p</td>
+          <td><span class="tag tag-warn">HIGH SWEEP</span></td>
+          <td>10:15 (H)</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>38.7p</td>
+          <td><span class="tag tag-warn">JUDAS HIGH→SELL</span></td>
+          <td>16:35 (H)</td>
+        </tr>
+        <tr style="border-top: 2px solid var(--accent);">
+          <td><b style="color:var(--bull)">Thu 11/06</b></td>
+          <td><span class="tag tag-neutral">TURN</span></td>
+          <td class="price-cell bear-val">1.15562</td>
+          <td class="price-cell bull-val">1.15258</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>30.4p</td>
+          <td><span class="tag tag-bear">BEAR</span></td>
+          <td>39.1p</td>
+          <td><span class="tag tag-bull">LOW SWEEP</span></td>
+          <td>13:10 (L)</td>
+          <td><span class="tag tag-bull">BULL</span></td>
+          <td>86.9p</td>
+          <td><span class="tag tag-bull">JUDAS LOW→BUY</span></td>
+          <td>17:35 (L) → 20:30 (H)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Statistical patterns -->
+  <div class="card-grid card-grid-2" style="margin-top:12px;">
+    <div class="card">
+      <h4>London Session Statistical Patterns</h4>
+      <div class="level-row">
+        <span class="level-label">HIGH SWEEP JUDAS</span>
+        <span class="level-value accent-val">3/9 = 33% &nbsp; <span class="tag tag-warn">10:05–12:00</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">LOW SWEEP JUDAS</span>
+        <span class="level-value bull-val">2/9 = 22% &nbsp; <span class="tag tag-warn">10:30–13:10</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">BOTH SWEEP</span>
+        <span class="level-value purple-val">3/9 = 33% &nbsp; <span class="tag tag-neutral">mixed</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">INSIDE RANGE</span>
+        <span class="level-value muted" style="color:var(--muted)">1/9 = 11%</span>
+      </div>
+      <div class="level-row" style="margin-top:6px;">
+        <span class="level-label" style="color:var(--bull);font-weight:700;">HTF BULL context</span>
+        <span class="level-value warn-val">→ LOW SWEEP preferred</span>
+      </div>
+      <div style="margin-top:10px; padding-top:8px; border-top:1px solid var(--border); font-size:10px; color:var(--muted);">
+        Sweep timing: HIGH sweeps typically 10:00–12:00 EET. LOW sweeps typically 10:30–13:10 EET. BOTH SWEEP: low-first pattern (11:40→14:20 on Mon 08) most aligned with current bullish HTF.
+      </div>
+    </div>
+    <div class="card">
+      <h4>NY Session Statistical Patterns</h4>
+      <div class="level-row">
+        <span class="level-label">DIRECT CONTINUATION LOWER</span>
+        <span class="level-value bear-val">4/9 = 44% <span class="tag tag-neutral">(all bear days)</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">JUDAS HIGH THEN SELL</span>
+        <span class="level-value warn-val">3/9 = 33% <span class="tag tag-warn">16:00–16:35 sweep</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">JUDAS LOW THEN BUY</span>
+        <span class="level-value bull-val">1/9 = 11% <span class="tag tag-bull">(Thu 11 reversal)</span></span>
+      </div>
+      <div class="level-row">
+        <span class="level-label">INSIDE REVERSAL</span>
+        <span class="level-value muted" style="color:var(--muted)">1/9 = 11%</span>
+      </div>
+      <div class="level-row" style="margin-top:6px;">
+        <span class="level-label" style="color:var(--bull);font-weight:700;">HTF BULL context</span>
+        <span class="level-value bull-val">→ JUDAS LOW → BUY or CONT HIGHER</span>
+      </div>
+      <div style="margin-top:10px; padding-top:8px; border-top:1px solid var(--border); font-size:10px; color:var(--muted);">
+        NY sweep timing dominant: 16:00–17:55 EET (low sweep). NY high sweeps: 16:00–16:35 when JUDAS HIGH. NY range avg 47p, with outlier days (Fri 05: 81p, Thu 11: 87p) on high-volatility news sessions.
+      </div>
+    </div>
+  </div>
+
+  <!-- Key behavioral rules -->
+  <div class="card" style="margin-top:12px; border-color: rgba(0,212,255,0.2);">
+    <h4>Recurring Institutional Behaviors — Statistically Significant</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; font-size:11px; color:var(--neutral);">
+      <div>
+        <div style="color:var(--warn); font-weight:700; margin-bottom:4px;">LONDON RULES (confirmed 9/9 sessions)</div>
+        <div>① Asia range is swept at least on one side in 89% of sessions</div>
+        <div style="margin-top:3px;">② High sweeps concentrated 10:00–12:00 EET</div>
+        <div style="margin-top:3px;">③ Low sweeps concentrated 10:30–13:30 EET</div>
+        <div style="margin-top:3px;">④ London direction aligns with HTF bias in 7/9 sessions</div>
+        <div style="margin-top:3px;">⑤ BOTH SWEEP sessions create widest London ranges (44–58p)</div>
+      </div>
+      <div>
+        <div style="color:var(--purple); font-weight:700; margin-bottom:4px;">NY RULES (confirmed 9/9 sessions)</div>
+        <div>① NY sweeps London low in 6/9 sessions (67%) — dominant</div>
+        <div style="margin-top:3px;">② NY sweep of London high triggers at exactly 16:00 EET (3 times)</div>
+        <div style="margin-top:3px;">③ When London is bullish and HTF bearish → NY sells (Mon 08, Tue 09, Wed 10)</div>
+        <div style="margin-top:3px;">④ When London sweeps low late (13:10+) → NY reverses bullish (Thu 11)</div>
+        <div style="margin-top:3px;">⑤ NY low sweep timing range: 16:00–17:55 EET</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ DAY TRADES -->
+<div class="section">
+  <div class="section-title">Day Trade Setups — Max 5</div>
+
+  <!-- DT-1 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">DT-1 &nbsp;·&nbsp; LONG &nbsp;·&nbsp; <span class="tag tag-accent">London Open</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — Judas Low Sweep + Reversal</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-aplus">A+</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bull);">72%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-high" style="width:72%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15575–1.15620</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15470</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15754 (EQH)</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.15866 (Asia H)</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">3.2:1 / LONDON</div>
+      </div>
+    </div>
+    <div class="setup-rationale">London sweeps below Asia low (1.15616) as Judas manipulation (10:30–12:00 window). Entry in 1H OB / discount zone. Draw on liquidity = 1.15866 BSL then 1.15899. Highest probability setup aligned with new HTF bullish bias + statistical low-sweep pattern.</div>
+  </div>
+
+  <!-- DT-2 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">DT-2 &nbsp;·&nbsp; LONG &nbsp;·&nbsp; <span class="tag tag-accent">London Mid</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — 1H OB Retest After Internal BOS</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-a">A</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bull);">65%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-high" style="width:65%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15650–1.15710</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15570</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15866</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.15899</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">2.8:1 / LONDON</div>
+      </div>
+    </div>
+    <div class="setup-rationale">If London opens bullish (no low sweep), entry on 5M CHoCH confirmation within 1H OB zone (1.15616–1.15703). Valid if price holds above Asia low and shows bullish displacement. Activates on 5M BOS above 1.15754 equal highs.</div>
+  </div>
+
+  <!-- DT-3 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">DT-3 &nbsp;·&nbsp; LONG &nbsp;·&nbsp; <span class="tag tag-accent">London</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — BOS Above Asia High</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-b">B</div>
+        <div style="font-size:18px; font-weight:800; color:var(--warn);">60%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-med" style="width:60%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15870–1.15905</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15790</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15980</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.16068</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">2.1:1 / LONDON–NY</div>
+      </div>
+    </div>
+    <div class="setup-rationale">Breakout continuation above 1.15899 BSL. Requires clean 1H BOS, not a spike. Valid only after DT-1 or DT-2 plays out and HTF momentum is confirmed. Lower probability as entry is in premium zone.</div>
+  </div>
+
+  <!-- DT-4 -->
+  <div class="setup-card bear">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">DT-4 &nbsp;·&nbsp; SHORT &nbsp;·&nbsp; <span class="tag tag-warn">NY Open</span></div>
+        <div class="setup-dir" style="color:var(--bear);">▼ SHORT — NY Judas High Sweep</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-b">B</div>
+        <div style="font-size:18px; font-weight:800; color:var(--warn);">52%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-med" style="width:52%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bear-val">1.15890–1.15940</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bull-val">1.15990</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15720</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.15580</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">2.0:1 / NY</div>
+      </div>
+    </div>
+    <div class="setup-rationale">Statistical NY Judas high pattern (33% of sessions, 16:00 EET sweep). Conditional on London closing bullish near 1.15866–1.15899. Conflicts with HTF bullish bias — lower conviction. Intraday fade only, not swing.</div>
+  </div>
+
+  <!-- DT-5 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">DT-5 &nbsp;·&nbsp; LONG &nbsp;·&nbsp; <span class="tag tag-warn">NY Early</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — NY Sweep London Low + Buy</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-b">B</div>
+        <div style="font-size:18px; font-weight:800; color:var(--warn);">55%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-med" style="width:55%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">Depends on London low</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">London low – 15p</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">London midpoint</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">London high</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">2.5:1 / NY 16–18</div>
+      </div>
+    </div>
+    <div class="setup-rationale">NY sweeps London session low (16:00–17:55 window, confirmed 6/9 sessions). Entry on 5M CHoCH after sweep. Aligned with HTF bullish. Level TBD after London develops. Watch 16:00–17:30 EET for sweep spike.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ SWING TRADES -->
+<div class="section">
+  <div class="section-title">Swing Trade Setups — Max 5</div>
+
+  <!-- SW-1 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">SW-1 &nbsp;·&nbsp; LONG SWING &nbsp;·&nbsp; <span class="tag tag-bull">HIGH PROB</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — 1H OB / FVG Demand Zone</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-a">A</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bull);">70%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-high" style="width:70%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15414–1.15550</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15160</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15899</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.16068</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">3.8:1 / Any</div>
+      </div>
+    </div>
+    <div class="setup-rationale">1H FVG + bullish OB confluence zone. Deep pullback entry on any intraday London/NY flush. Backed by HTF CHoCH and institutional reversal from Jun 11.</div>
+  </div>
+
+  <!-- SW-2 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">SW-2 &nbsp;·&nbsp; LONG SWING &nbsp;·&nbsp; <span class="tag tag-aplus" style="background:rgba(0,229,160,0.15);color:var(--aplus);">BEST RISK/REWARD</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — 4H Bullish OB (HTF Reversal Base)</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-aplus">A+</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bull);">75%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-high" style="width:75%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15073–1.15250</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15010</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15866</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.16200+</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">6.5:1 / Any</div>
+      </div>
+    </div>
+    <div class="setup-rationale">4H Bullish OB from Jun 11 16:00 bar (the last bearish H4 candle before 87-pip reversal). Strongest HTF demand zone. Deep swing entry, requires patience. Invalidation below sweep low structure.</div>
+  </div>
+
+  <!-- SW-3 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">SW-3 &nbsp;·&nbsp; LONG SWING &nbsp;·&nbsp; <span class="tag tag-accent">Breakout</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — Continuation Above 1.15899 BSL</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-b">B</div>
+        <div style="font-size:18px; font-weight:800; color:var(--warn);">60%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-med" style="width:60%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15900–1.15950</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15690</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.16200</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.16453</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">2.5:1 / London–NY</div>
+      </div>
+    </div>
+    <div class="setup-rationale">If 1.15899 BSL is swept and price consolidates above with 4H BOS confirmation → swing long continuation. Next major draw = Jun 4 high at 1.16453. Entry on pullback to 1.15866 zone.</div>
+  </div>
+
+  <!-- SW-4 -->
+  <div class="setup-card bear">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">SW-4 &nbsp;·&nbsp; SHORT SWING &nbsp;·&nbsp; <span class="tag tag-neutral">Low Prob</span></div>
+        <div class="setup-dir" style="color:var(--bear);">▼ SHORT — HTF Resistance Rejection</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-c">C</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bear);">38%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-low" style="width:38%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bear-val">1.15880–1.15940</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bull-val">1.15990</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.15550</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.15164</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">3.0:1 / Any</div>
+      </div>
+    </div>
+    <div class="setup-rationale">Counter-HTF swing short. Valid only if 1.15899 produces strong 4H rejection with bearish engulfing and 1H CHoCH. Conflicts with dominant bullish structure. Low conviction — avoid unless clear structural failure.</div>
+  </div>
+
+  <!-- SW-5 -->
+  <div class="setup-card bull">
+    <div class="setup-header">
+      <div>
+        <div class="setup-id">SW-5 &nbsp;·&nbsp; LONG SWING &nbsp;·&nbsp; <span class="tag tag-accent">Multi-week</span></div>
+        <div class="setup-dir" style="color:var(--bull);">▲ LONG — Macro Continuation to 1.16650</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="grade grade-b">B</div>
+        <div style="font-size:18px; font-weight:800; color:var(--bull);">58%</div>
+        <div class="prob-bar-wrap" style="width:80px;"><div class="prob-bar prob-high" style="width:58%;"></div></div>
+      </div>
+    </div>
+    <div class="setup-grid">
+      <div class="setup-field">
+        <label>Entry Zone</label>
+        <div class="val bull-val">1.15414–1.15616</div>
+      </div>
+      <div class="setup-field">
+        <label>Invalidation</label>
+        <div class="val bear-val">1.15020</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 1</label>
+        <div class="val accent-val">1.16068</div>
+      </div>
+      <div class="setup-field">
+        <label>Target 2</label>
+        <div class="val accent-val">1.16650 (macro)</div>
+      </div>
+      <div class="setup-field">
+        <label>RR / Session</label>
+        <div class="val gold-val">8.0:1 / Weekly</div>
+      </div>
+    </div>
+    <div class="setup-rationale">Multi-week macro long targeting full retrace of Jun 1–8 sell-off. Built around 4H OB zone with scale-in approach. Requires HTF bullish confirmation via 1W close above 1.15899.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ CONCLUSION -->
+<div class="section">
+  <div class="section-title">Conclusion</div>
+  <div class="card-grid" style="grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:14px;">
+    <div class="scenario-card" style="border-color:rgba(0,229,160,0.3);">
+      <div class="sc-label" style="color:var(--bull);">🎯 Most Likely Scenario (60%)</div>
+      <div class="sc-text">London opens at 10:00 EET. Initial sweep below Asia low (1.15616) between 10:30–12:00, touching the 1.15575–1.15620 demand zone. Price then reverses bullish, runs above 1.15754 equal highs, targets Asia high 1.15866. NY session either extends to 1.15899 or sweeps London low before bull continuation.</div>
+    </div>
+    <div class="scenario-card" style="border-color:rgba(255,179,71,0.3);">
+      <div class="sc-label" style="color:var(--warn);">⚡ Alternative Scenario (28%)</div>
+      <div class="sc-text">London opens bullish directly. Sweeps Asia high (1.15866) at the open (10:00–10:30), spike to 1.15899 BSL. Price then pulls back to 1.15700–1.15750 and consolidates. NY either continues higher to 1.16068 or reverses as JUDAS HIGH pattern (16:00 EET).</div>
+    </div>
+    <div class="scenario-card" style="border-color:rgba(255,77,109,0.2);">
+      <div class="sc-label" style="color:var(--bear);">⚠ Low Probability Scenario (12%)</div>
+      <div class="sc-text">London breaks aggressively below 1.15550 without reversal. Price loses the 1H OB and retests Jun 11 London low at 1.15164. This would signal institutional re-entry into bearish flow. Requires strong fundamental catalyst (news event). HTF CHoCH would be questioned above 1.15020 only.</div>
+    </div>
+  </div>
+
+  <!-- Best single trade -->
+  <div class="best-trade">
+    <h3>⭐ Best Single Trade Idea</h3>
+    <div style="display:grid; grid-template-columns:1fr 2fr; gap:20px;">
+      <div>
+        <div class="level-row">
+          <span class="level-label">Setup ID</span>
+          <span class="level-value bull-val">DT-1</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Direction</span>
+          <span class="bias-tag bull">LONG</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Grade</span>
+          <span class="grade grade-aplus" style="font-size:20px;">A+</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Probability</span>
+          <span class="level-value bull-val">72%</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Entry</span>
+          <span class="level-value accent-val">1.15575–1.15620</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Stop</span>
+          <span class="level-value bear-val">1.15470</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Target 1</span>
+          <span class="level-value accent-val">1.15754</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Target 2</span>
+          <span class="level-value accent-val">1.15866</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">RR</span>
+          <span class="level-value gold-val">3.2:1</span>
+        </div>
+        <div class="level-row">
+          <span class="level-label">Session</span>
+          <span class="level-value warn-val">LONDON 10:30–12:00</span>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--neutral); line-height:1.8;">
+        <p><b style="color:var(--bull);">Thesis:</b> Buy the London Judas sweep of Asia low. The HTF has flipped bullish after Jun 11's decisive CHoCH. The dominant statistical London pattern (89% sweep of at least one Asia extreme) strongly supports a manipulation move below 1.15616 before reversal. The 1H OB zone (1.15616–1.15703) + H4 FVG below provide a deep structural demand area. Draw on liquidity is clear: 1.15866 and 1.15899 BSL clusters above.</p>
+        <p style="margin-top:8px;"><b style="color:var(--warn);">Execution:</b> Wait for London open (10:00 EET). Do not enter before. Monitor 5M for sweep below 1.15616 → wait for 5M bearish wick + CHoCH (higher high on 5M) before entering long. Scale out 50% at 1.15754, remaining at 1.15866.</p>
+        <p style="margin-top:8px;"><b style="color:var(--bear);">Invalidation:</b> Sustained candle close below 1.15470 on 5M without recovery. In that case, reassess at 1.15414 FVG or 1.15250 H4 OB for re-entry.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Probability weighting legend -->
+  <div class="card" style="margin-top:12px;">
+    <h4>Probability Weighting Methodology</h4>
+    <div style="margin-top:8px;">
+      <div class="weight-row"><span class="weight-label">HTF Bias (4H)</span><div class="weight-bar"><div class="weight-fill" style="width:40%;"></div></div><span class="weight-pct">40%</span></div>
+      <div class="weight-row"><span class="weight-label">Liquidity Alignment</span><div class="weight-bar"><div class="weight-fill" style="width:20%; background:var(--bull);"></div></div><span class="weight-pct" style="color:var(--bull);">20%</span></div>
+      <div class="weight-row"><span class="weight-label">Structure Quality</span><div class="weight-bar"><div class="weight-fill" style="width:15%; background:var(--warn);"></div></div><span class="weight-pct" style="color:var(--warn);">15%</span></div>
+      <div class="weight-row"><span class="weight-label">OB Quality</span><div class="weight-bar"><div class="weight-fill" style="width:15%; background:var(--purple);"></div></div><span class="weight-pct" style="color:var(--purple);">15%</span></div>
+      <div class="weight-row"><span class="weight-label">FVG Quality</span><div class="weight-bar"><div class="weight-fill" style="width:10%; background:var(--gold);"></div></div><span class="weight-pct" style="color:var(--gold);">10%</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center; padding:16px 0 8px; font-size:10px; color:var(--muted); letter-spacing:0.5px;">
+  EURUSD Institutional SMC Report · Generated 12 Jun 2026 07:20 EET · Data: 9 sessions Jun 1–11 2026 · Analysis: 4H / 1H / 5M stack · This is not financial advice.
+</div>
+
+</div>
+</body>
+</html>
