@@ -3,991 +3,472 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GER40 SMC Analysis | 2026-06-15 | Asia Pre-London</title>
+<title>GER40 SMC | 2026-06-15 | 09:10 EET Pre-London UPDATED</title>
 <style>
   :root {
-    --bg: #0d0f14;
-    --surface: #13161d;
-    --surface2: #1a1e28;
-    --border: #232838;
-    --border2: #2e3548;
-    --bull: #00e5a0;
-    --bear: #ff4d6d;
-    --neutral: #f0c040;
-    --accent: #4d94ff;
-    --accent2: #a855f7;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --dim: #94a3b8;
-    --a-plus: #00e5a0;
-    --a: #4d94ff;
-    --b: #f0c040;
-    --c: #ff7043;
+    --bg:#0d0f14;--surface:#13161d;--surface2:#1a1e28;--border:#232838;--border2:#2e3548;
+    --bull:#00e5a0;--bear:#ff4d6d;--neutral:#f0c040;--accent:#4d94ff;--accent2:#a855f7;
+    --text:#e2e8f0;--muted:#64748b;--dim:#94a3b8;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 13px; line-height: 1.6; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:13px;line-height:1.6;}
 
-  .header {
-    background: linear-gradient(135deg, #0d1520 0%, #111827 50%, #0d1520 100%);
-    border-bottom: 1px solid var(--border2);
-    padding: 24px 32px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .header-left h1 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: 0.05em; }
-  .header-left p { color: var(--muted); font-size: 11px; margin-top: 4px; letter-spacing: 0.08em; }
-  .header-right { text-align: right; }
-  .price-now { font-size: 28px; font-weight: 800; color: var(--bull); }
-  .price-label { color: var(--muted); font-size: 10px; letter-spacing: 0.1em; margin-top: 2px; }
+  .header{background:linear-gradient(135deg,#0d1520,#111827,#0d1520);border-bottom:1px solid var(--border2);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;}
+  .header h1{font-size:17px;font-weight:700;letter-spacing:0.05em;}
+  .header p{color:var(--muted);font-size:10px;margin-top:3px;letter-spacing:0.08em;}
+  .hright{text-align:right;}
+  .pnow{font-size:28px;font-weight:800;color:var(--bear);}
+  .psub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.1em;}
 
-  .session-banner {
-    background: #0f172a;
-    border-bottom: 1px solid var(--border);
-    padding: 8px 32px;
-    display: flex; gap: 32px; align-items: center;
-  }
-  .session-item { display: flex; gap: 8px; align-items: center; font-size: 11px; }
-  .session-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .dot-asia { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); }
-  .dot-london { background: var(--neutral); }
-  .dot-ny { background: var(--bear); }
-  .session-active { color: var(--accent2); font-weight: 700; }
-  .session-pending { color: var(--muted); }
+  .alert{background:linear-gradient(90deg,rgba(255,77,109,0.1),rgba(255,77,109,0.04));border-bottom:1px solid rgba(255,77,109,0.3);padding:8px 28px;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--bear);letter-spacing:0.05em;}
+  .adot{width:8px;height:8px;border-radius:50%;background:var(--bear);box-shadow:0 0 6px var(--bear);animation:pulse 1.5s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
 
-  .main { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
+  .sbar{background:#0f172a;border-bottom:1px solid var(--border);padding:7px 28px;display:flex;gap:28px;font-size:11px;}
+  .si{display:flex;gap:7px;align-items:center;}
+  .sd{width:7px;height:7px;border-radius:50%;}
+  .sd-a{background:var(--accent2);box-shadow:0 0 5px var(--accent2);}
+  .sd-l{background:var(--neutral);}
+  .sa{color:var(--accent2);font-weight:700;}
+  .sp{color:var(--muted);}
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-  .grid-full { margin-bottom: 16px; }
+  .main{max-width:1360px;margin:0 auto;padding:20px 28px;}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+  .gf{margin-bottom:14px;}
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 20px;
-  }
-  .card-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-title { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
-  .card-badge {
-    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.06em;
-  }
-  .badge-bull { background: rgba(0,229,160,0.12); color: var(--bull); border: 1px solid rgba(0,229,160,0.25); }
-  .badge-bear { background: rgba(255,77,109,0.12); color: var(--bear); border: 1px solid rgba(255,77,109,0.25); }
-  .badge-neutral { background: rgba(240,192,64,0.12); color: var(--neutral); border: 1px solid rgba(240,192,64,0.25); }
-  .badge-info { background: rgba(77,148,255,0.12); color: var(--accent); border: 1px solid rgba(77,148,255,0.25); }
-  .badge-asia { background: rgba(168,85,247,0.12); color: var(--accent2); border: 1px solid rgba(168,85,247,0.25); }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+  .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+  .ct{font-size:9px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--muted);}
+  .cb{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:0.05em;}
+  .bb{background:rgba(0,229,160,0.1);color:var(--bull);border:1px solid rgba(0,229,160,0.22);}
+  .rb{background:rgba(255,77,109,0.1);color:var(--bear);border:1px solid rgba(255,77,109,0.22);}
+  .nb{background:rgba(240,192,64,0.1);color:var(--neutral);border:1px solid rgba(240,192,64,0.22);}
+  .ab{background:rgba(77,148,255,0.1);color:var(--accent);border:1px solid rgba(77,148,255,0.22);}
+  .pb2{background:rgba(168,85,247,0.1);color:var(--accent2);border:1px solid rgba(168,85,247,0.22);}
 
-  .level-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(35,40,56,0.6);
-    font-size: 12px;
-  }
-  .level-row:last-child { border-bottom: none; }
-  .level-label { color: var(--muted); font-size: 11px; }
-  .level-val { font-weight: 600; }
-  .bull-val { color: var(--bull); }
-  .bear-val { color: var(--bear); }
-  .neutral-val { color: var(--neutral); }
-  .accent-val { color: var(--accent); }
-  .purple-val { color: var(--accent2); }
+  .lr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(35,40,56,0.55);font-size:12px;}
+  .lr:last-child{border-bottom:none;}
+  .ll{color:var(--muted);font-size:11px;}
+  .lv{font-weight:600;}
+  .bv{color:var(--bull);}.rv{color:var(--bear);}.nv{color:var(--neutral);}.av{color:var(--accent);}.pv{color:var(--accent2);}
 
-  .bias-block {
-    background: var(--surface2);
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-top: 10px;
-  }
+  .sec{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;display:flex;align-items:center;gap:10px;}
+  .sec::after{content:'';flex:1;height:1px;background:var(--border);}
 
-  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-  .stat-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    text-align: center;
-  }
-  .stat-num { font-size: 20px; font-weight: 800; }
-  .stat-label { font-size: 9px; color: var(--muted); margin-top: 2px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .exec{background:linear-gradient(135deg,#0f172a,#111827);border:1px solid var(--border2);border-radius:8px;padding:16px 20px;margin-bottom:18px;display:flex;gap:18px;}
+  .em{flex:1;}
+  .em h2{font-size:13px;font-weight:700;margin-bottom:7px;}
+  .em p{font-size:11px;color:var(--dim);line-height:1.75;}
+  .ediv{width:1px;background:var(--border2);}
+  .es{width:175px;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+  .ekv{display:flex;justify-content:space-between;font-size:10px;}
+  .ek{color:var(--muted);}
+  .ev{font-weight:700;}
 
-  .liq-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-  .liq-table th { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border2); }
-  .liq-table td { padding: 7px 8px; font-size: 12px; border-bottom: 1px solid rgba(35,40,56,0.5); }
-  .liq-table tr:last-child td { border-bottom: none; }
-  .prob-high { color: var(--bull); font-weight: 700; }
-  .prob-med { color: var(--neutral); font-weight: 700; }
-  .prob-low { color: var(--muted); }
+  .flow{background:var(--surface2);border-radius:6px;padding:11px 13px;margin-top:8px;}
+  .fr{display:flex;gap:10px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(35,40,56,0.4);}
+  .fr:last-child{border-bottom:none;}
+  .ft{color:var(--muted);width:50px;flex-shrink:0;}
+  .fc{flex:1;color:var(--dim);}
+  .fc .b{color:var(--bull);font-weight:700;}
+  .fc .r{color:var(--bear);font-weight:700;}
+  .fc .n{color:var(--neutral);font-weight:700;}
+  .fc .a{color:var(--accent);font-weight:700;}
 
-  .setup-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin-bottom: 12px;
-    position: relative;
-    overflow: hidden;
-  }
-  .setup-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 100%;
-  }
-  .setup-bull::before { background: var(--bull); }
-  .setup-bear::before { background: var(--bear); }
+  .liq-t{width:100%;border-collapse:collapse;margin-top:8px;}
+  .liq-t th{font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border2);}
+  .liq-t td{padding:7px 8px;font-size:12px;border-bottom:1px solid rgba(35,40,56,0.5);}
+  .liq-t tr:last-child td{border-bottom:none;}
+  .ph{color:var(--bull);font-weight:700;}
+  .pm{color:var(--neutral);font-weight:700;}
+  .pl{color:var(--muted);}
+  .tag{font-size:9px;font-weight:700;letter-spacing:0.05em;padding:1px 6px;border-radius:3px;}
+  .t-bsl{background:rgba(0,229,160,0.13);color:var(--bull);}
+  .t-ssl{background:rgba(255,77,109,0.13);color:var(--bear);}
+  .t-fvg{background:rgba(77,148,255,0.13);color:var(--accent);}
+  .t-ob{background:rgba(168,85,247,0.13);color:var(--accent2);}
+  .t-eq{background:rgba(240,192,64,0.13);color:var(--neutral);}
 
-  .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .setup-id { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted); }
-  .setup-meta { display: flex; gap: 8px; align-items: center; }
-  .grade { font-size: 13px; font-weight: 800; }
-  .grade-aplus { color: var(--bull); }
-  .grade-a { color: var(--accent); }
-  .grade-b { color: var(--neutral); }
-  .grade-c { color: var(--muted); }
-  .prob-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; background: rgba(77,148,255,0.15); color: var(--accent); }
+  .sc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
+  .sc::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+  .sb-l::before{background:var(--bull);}
+  .sb-r::before{background:var(--bear);}
+  .sh2{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .sid{font-size:10px;font-weight:700;letter-spacing:0.09em;color:var(--muted);}
+  .smeta{display:flex;gap:7px;align-items:center;}
+  .gr{font-size:13px;font-weight:800;}
+  .g-ap{color:var(--bull);}.g-a{color:var(--accent);}.g-b{color:var(--neutral);}.g-c{color:var(--muted);}
+  .pbd{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;background:rgba(77,148,255,0.13);color:var(--accent);}
+  .sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px;}
+  .sf{background:var(--surface2);border-radius:4px;padding:7px 9px;}
+  .sfl{font-size:9px;color:var(--muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:2px;}
+  .sfv{font-size:12px;font-weight:600;}
+  .rat{font-size:11px;color:var(--dim);background:var(--surface2);border-radius:4px;padding:8px 10px;border-left:2px solid var(--border2);}
 
-  .setup-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-  .setup-field { background: var(--surface2); border-radius: 4px; padding: 7px 10px; }
-  .sf-label { font-size: 9px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
-  .sf-val { font-size: 12px; font-weight: 600; }
+  .cb3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+  .cbox{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:12px 14px;}
+  .cl{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:5px;}
+  .ct2{font-size:11px;color:var(--dim);line-height:1.7;}
+  .cp .cl{color:var(--neutral);}.ca .cl{color:var(--bear);}.clo .cl{color:var(--muted);}
 
-  .rationale { font-size: 11px; color: var(--dim); background: var(--surface2); border-radius: 4px; padding: 8px 10px; margin-top: 8px; border-left: 2px solid var(--border2); }
+  .conflict-box{background:linear-gradient(135deg,rgba(240,192,64,0.07),rgba(77,148,255,0.04));border:1px solid rgba(240,192,64,0.28);border-radius:8px;padding:16px 18px;margin-bottom:14px;}
+  .conflict-title{font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--neutral);text-transform:uppercase;margin-bottom:8px;}
+  .conflict-body{font-size:11px;color:var(--dim);line-height:1.8;}
+  .conflict-body strong{color:var(--neutral);}
+  .conflict-body .bhl{color:var(--bull);font-weight:700;}
+  .conflict-body .rhl{color:var(--bear);font-weight:700;}
 
-  .behavior-row {
-    background: var(--surface2);
-    border-radius: 6px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .beh-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
-  .beh-content { flex: 1; }
-  .beh-title { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-  .beh-stat { font-size: 11px; color: var(--dim); }
-  .beh-highlight { color: var(--bull); font-weight: 700; }
-  .beh-warn { color: var(--bear); font-weight: 700; }
-  .beh-neutral { color: var(--neutral); font-weight: 700; }
+  .best{background:linear-gradient(135deg,rgba(0,229,160,0.07),rgba(77,148,255,0.06));border:1px solid rgba(0,229,160,0.28);border-radius:8px;padding:18px;margin-top:12px;}
+  .bl{font-size:10px;font-weight:700;letter-spacing:0.12em;color:var(--bull);text-transform:uppercase;margin-bottom:8px;}
+  .bc{font-size:13px;color:var(--text);line-height:1.8;}
+  .bc span{color:var(--bull);font-weight:700;}
+  .bc .r{color:var(--bear);font-weight:700;}
 
-  .conclusion-box {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-  }
-  .conc-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
-  .conc-text { font-size: 12px; color: var(--dim); line-height: 1.7; }
-  .conc-primary .conc-label { color: var(--bull); }
-  .conc-alt .conc-label { color: var(--neutral); }
-  .conc-low .conc-label { color: var(--muted); }
+  .ib-box{background:var(--surface2);border-radius:6px;padding:11px 13px;margin-top:8px;}
+  .ib-row{display:flex;gap:10px;padding:5px 0;font-size:11px;border-bottom:1px solid rgba(35,40,56,0.4);}
+  .ib-row:last-child{border-bottom:none;}
+  .ib-k{color:var(--muted);width:200px;flex-shrink:0;}
+  .ib-v{flex:1;color:var(--dim);}
 
-  .best-trade {
-    background: linear-gradient(135deg, rgba(0,229,160,0.07) 0%, rgba(77,148,255,0.07) 100%);
-    border: 1px solid rgba(0,229,160,0.3);
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 14px;
-  }
-  .best-trade-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--bull); text-transform: uppercase; margin-bottom: 10px; }
-  .best-trade-content { font-size: 13px; color: var(--text); line-height: 1.8; }
-  .best-trade-content span { color: var(--bull); font-weight: 700; }
+  .footer{border-top:1px solid var(--border);padding:14px 28px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);letter-spacing:0.06em;margin-top:28px;}
 
-  .section-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--muted); margin: 20px 0 10px 0;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .upd-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:rgba(0,229,160,0.12);color:var(--bull);border:1px solid rgba(0,229,160,0.25);margin-left:8px;letter-spacing:0.06em;}
 
-  .exec-banner {
-    background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 18px 22px;
-    margin-bottom: 20px;
-    display: flex; gap: 20px; align-items: stretch;
-  }
-  .exec-main { flex: 1; }
-  .exec-main h2 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--bull); }
-  .exec-main p { font-size: 12px; color: var(--dim); line-height: 1.7; }
-  .exec-divider { width: 1px; background: var(--border2); }
-  .exec-side { width: 180px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
-  .exec-kv { display: flex; justify-content: space-between; font-size: 11px; }
-  .exec-k { color: var(--muted); }
-  .exec-v { font-weight: 700; }
-
-  .asia-range-bar {
-    background: var(--surface2);
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-top: 10px;
-  }
-  .range-visual {
-    display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px;
-  }
-  .range-bar-wrap { flex: 1; background: var(--border); border-radius: 3px; height: 8px; position: relative; }
-  .range-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent)); }
-  .range-cursor {
-    position: absolute; top: -3px;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--bull); border: 2px solid var(--bg);
-    box-shadow: 0 0 8px var(--bull);
-    transform: translateX(-7px);
-  }
-  .tag-small {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
-    padding: 1px 6px; border-radius: 3px;
-  }
-  .tag-fvg { background: rgba(77,148,255,0.15); color: var(--accent); }
-  .tag-ob { background: rgba(168,85,247,0.15); color: var(--accent2); }
-  .tag-bsl { background: rgba(0,229,160,0.15); color: var(--bull); }
-  .tag-ssl { background: rgba(255,77,109,0.15); color: var(--bear); }
-  .tag-sweep { background: rgba(240,192,64,0.15); color: var(--neutral); }
-
-  .update-notice { 
-    background: rgba(77,148,255,0.05); border: 1px solid rgba(77,148,255,0.2);
-    border-radius: 6px; padding: 10px 14px; margin-top: 14px;
-    font-size: 11px; color: var(--muted);
-  }
-  .update-notice strong { color: var(--accent); }
-
-  .footer {
-    border-top: 1px solid var(--border);
-    padding: 16px 32px;
-    display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--muted); letter-spacing: 0.06em;
-    margin-top: 32px;
-  }
+  .lh-seq{font-family:inherit;font-size:11px;color:var(--dim);background:var(--surface2);border-radius:4px;padding:9px 12px;margin-top:8px;line-height:1.8;}
+  .lh-seq .r{color:var(--bear);font-weight:700;}
+  .lh-seq .b{color:var(--bull);font-weight:700;}
+  .lh-seq .n{color:var(--neutral);font-weight:700;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-left">
-    <h1>GER40 &mdash; SMC INSTITUTIONAL ANALYSIS</h1>
-    <p>MONDAY 2026-06-15 &bull; PRE-LONDON PREPARATION &bull; ASIA SESSION ACTIVE &bull; 05:00 EET</p>
+  <div>
+    <h1>GER40 &mdash; SMC PRE-LONDON UPDATE <span class="upd-badge">UPDATED 09:10</span></h1>
+    <p>MONDAY 2026-06-15 &bull; 09:10 EET &bull; T-50 MIN TO LONDON OPEN &bull; ASIA CLOSING &bull; HTF BULLISH</p>
   </div>
-  <div class="header-right">
-    <div class="price-now">25,023</div>
-    <div class="price-label">CURRENT PRICE (05:00 EET)</div>
+  <div class="hright">
+    <div class="pnow">24,999</div>
+    <div class="psub">09:10 EET &bull; 5M BEARISH CHoCH &bull; EQUAL LOWS BROKEN</div>
   </div>
 </div>
 
-<div class="session-banner">
-  <div class="session-item">
-    <div class="session-dot dot-asia"></div>
-    <span class="session-active">ASIA &mdash; ACTIVE (02:00&ndash;10:00 EET)</span>
-  </div>
-  <div class="session-item">
-    <div class="session-dot dot-london"></div>
-    <span class="session-pending">LONDON &mdash; IN 5H (10:00 EET)</span>
-  </div>
-  <div class="session-item">
-    <div class="session-dot dot-ny"></div>
-    <span class="session-pending">NEW YORK &mdash; IN 11H (16:00 EET)</span>
-  </div>
+<div class="alert">
+  <div class="adot"></div>
+  <span>5M CHoCH BEARISH CONFIRMED 09:10 &mdash; BROKE BELOW EQUAL LOWS 24991&ndash;25001 &mdash; ASIA HIGH 25082.5 UNTOUCHED (BSL) &mdash; CONFLICTING HTF vs 5M BIAS</span>
+</div>
+
+<div class="sbar">
+  <div class="si"><div class="sd sd-a"></div><span class="sa">ASIA &mdash; CLOSING (02:00&ndash;10:00 EET)</span></div>
+  <div class="si"><div class="sd sd-l"></div><span class="sp">LONDON &mdash; IN 50 MIN (10:00 EET)</span></div>
 </div>
 
 <div class="main">
 
-  <!-- EXECUTIVE SUMMARY -->
-  <div class="exec-banner">
-    <div class="exec-main">
-      <h2>EXECUTIVE SUMMARY</h2>
-      <p>HTF bias flipped BULLISH on Thu Jun 11 (CHoCH from 23,950). Sunday gap + impulse drove GER40 from 24,671 to 25,082 in a single 4H candle (+411 pts). Asia session is actively printing a consolidation range between <strong style="color:var(--bull)">24,905 &ndash; 25,082</strong>. Unfilled 1H FVG sits below at 24,671&ndash;24,907. London opens in ~5 hours. Statistical model (45 sessions) shows 77% probability London sweeps Asia High, most likely at 10:00&ndash;10:10 EET. Monday BULLISH bias historically leads to DIRECT_CONTINUATION_HIGHER in NY 40% of the time. Primary scenario: London HIGH_SWEEP_JUDAS above 25,082 then return to 25,000&ndash;25,020 OB/FVG, NY continuation toward 25,325 BSL.</p>
-    </div>
-    <div class="exec-divider"></div>
-    <div class="exec-side">
-      <div class="exec-kv"><span class="exec-k">HTF BIAS</span><span class="exec-v bull-val">BULLISH</span></div>
-      <div class="exec-kv"><span class="exec-k">STRUCTURE</span><span class="exec-v bull-val">BOS CONFIRMED</span></div>
-      <div class="exec-kv"><span class="exec-k">SESSION</span><span class="exec-v purple-val">ASIA ACTIVE</span></div>
-      <div class="exec-kv"><span class="exec-k">ASIA H</span><span class="exec-v bull-val">25,082.5</span></div>
-      <div class="exec-kv"><span class="exec-k">ASIA L</span><span class="exec-v bear-val">24,905.0</span></div>
-      <div class="exec-kv"><span class="exec-k">ASIA RANGE</span><span class="exec-v neutral-val">177.5 pts</span></div>
-      <div class="exec-kv"><span class="exec-k">MODEL n</span><span class="exec-v">47 sessions</span></div>
+  <!-- KEY CONFLICT -->
+  <div class="conflict-box">
+    <div class="conflict-title">&#9888; HTF vs 5M STRUCTURAL CONFLICT &mdash; READ BEFORE TRADING</div>
+    <div class="conflict-body">
+      <strong>HTF BULLISH</strong> (4H CHoCH Jun 11, IB model 77% Asia High sweep) is in direct conflict with the <strong class="rhl">current 5M bearish CHoCH</strong> printed at 09:10 EET. Price broke below equal lows (24991&ndash;25001) and is currently at 24999. Two competing narratives must be resolved at London open. <br><br>
+      <strong class="bhl">Bull case:</strong> This is the LOW_SWEEP_JUDAS setup &mdash; London opens at 10:00 and sweeps SSL below 24991 first, engineers the run to the downside, then flips and drives through Asia High 25082. This is the HIGHEST probability scenario per IB model (BULLISH Monday + LOW sweep = continuation higher).<br><br>
+      <strong class="rhl">Bear case:</strong> 5M/1H distribution is complete. LH sequence from 25082 &rarr; 25069 &rarr; 25061 (5.5h of lower highs). London confirms bearish structure, drives to Asia Low 24905. Wait for confirmation &mdash; do NOT fight the momentum blindly in either direction.
     </div>
   </div>
 
-  <!-- 4H BIAS + 1H EXECUTION -->
-  <div class="section-label">MULTI-TIMEFRAME BIAS</div>
-  <div class="grid-2">
+  <!-- EXEC SUMMARY -->
+  <div class="exec">
+    <div class="em">
+      <h2 style="color:var(--neutral);">EXECUTIVE SUMMARY &mdash; DUAL SCENARIO PRE-LONDON</h2>
+      <p>GER40 opened Monday with a 243pt gap impulse (24671 &rarr; 24914) at 01:05 EET. Asia session set its HIGH at 03:30 (25082.5) after a second impulse, then entered 5.5 hours of distribution. At 09:10 EET, price broke below equal lows (24991&ndash;25001) confirming a <strong style="color:var(--bear)">5M bearish CHoCH</strong>. However, the <strong style="color:var(--bull)">HTF 4H bias remains BULLISH</strong> and the IB model shows Monday BULLISH sessions most often produce HIGH_SWEEP_JUDAS or a LOW_SWEEP_JUDAS before continuation higher. Asia High 25082.5 remains the <strong style="color:var(--bull)">primary BSL unswept</strong>. The critical decision at London open: does London sweep SSL (24905&ndash;24991 zone) and reverse bullish, or confirm bearish and target Asia Low? Wait for the first 5M candle after 10:00 for directional confirmation.</p>
+    </div>
+    <div class="ediv"></div>
+    <div class="es">
+      <div class="ekv"><span class="ek">HTF BIAS</span><span class="ev bv">BULLISH</span></div>
+      <div class="ekv"><span class="ek">5M STRUCT</span><span class="ev rv">BEARISH CHoCH</span></div>
+      <div class="ekv"><span class="ek">ASIA HIGH</span><span class="ev rv">25,082.5 (BSL)</span></div>
+      <div class="ekv"><span class="ek">ASIA LOW</span><span class="ev bv">24,905.0 (SSL)</span></div>
+      <div class="ekv"><span class="ek">EQ. LOWS</span><span class="ev rv">24,991&ndash;25,001 (broken)</span></div>
+      <div class="ekv"><span class="ek">CURRENT</span><span class="ev rv">24,999</span></div>
+      <div class="ekv"><span class="ek">TO ASIA H</span><span class="ev nv">+83.5 pts</span></div>
+      <div class="ekv"><span class="ek">TO ASIA L</span><span class="ev nv">&minus;94.0 pts</span></div>
+      <div class="ekv"><span class="ek">TO LONDON</span><span class="ev nv">50 MINUTES</span></div>
+    </div>
+  </div>
 
-    <!-- 4H BIAS -->
+  <!-- 4H + 1H -->
+  <div class="sec">MULTI-TIMEFRAME ANALYSIS &mdash; UPDATED 09:10 EET</div>
+  <div class="g2">
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">4H BIAS</span>
-        <span class="card-badge badge-bull">BULLISH &mdash; POST CHoCH</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">CHoCH Confirmed</span>
-        <span class="level-val bull-val">Jun 11 &mdash; 23,950.75 low</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">BOS Level</span>
-        <span class="level-val bull-val">24,761 (Jun 12 high, broken)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">4H Range (dealing)</span>
-        <span class="level-val accent-val">23,950 &ndash; 25,082</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Range Midpoint (50%)</span>
-        <span class="level-val neutral-val">24,516</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Current Position</span>
-        <span class="level-val bear-val">PREMIUM (25,023 &gt; 24,516)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">BSL Target 1</span>
-        <span class="level-val bull-val">25,082.5 (Asia high today)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">BSL Target 2</span>
-        <span class="level-val bull-val">25,325.5 (May 25 swing high)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">BSL Target 3</span>
-        <span class="level-val bull-val">25,442.5 (May 25 NY high &mdash; MAJOR)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">4H Bull OB (impulse)</span>
-        <span class="level-val purple-val">24,167 &ndash; 24,615 (Jun 11 20:00)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">4H FVG (gap)</span>
-        <span class="level-val accent-val">24,671 &ndash; 24,907 (unfilled)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Major SSL</span>
-        <span class="level-val bear-val">23,950.75 (CHoCH low)</span>
-      </div>
-      <div class="bias-block">
-        <span style="font-size:11px;color:var(--muted)">4H IMPULSE: Jun 15 00:00 candle opened 24,671 and printed 25,082 (+411 pts). Clean institutional impulse. No prior resistance until 25,325 BSL zone.</span>
-      </div>
+      <div class="ch"><span class="ct">4H STRUCTURE</span><span class="cb nb">BULLISH HTF / INTRADAY DIST.</span></div>
+      <div class="lr"><span class="ll">4H Candle 1 (04:00 EET)</span><span class="lv bv">O=24671 H=25082 L=24671 C=25044 &uarr;</span></div>
+      <div class="lr"><span class="ll">4H Candle 1 character</span><span class="lv bv">Massive bull impulse (+411pt). Bull OB body: 24671&ndash;25044.</span></div>
+      <div class="lr"><span class="ll">4H Candle 2 (08:00 live)</span><span class="lv rv">O=25044 H=25069 L=24997 C=25032 &darr;</span></div>
+      <div class="lr"><span class="ll">4H Candle 2 character</span><span class="lv rv">LH vs C1 (25069 &lt; 25082). Bearish OB forming. Rejection candle.</span></div>
+      <div class="lr"><span class="ll">4H Bull OB (demand)</span><span class="lv pv">24,671 &ndash; 25,044 (C1 body)</span></div>
+      <div class="lr"><span class="ll">4H Bear OB (forming)</span><span class="lv rv">25,044 &ndash; 25,069 (C2 so far)</span></div>
+      <div class="lr"><span class="ll">4H Midpoint (50%)</span><span class="lv nv">24,877 (below current)</span></div>
+      <div class="lr"><span class="ll">BSL (primary)</span><span class="lv bv">25,082.5 &rarr; 25,325 &rarr; 25,442</span></div>
+      <div class="lr"><span class="ll">SSL (key)</span><span class="lv rv">24,905 / 24,671 (gap level)</span></div>
+      <div class="lr"><span class="ll">4H FVG (gap imbalance)</span><span class="lv av">24,671 &ndash; 24,905 (unfilled)</span></div>
     </div>
 
-    <!-- 1H EXECUTION -->
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">1H EXECUTION</span>
-        <span class="card-badge badge-bull">BULLISH STRUCTURE</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">1H Structure</span>
-        <span class="level-val bull-val">HH / HL sequence active</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Last 1H BOS</span>
-        <span class="level-val bull-val">Above 24,761 (Jun 12 08:00 H)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">1H Bull OB (key)</span>
-        <span class="level-val purple-val">24,671 &ndash; 24,943 (Jun 15 01:00 body)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">1H FVG (open)</span>
-        <span class="level-val accent-val">24,671 &ndash; 24,907 (gap imbalance)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">FVG 50% level</span>
-        <span class="level-val accent-val">24,789</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Internal Liquidity</span>
-        <span class="level-val neutral-val">Asia High 25,082 (BSL resting)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Draw on Liquidity</span>
-        <span class="level-val bull-val">25,325 &rarr; 25,442 (external)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Support OB (secondary)</span>
-        <span class="level-val purple-val">24,761 &ndash; 24,822 (Jun 12 08:00)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">Asia Range (live)</span>
-        <span class="level-val neutral-val">24,905 &ndash; 25,082 (177.5 pts)</span>
-      </div>
-      <div class="level-row">
-        <span class="level-label">1H CHoCH Risk Level</span>
-        <span class="level-val bear-val">Break &lt;24,671 (gap level)</span>
-      </div>
-      <div class="asia-range-bar">
-        <span style="font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;">ASIA RANGE DEVELOPMENT (02:00&ndash;05:00 EET)</span>
-        <div class="range-visual">
-          <span style="color:var(--bear);font-size:11px;">24,905</span>
-          <div class="range-bar-wrap">
-            <div class="range-bar-fill" style="width:100%"></div>
-            <div class="range-cursor" style="left:64%"></div>
-          </div>
-          <span style="color:var(--bull);font-size:11px;">25,082</span>
-        </div>
-        <span style="font-size:10px;color:var(--dim);margin-top:6px;display:block;">Current: 25,023 &bull; 64% from low &bull; Below Asia High &bull; 5h to London</span>
-      </div>
+      <div class="ch"><span class="ct">1H EXECUTION STRUCTURE</span><span class="cb rb">DISTRIBUTION PHASE</span></div>
+      <div class="lr"><span class="ll">1H 02:00 (gap candle)</span><span class="lv bv">O=24671 H=24953 L=24671 C=24942 &mdash; FVG candle</span></div>
+      <div class="lr"><span class="ll">1H 03:00 (compression)</span><span class="lv nv">O=24942 H=24953 L=24906 C=24950</span></div>
+      <div class="lr"><span class="ll">1H 04:00 (impulse &mdash; KEY OB)</span><span class="lv bv">O=24950 H=25082 L=24905 C=25044 &uarr;</span></div>
+      <div class="lr"><span class="ll">1H 05:00 (dist. top 1)</span><span class="lv rv">O=25044 H=25069 L=25013 C=25019 &mdash; doji/LH</span></div>
+      <div class="lr"><span class="ll">1H 06:00 (dist. top 2)</span><span class="lv rv">O=25019 H=25041 L=25000 C=25038 &mdash; LH vs 05</span></div>
+      <div class="lr"><span class="ll">1H 07:00 (bear close)</span><span class="lv rv">O=25038 H=25053 L=25011 C=25013 &mdash; bearish</span></div>
+      <div class="lr"><span class="ll">1H 08:00 (range)</span><span class="lv nv">O=25013 H=25033 L=24997 C=25032 &mdash; HL=24997</span></div>
+      <div class="lr"><span class="ll">1H 09:00 (live &darr;)</span><span class="lv rv">O=25032 H=25062 L=25011 C=25028 &darr; dropping</span></div>
+      <div class="lr"><span class="ll">1H Bull OB (demand key)</span><span class="lv pv">24,950 &ndash; 25,044 (04:00 body)</span></div>
+      <div class="lr"><span class="ll">1H Bear OB (forming)</span><span class="lv rv">25,032 &ndash; 25,062 (09:00 candle)</span></div>
+      <div class="lr"><span class="ll">1H CHoCH trigger</span><span class="lv rv">Close below 24,997 (08:00 low) = 1H CHoCH</span></div>
+    </div>
+  </div>
+
+  <!-- 5M FLOW -->
+  <div class="sec">5M COMPLETE SESSION FLOW</div>
+  <div class="card gf">
+    <div class="ch"><span class="ct">5M PRICE ACTION &mdash; 01:05 TO 09:10 EET</span><span class="cb rb">BEARISH CHoCH 09:10</span></div>
+    <div class="flow">
+      <div class="fr"><span class="ft">01:05</span><span class="fc"><span class="b">GAP OPEN:</span> 24671 &rarr; 24914 (+243pt). Week open impulse. Weekly gap up from 24671.</span></div>
+      <div class="fr"><span class="ft">01:10&ndash;02:00</span><span class="fc">Compression 24911&ndash;24953. Tight consolidation digesting gap. Asia not open yet.</span></div>
+      <div class="fr"><span class="ft">02:00&ndash;02:25</span><span class="fc">Asia open. <span class="r">Drift DOWN:</span> 24953 &rarr; 24906.9. <span class="n">Asia Low set: 24906.9.</span></span></div>
+      <div class="fr"><span class="ft">02:30&ndash;03:15</span><span class="fc"><span class="b">Recovery grind:</span> 24920 &rarr; 24971. Slow HL sequence building.</span></div>
+      <div class="fr"><span class="ft">03:20</span><span class="fc"><span class="n">KEY CANDLE:</span> O=24971 H=25012 L=24905 C=25011 (107pt range). False break to 24905 then explosive rip through 25011. Sweeps Asia Low + punches higher.</span></div>
+      <div class="fr"><span class="ft">03:25&ndash;03:30</span><span class="fc"><span class="b">Extension:</span> 25011 &rarr; 25068 &rarr; <span class="b">25082.5. ASIA HIGH SET 03:30.</span></span></div>
+      <div class="fr"><span class="ft">03:30&ndash;04:55</span><span class="fc">Consolidation below Asia High: 25030&ndash;25069. <span class="n">LH forming vs 25082.</span></span></div>
+      <div class="fr"><span class="ft">04:55&ndash;05:00</span><span class="fc"><span class="r">First drop:</span> 25047 &rarr; 25017. Minor sell-off, first sign of supply.</span></div>
+      <div class="fr"><span class="ft">05:00&ndash;06:25</span><span class="fc">Slow recovery 25019 &rarr; 25052. <span class="r">LH: 25052 &lt; 25069 &lt; 25082.</span> Distribution continues.</span></div>
+      <div class="fr"><span class="ft">06:30&ndash;07:05</span><span class="fc"><span class="r">Drop:</span> 25042 &rarr; 24999. Breaks 25000. <span class="r">LL: 24999 printed.</span></span></div>
+      <div class="fr"><span class="ft">07:10&ndash;08:25</span><span class="fc">Recovery 25003 &rarr; 25062. <span class="r">LH: 25062 &lt; 25082.</span> Push up fails at lower level again.</span></div>
+      <div class="fr"><span class="ft">08:35&ndash;09:00</span><span class="fc"><span class="r">Rejection:</span> 25061 &rarr; 25019. Bearish sequence starts. LL: 25007 (09:05).</span></div>
+      <div class="fr"><span class="ft">09:10</span><span class="fc"><span class="r">5M CHoCH BEARISH CONFIRMED:</span> 25016 &rarr; 24991. Breaks equal lows 24997&ndash;25001. LL sequence active.</span></div>
+    </div>
+
+    <div class="lh-seq" style="margin-top:10px;">
+      <strong style="color:var(--bear)">LOWER HIGH SEQUENCE (5M):</strong> <span class="r">25082</span> &rarr; <span class="r">25069</span> &rarr; <span class="r">25052</span> &rarr; <span class="r">25061</span> &rarr; <span class="r">25038</span> &rarr; <span class="r">25016</span><br>
+      <strong style="color:var(--bull)">LOWER LOW SEQUENCE (5M):</strong> <span class="b">24905</span> &rarr; <span class="b">24999</span> (HL) &rarr; <span class="b">25001</span> &rarr; <span class="b">25007</span> &rarr; <span class="r">24991</span> (CHoCH LL)<br>
+      <strong style="color:var(--neutral)">DISTRIBUTION DURATION:</strong> 5h 40min from Asia High (03:30) to CHoCH (09:10). Classic SMC distribution: equal highs (BSL) above, now equal lows (SSL) below — London sweep target is clear.
     </div>
   </div>
 
   <!-- LIQUIDITY MAP -->
-  <div class="section-label">LIQUIDITY MAP</div>
-  <div class="card grid-full">
-    <div class="card-header">
-      <span class="card-title">LIQUIDITY ZONES</span>
-      <span class="card-badge badge-info">BULLISH DRAW</span>
-    </div>
-    <table class="liq-table">
+  <div class="sec">LIQUIDITY MAP &mdash; UPDATED</div>
+  <div class="card gf">
+    <div class="ch"><span class="ct">LIQUIDITY ZONES</span><span class="cb nb">DUAL DRAW</span></div>
+    <table class="liq-t">
       <thead>
-        <tr>
-          <th>ZONE</th>
-          <th>PRICE</th>
-          <th>TYPE</th>
-          <th>DIRECTION</th>
-          <th>PROBABILITY</th>
-          <th>NOTES</th>
-        </tr>
+        <tr><th>ZONE</th><th>PRICE</th><th>TYPE</th><th>DIR</th><th>PROB</th><th>NOTES</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td>May 25 NY High</td>
-          <td class="bull-val">25,442.5</td>
-          <td><span class="tag-small tag-bsl">BSL</span></td>
-          <td class="bull-val">UPSIDE</td>
-          <td><span class="prob-high">HIGH</span></td>
-          <td style="color:var(--muted)">Major external BSL &mdash; macro draw</td>
-        </tr>
-        <tr>
-          <td>May 25 Swing High</td>
-          <td class="bull-val">25,325.5</td>
-          <td><span class="tag-small tag-bsl">BSL</span></td>
-          <td class="bull-val">UPSIDE</td>
-          <td><span class="prob-high">HIGH</span></td>
-          <td style="color:var(--muted)">Primary draw target for this week</td>
-        </tr>
-        <tr>
-          <td>Asia High Today</td>
-          <td class="bull-val">25,082.5</td>
-          <td><span class="tag-small tag-bsl">BSL</span></td>
-          <td class="bull-val">UPSIDE</td>
-          <td><span class="prob-high">HIGH</span></td>
-          <td style="color:var(--muted)">Immediate; London likely sweeps (77% stat)</td>
-        </tr>
-        <tr>
-          <td>Current Price</td>
-          <td class="neutral-val">25,023</td>
-          <td>&mdash;</td>
-          <td class="neutral-val">HERE</td>
-          <td>&mdash;</td>
-          <td style="color:var(--muted)">05:00 EET, Asia consolidating</td>
-        </tr>
-        <tr>
-          <td>Asia Low Today</td>
-          <td class="bear-val">24,905.0</td>
-          <td><span class="tag-small tag-ssl">SSL</span></td>
-          <td class="bear-val">DOWNSIDE</td>
-          <td><span class="prob-med">MEDIUM</span></td>
-          <td style="color:var(--muted)">Immediate SSL; London may sweep first</td>
-        </tr>
-        <tr>
-          <td>1H FVG / Bull OB Top</td>
-          <td class="accent-val">24,907 &ndash; 24,943</td>
-          <td><span class="tag-small tag-fvg">FVG</span></td>
-          <td class="bull-val">DEMAND</td>
-          <td><span class="prob-high">HIGH</span></td>
-          <td style="color:var(--muted)">Key pullback zone; gap imbalance top</td>
-        </tr>
-        <tr>
-          <td>1H FVG Base / Gap Level</td>
-          <td class="accent-val">24,671 &ndash; 24,789</td>
-          <td><span class="tag-small tag-fvg">FVG</span></td>
-          <td class="bull-val">DEMAND</td>
-          <td><span class="prob-med">MEDIUM</span></td>
-          <td style="color:var(--muted)">50% FVG fill; extreme pullback zone</td>
-        </tr>
-        <tr>
-          <td>Jun 12 High (prior BOS)</td>
-          <td class="accent-val">24,761</td>
-          <td><span class="tag-small tag-ob">OB</span></td>
-          <td class="bull-val">DEMAND</td>
-          <td><span class="prob-med">MEDIUM</span></td>
-          <td style="color:var(--muted)">Prior resistance, now support</td>
-        </tr>
-        <tr>
-          <td>Jun 12 Low / NY SSL</td>
-          <td class="bear-val">24,414</td>
-          <td><span class="tag-small tag-ssl">SSL</span></td>
-          <td class="bear-val">DOWNSIDE</td>
-          <td><span class="prob-low">LOW</span></td>
-          <td style="color:var(--muted)">Only relevant if gap fills</td>
-        </tr>
-        <tr>
-          <td>CHoCH Low / Major SSL</td>
-          <td class="bear-val">23,950.75</td>
-          <td><span class="tag-small tag-ssl">SSL</span></td>
-          <td class="bear-val">DOWNSIDE</td>
-          <td><span class="prob-low">LOW</span></td>
-          <td style="color:var(--muted)">Structural invalidation only</td>
-        </tr>
+        <tr><td>May 25 Major Swing High</td><td class="bv">25,442.5</td><td><span class="tag t-bsl">BSL</span></td><td class="bv">UPSIDE</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">Week/multi-day draw. External BSL. HTF target.</td></tr>
+        <tr><td>May 25 Peak</td><td class="bv">25,325.5</td><td><span class="tag t-bsl">BSL</span></td><td class="bv">UPSIDE</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">Primary draw for week. London/NY must clear 25082 first.</td></tr>
+        <tr><td>Asia High</td><td class="bv">25,082.5</td><td><span class="tag t-bsl">BSL</span></td><td class="bv">UPSIDE</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">Untouched. London sweep target. 77% stat prob.</td></tr>
+        <tr><td>Local BSL (08:25 spike)</td><td class="bv">25,062.5</td><td><span class="tag t-bsl">BSL</span></td><td class="bv">UPSIDE</td><td><span class="pm">MEDIUM</span></td><td style="color:var(--muted)">Minor BSL from 08:25 push. Below Asia High cluster.</td></tr>
+        <tr><td>1H Bear OB (09:00)</td><td class="rv">25,032&ndash;25,062</td><td><span class="tag t-ob">BEAR OB</span></td><td class="rv">SUPPLY</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">If London retraces here = short entry. Aligns with local BSL.</td></tr>
+        <tr><td>4H OB top / 1H resistance</td><td class="rv">25,044&ndash;25,069</td><td><span class="tag t-ob">BEAR OB</span></td><td class="rv">SUPPLY</td><td><span class="pm">MEDIUM</span></td><td style="color:var(--muted)">4H candle 2 open = supply zone. LH zone.</td></tr>
+        <tr><td>CURRENT PRICE</td><td class="nv">24,999</td><td>&mdash;</td><td class="nv">HERE</td><td>&mdash;</td><td style="color:var(--muted)">09:10 EET. Inside 5M bearish sequence.</td></tr>
+        <tr><td>Equal Lows (broken)</td><td class="rv">24,991&ndash;25,001</td><td><span class="tag t-eq">EQ. LOWS</span></td><td class="rv">SSL SWEEP</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">BROKEN at 09:10. Now resistance on retrace. Dense SSL cluster.</td></tr>
+        <tr><td>1H Bull OB (demand KEY)</td><td class="bv">24,950&ndash;25,044</td><td><span class="tag t-ob">BULL OB</span></td><td class="bv">DEMAND</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">1H 04:00 body. Key long zone if London sweeps here.</td></tr>
+        <tr><td>Asia Low / Structural SSL</td><td class="rv">24,905&ndash;24,940</td><td><span class="tag t-ssl">SSL</span></td><td class="bv">PRIME DEMAND</td><td><span class="ph">HIGH</span></td><td style="color:var(--muted)">Asia Low 24905. If reached = highest prob long zone. Aligns with 1H OB base.</td></tr>
+        <tr><td>4H FVG (gap imbalance)</td><td class="av">24,671&ndash;24,905</td><td><span class="tag t-fvg">FVG</span></td><td class="bv">DEEP DEMAND</td><td><span class="pl">LOW</span></td><td style="color:var(--muted)">Gap fill. Only relevant if 24905 breaks clean.</td></tr>
+        <tr><td>Gap Level / Week Open</td><td class="rv">24,671.5</td><td><span class="tag t-ssl">MAJOR SSL</span></td><td class="bv">STRUCTURAL</td><td><span class="pl">LOW</span></td><td style="color:var(--muted)">Monday week open. Invalidation of entire bullish bias.</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- INTRADAY BEHAVIOR -->
-  <div class="section-label">INTRADAY BEHAVIOR MODEL (47 SESSIONS)</div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">LONDON SESSION TENDENCIES</span>
-        <span class="card-badge badge-bull">10:00 EET OPEN</span>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x25B2;</div>
-        <div class="beh-content">
-          <div class="beh-title">Asia High Sweep Probability</div>
-          <div class="beh-stat">All sessions: <span class="beh-highlight">77.8%</span> &bull; BULLISH HTF: <span class="beh-highlight">76.9%</span> &bull; Monday: <span class="beh-highlight">88.9%</span></div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x23F1;</div>
-        <div class="beh-content">
-          <div class="beh-title">Sweep Timing Cluster</div>
-          <div class="beh-stat">10:00 EET: <span class="beh-highlight">31%</span> of sweeps &bull; Within 10 min: <span class="beh-highlight">48%</span> of sweeps &bull; Median: 10:05 EET</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x2696;</div>
-        <div class="beh-content">
-          <div class="beh-title">London Judas Patterns (BULLISH HTF)</div>
-          <div class="beh-stat">HIGH_SWEEP_JUDAS: <span class="beh-highlight">38%</span> &bull; BOTH_SWEPT: <span class="beh-highlight">38%</span> &bull; LOW_SWEEP_JUDAS: <span class="beh-highlight">23%</span></div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x1F4CD;</div>
-        <div class="beh-content">
-          <div class="beh-title">TODAY CONTEXT: Asia High at 25,082</div>
-          <div class="beh-stat">Price below Asia high at London open. <span class="beh-highlight">Most likely:</span> London sweeps high at 10:00&ndash;10:10. If HIGH_SWEEP_JUDAS &rarr; pull to 25,000 OB, then NY higher.</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x26A0;</div>
-        <div class="beh-content">
-          <div class="beh-title">LOW_SWEEP_JUDAS Risk (23% chance)</div>
-          <div class="beh-stat">If London sweeps Asia Low <span class="beh-warn">(24,905)</span> first &rarr; look for demand 24,905&ndash;24,940 &rarr; long continuation. Pattern seen on <span class="beh-warn">Apr 20, May 8, May 20</span>.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">NY SESSION TENDENCIES</span>
-        <span class="card-badge badge-info">16:00 EET</span>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x1F4CA;</div>
-        <div class="beh-content">
-          <div class="beh-title">NY Outcome After HIGH_SWEEP_JUDAS (BULLISH HTF)</div>
-          <div class="beh-stat">DIRECT_CONTINUATION_HIGHER: <span class="beh-highlight">60%</span> (n=6/10) &bull; CONTINUATION_LOWER: <span class="beh-warn">20%</span> &bull; Other: 20%</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x1F4CA;</div>
-        <div class="beh-content">
-          <div class="beh-title">Monday BULLISH &mdash; NY Direction</div>
-          <div class="beh-stat">BULL: <span class="beh-highlight">2/5 (40%)</span> &bull; BEAR: 3/5 &bull; Note: small sample, treat directional only</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x1F5D3;</div>
-        <div class="beh-content">
-          <div class="beh-title">BOTH_SWEPT London &rarr; NY Outcome (BULLISH HTF)</div>
-          <div class="beh-stat">DIRECT_CONTINUATION_LOWER: <span class="beh-warn">50%</span> &bull; INSIDE_RANGE: 20% &bull; Mixed. Avoid NY long if BOTH_SWEPT confirmed.</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x23F0;</div>
-        <div class="beh-content">
-          <div class="beh-title">NY Sweep Timing</div>
-          <div class="beh-stat">NY sweeps London levels most often between <span class="beh-neutral">16:00&ndash;18:30 EET</span>. Jun 12: swept low at 16:40. Jun 11: swept high at 16:45.</div>
-        </div>
-      </div>
-      <div class="behavior-row">
-        <div class="beh-icon">&#x2714;</div>
-        <div class="beh-content">
-          <div class="beh-title">Key Statistical Edge (BULLISH HTF)</div>
-          <div class="beh-stat">HIGH_SWEEP_JUDAS at London open &rarr; <span class="beh-highlight">buy the dip to OB/FVG</span> &rarr; target 25,325 BSL. Highest edge day trade setup per model.</div>
-        </div>
-      </div>
+  <!-- IB MODEL -->
+  <div class="sec">INTRADAY BEHAVIOR MODEL APPLICATION</div>
+  <div class="card gf">
+    <div class="ch"><span class="ct">IB MODEL (47 SESSIONS) &mdash; TODAY'S CONTEXT</span><span class="cb bb">BULLISH HTF MONDAY</span></div>
+    <div class="ib-box">
+      <div class="ib-row"><span class="ib-k">HTF Bias</span><span class="ib-v bv">BULLISH (CHoCH Jun 11, 23950 low)</span></div>
+      <div class="ib-row"><span class="ib-k">Day of Week</span><span class="ib-v">Monday (n=9 in model)</span></div>
+      <div class="ib-row"><span class="ib-k">Asia Direction</span><span class="ib-v bv">BULL (open 24671, high 25082, low 24905, range 177.5)</span></div>
+      <div class="ib-row"><span class="ib-k">London High Sweep Prob.</span><span class="ib-v bv">77% overall &bull; 77% BULLISH HTF &bull; 89% Mondays</span></div>
+      <div class="ib-row"><span class="ib-k">Dominant London Pattern (Mon BULL)</span><span class="ib-v bv">HIGH_SWEEP_JUDAS: 55% &bull; BOTH_SWEPT: 33% &bull; LOW_SWEEP: 11%</span></div>
+      <div class="ib-row"><span class="ib-k">Current 5M structure</span><span class="ib-v rv">BEARISH CHoCH at 09:10 (LH/LL confirmed below 24991)</span></div>
+      <div class="ib-row"><span class="ib-k">Conflict resolution</span><span class="ib-v nv">5M bear + IB model = LOW_SWEEP_JUDAS most likely. London sweeps SSL zone 24905&ndash;24991, then reverses HIGHER through Asia High 25082.</span></div>
+      <div class="ib-row"><span class="ib-k">If HIGH_SWEEP_JUDAS &rarr; NY</span><span class="ib-v bv">60% DIRECT_CONTINUATION_HIGHER toward 25325</span></div>
+      <div class="ib-row"><span class="ib-k">If BOTH_SWEPT &rarr; NY</span><span class="ib-v rv">50% DIRECT_CONTINUATION_LOWER</span></div>
+      <div class="ib-row"><span class="ib-k">Sweep timing (stat)</span><span class="ib-v">Asia High swept at 10:00&ndash;10:10 in 48% of sessions. Equal lows sweep often at 10:00 open.</span></div>
+      <div class="ib-row"><span class="ib-k">Prior Monday reference (BULL)</span><span class="ib-v">Apr 20: LOW_SWEEP_JUDAS &rarr; CONTINUATION_HIGHER &bull; May 18: HIGH_SWEEP_JUDAS &rarr; CONTINUATION_HIGHER</span></div>
     </div>
   </div>
 
   <!-- DAY TRADES -->
-  <div class="section-label">DAY TRADES</div>
+  <div class="sec">DAY TRADES &mdash; UPDATED LONDON PLAN</div>
 
   <!-- DT1 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">DT-1 &bull; DAY TRADE &bull; LONDON</span>
-      <div class="setup-meta">
-        <span class="grade grade-aplus">A+</span>
-        <span class="prob-badge">78%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">DT-1 &bull; LONG &bull; LOW_SWEEP_JUDAS &bull; HIGHEST PROBABILITY</span>
+      <div class="smeta"><span class="gr g-ap">A+</span><span class="pbd">72%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">25,000 &ndash; 25,020</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON (10:10&ndash;11:00)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 24,895 (below Asia Low)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,200 &rarr; 25,325</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">3.3R &rarr; 5.2R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">24,905 &ndash; 24,960</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON (10:00&ndash;10:20)</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&lt; 24,855</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,082 (T1) &rarr; 25,200 (T2)</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">T1: 3.5R &bull; T2: 5.8R</div></div>
     </div>
-    <div class="rationale">
-      London sweeps Asia High (25,082) within first 10 min at 10:00&ndash;10:10 (HIGH_SWEEP_JUDAS). Price returns to 1H OB / Asia midrange 25,000&ndash;25,020. 5M demand structure needed for confirmation. Stat backing: BULLISH HTF + HIGH_SWEEP_JUDAS &rarr; DIRECT_CONTINUATION_HIGHER in 60% of sessions. Best probability setup in current model context.
+    <div class="rat">
+      London opens at 10:00, current 5M bearish continues briefly, sweeps Asia Low zone (24905&ndash;24940) grabbing SSL. This is the LOW_SWEEP_JUDAS engineered by institutions: current equal lows breakdown is the pre-London manipulation. At 24905&ndash;24960 (1H 04:00 OB base + Asia Low), wait for 5M CHoCH bullish &mdash; first green impulse candle closing above prior high. Then long. Model: BULLISH Monday + LOW_SWEEP_JUDAS &rarr; DIRECT_CONTINUATION_HIGHER (Apr 20 exact reference). Target: Asia High 25082 first, then 25200+.
     </div>
   </div>
 
   <!-- DT2 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">DT-2 &bull; DAY TRADE &bull; LONDON</span>
-      <div class="setup-meta">
-        <span class="grade grade-a">A</span>
-        <span class="prob-badge">68%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">DT-2 &bull; LONG &bull; HIGH_SWEEP_JUDAS PULLBACK</span>
+      <div class="smeta"><span class="gr g-a">A</span><span class="pbd">65%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">24,905 &ndash; 24,945</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON OPEN (10:00&ndash;10:30)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 24,850</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,082 &rarr; 25,200</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">2.3R &rarr; 4.6R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">25,010 &ndash; 25,040 (OB retest)</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON (10:10&ndash;11:00)</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&lt; 24,970</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,082 &rarr; 25,200 &rarr; 25,325</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">T1: 2.1R &bull; T2: 6.3R</div></div>
     </div>
-    <div class="rationale">
-      LOW_SWEEP_JUDAS scenario: London drops to sweep Asia Low (24,905) at 10:00 open, tapping 1H FVG top (24,907). Demand reaction + 5M CHoCH for entry. Historically: BULLISH HTF + LOW_SWEEP_JUDAS at open &rarr; continuation higher. Acts as alternative to DT-1 if London opens bearish. Requires 5M structural flip before entry.
+    <div class="rat">
+      Alternative: London skips SSL sweep, instead pushes UP directly from 10:00 through Asia High 25082.5 (HIGH_SWEEP_JUDAS). After the sweep, price retraces to 25010&ndash;25040 (1H Bull OB + broken equal lows = support). Enter long on 5M demand confirmation. This is valid if London opens with a bullish candle above 25020 at 10:00. Target: 25200 and 25325 BSL. Less probable given current 5M bearish structure but supported by Mon+BULL IB data (55% HIGH_SWEEP_JUDAS).
     </div>
   </div>
 
   <!-- DT3 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">DT-3 &bull; DAY TRADE &bull; LONDON&ndash;NY</span>
-      <div class="setup-meta">
-        <span class="grade grade-a">A</span>
-        <span class="prob-badge">65%</span>
-      </div>
+  <div class="sc sb-r">
+    <div class="sh2">
+      <span class="sid">DT-3 &bull; SHORT &bull; BEAR OB RETEST &bull; CONDITIONAL</span>
+      <div class="smeta"><span class="gr g-a">A</span><span class="pbd">60%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">25,082 &ndash; 25,110 breakout</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON (11:00+)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 25,020</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,200 &rarr; 25,325</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">2.0R &rarr; 4.0R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv rv">SHORT (conditional)</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">25,032 &ndash; 25,062 (1H Bear OB)</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON (10:05&ndash;10:30)</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&gt; 25,090</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">24,905 &rarr; 24,761</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">T1: 2.0R &bull; T2: 4.3R</div></div>
     </div>
-    <div class="rationale">
-      Momentum breakout continuation: if London clears 25,082 Asia High with impulsive close and holds above, enters on first 5M retest / FVG above the sweep. Clean BOS above Asia High = draw toward 25,200 and 25,325 BSL. Lower probability as GER40 momentum model favors SEQ continuation setups, not breakout entries.
+    <div class="rat">
+      ONLY valid if London opens bullish (bounce from current levels), retraces UP to 1H Bear OB (25032&ndash;25062) and shows 5M bearish CHoCH inside that zone. Short from there targeting Asia Low 24905. This is a counter-HTF intraday short that aligns with 5M distribution structure. Requires strict confirmation &mdash; do NOT short blindly into OB. If triggered = BOTH_SWEPT scenario candidate for London.
     </div>
   </div>
 
   <!-- DT4 -->
-  <div class="setup-card setup-bear">
-    <div class="setup-header">
-      <span class="setup-id">DT-4 &bull; DAY TRADE &bull; LONDON (COUNTER)</span>
-      <div class="setup-meta">
-        <span class="grade grade-b">B</span>
-        <span class="prob-badge">52%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">DT-4 &bull; LONG &bull; BREAKOUT HOLD (MOMENTUM)</span>
+      <div class="smeta"><span class="gr g-b">B</span><span class="pbd">52%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bear-val">SHORT (counter-HTF)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">25,082 &ndash; 25,120 (BOTH_SWEPT scenario)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON (10:00&ndash;10:30)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&gt; 25,200</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bear-val">24,905 &rarr; 24,761</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">1.8R &rarr; 2.7R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">25,082 &ndash; 25,100 (break + retest)</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON (11:00+)</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&lt; 25,040</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,200 &rarr; 25,325</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">3.0R &rarr; 5.8R</div></div>
     </div>
-    <div class="rationale">
-      BOTH_SWEPT scenario only: London sweeps Asia high immediately (25,082+), fails to hold, then drops to sweep Asia low (24,905). SHORT valid only with clear 5M bearish CHoCH after sweep high. Counter-HTF &mdash; reduce size. BOTH_SWEPT on BULLISH HTF has led to CONTINUATION_LOWER in 50% of cases (n=10). Do NOT hold past 24,761.
+    <div class="rat">
+      After Asia High 25082.5 is swept and price holds above with 1H bullish close, first 5M pullback to 25082&ndash;25100 becomes demand. GER40 momentum model: large candle continuation. This is the cleanest entry if DT-1 misses and price blows through 25082 without a pullback. Lower grade due to higher entry and chasing risk.
     </div>
   </div>
 
   <!-- DT5 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">DT-5 &bull; DAY TRADE &bull; NY SESSION</span>
-      <div class="setup-meta">
-        <span class="grade grade-a">A</span>
-        <span class="prob-badge">62%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">DT-5 &bull; LONG &bull; NY SSL SWEEP &bull; 16:00 EET</span>
+      <div class="smeta"><span class="gr g-a">A</span><span class="pbd">60%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">London low (TBD after session)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">NY OPEN (16:00&ndash;16:45)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">Below London low &minus;30</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,325 BSL</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">3R+ (zone TBD)</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">London low (TBD post-session)</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">NY OPEN (16:00&ndash;16:45 EET)</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">Below London low &minus;25</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,325 BSL</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">3R+ (TBD)</div></div>
     </div>
-    <div class="rationale">
-      NY sweep of London low at 16:00&ndash;16:40 EET (statistically the most common NY sweep window). If London was HIGH_SWEEP_JUDAS and London printed a low, NY grabs SSL then continues higher toward 25,325. Directly mirrors Jun 12 session structure: NY swept London low at 16:40, closed BULL. Grade dependent on London session setup quality.
+    <div class="rat">
+      NY sweeps London low between 16:00&ndash;16:45 EET (IB model most common NY sweep window), then reverses HIGHER. Grade and exact entry depend entirely on London session outcome. If London = LOW_SWEEP_JUDAS &rarr; bullish, NY sweep of London low at 16:00 = ideal DT-5 long entry toward 25325. Direct replay of Jun 12 structure (NY swept London low at 16:40, closed BULL).
     </div>
   </div>
 
   <!-- SWING TRADES -->
-  <div class="section-label">SWING TRADES</div>
+  <div class="sec">SWING TRADES</div>
 
-  <!-- ST1 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">ST-1 &bull; SWING &bull; 1H OB RETEST</span>
-      <div class="setup-meta">
-        <span class="grade grade-aplus">A+</span>
-        <span class="prob-badge">72%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">ST-1 &bull; LONG SWING &bull; 24,905 DEMAND + ASIA LOW &bull; HIGHEST RR</span>
+      <div class="smeta"><span class="gr g-ap">A+</span><span class="pbd">70%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">24,761 &ndash; 24,870</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON / NY (if pullback)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 24,620</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,325 &rarr; 25,442</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">4.8R &rarr; 6.6R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">24,905 &ndash; 24,960</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON open</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&lt; 24,840</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,325 &rarr; 25,442</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">5.5R &rarr; 7.7R</div></div>
     </div>
-    <div class="rationale">
-      Deep pullback into prior BOS zone (Jun 12 high 24,761) + partial FVG fill. Strongest swing OB zone: prior resistance = new support. Price would need to retrace ~200 pts from current. Highest RR swing in the model. Enter only with 1H bullish CHoCH confirmation and 5M OB reaction. Hold toward 25,325 BSL (primary draw).
+    <div class="rat">
+      Same entry as DT-1 but swing hold: don't exit at Asia High. Hold through 25082 (partial), target 25325 and 25442 BSL. Asia Low zone (24905&ndash;24940) + 1H 04:00 OB base = confluence demand zone of the week. If triggered with 5M CHoCH, this is the best RR trade of the week. Partial at 25082 recommended.
     </div>
   </div>
 
-  <!-- ST2 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">ST-2 &bull; SWING &bull; FVG BASE RETEST</span>
-      <div class="setup-meta">
-        <span class="grade grade-a">A</span>
-        <span class="prob-badge">65%</span>
-      </div>
+  <div class="sc sb-l">
+    <div class="sh2">
+      <span class="sid">ST-2 &bull; LONG SWING &bull; 1H OB RETEST (DEEPER PULLBACK)</span>
+      <div class="smeta"><span class="gr g-a">A</span><span class="pbd">62%</span></div>
     </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">24,671 &ndash; 24,789 (FVG 50%)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">NY OR MULTI-DAY</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 24,580</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,325 &rarr; 25,442</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">5.5R &rarr; 7.2R</div>
-      </div>
+    <div class="sg">
+      <div class="sf"><div class="sfl">Direction</div><div class="sfv bv">LONG</div></div>
+      <div class="sf"><div class="sfl">Entry Zone</div><div class="sfv">24,761 &ndash; 24,870</div></div>
+      <div class="sf"><div class="sfl">Session</div><div class="sfv nv">LONDON / NY</div></div>
+      <div class="sf"><div class="sfl">Stop Loss</div><div class="sfv rv">&lt; 24,620</div></div>
+      <div class="sf"><div class="sfl">Target</div><div class="sfv bv">25,325 &rarr; 25,442</div></div>
+      <div class="sf"><div class="sfl">RR</div><div class="sfv bv">7.4R &rarr; 10.6R</div></div>
     </div>
-    <div class="rationale">
-      Full retracement to gap FVG base (24,671&ndash;24,789). This is the 4H bull OB opening candle level from today. Extreme pullback but provides maximum RR for a swing hold. Only valid if price sweeps back through Asia low + London low (BOTH_SWEPT scenario materializes across sessions). Use daily close candle entry for swing, not intraday.
-    </div>
-  </div>
-
-  <!-- ST3 -->
-  <div class="setup-card setup-bull">
-    <div class="setup-header">
-      <span class="setup-id">ST-3 &bull; SWING &bull; BSL BREAK CONTINUATION</span>
-      <div class="setup-meta">
-        <span class="grade grade-a">A</span>
-        <span class="prob-badge">63%</span>
-      </div>
-    </div>
-    <div class="setup-grid">
-      <div class="setup-field">
-        <div class="sf-label">Direction</div>
-        <div class="sf-val bull-val">LONG</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Entry Zone</div>
-        <div class="sf-val">25,082 &ndash; 25,150 (after sweep hold)</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Session</div>
-        <div class="sf-val neutral-val">LONDON / NY</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Stop Loss</div>
-        <div class="sf-val bear-val">&lt; 25,000</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">Target</div>
-        <div class="sf-val bull-val">25,325 &rarr; 25,442</div>
-      </div>
-      <div class="setup-field">
-        <div class="sf-label">RR</div>
-        <div class="sf-val bull-val">2.4R &rarr; 4.3R</div>
-      </div>
-    </div>
-    <div class="rationale">
-      IF London/NY clears Asia High (25,082) with 1H close above and holds &rarr; first pullback to 25,082&ndash;25,150 becomes demand. Draw = 25,325 and 25,442 major BSL clusters. GER40 momentum model: large candle with close above prior high continues. Requires confirmation, not anticipation.
+    <div class="rat">
+      Deeper pullback scenario: price fills the prior BOS level (Jun 12 high 24761) + partial FVG. Prior resistance becomes strong support. Only valid with 1H bullish CHoCH confirmation. Extreme RR swing but requires patience. If Asia Low 24905 breaks cleanly this becomes the next major demand zone.
     </div>
   </div>
 
   <!-- CONCLUSION -->
-  <div class="section-label">CONCLUSION</div>
-
-  <div class="grid-3">
-    <div class="conclusion-box conc-primary">
-      <div class="conc-label">MOST LIKELY SCENARIO (55%)</div>
-      <div class="conc-text">London opens at 10:00 EET and sweeps Asia High (25,082) within the first 10&ndash;15 min. HIGH_SWEEP_JUDAS: price spikes above 25,082 to ~25,110&ndash;25,150, creates manipulation, then retraces to 25,000&ndash;25,020 OB zone. NY session opens and delivers DIRECT_CONTINUATION_HIGHER toward 25,325 BSL. This pattern has occurred in 60% of BULLISH HTF + HIGH_SWEEP_JUDAS sessions.</div>
+  <div class="sec">CONCLUSION</div>
+  <div class="cb3">
+    <div class="cbox cp">
+      <div class="cl">MOST LIKELY (45%) &mdash; LOW_SWEEP_JUDAS</div>
+      <div class="ct2">London opens at 10:00, continues 5M bear briefly, sweeps SSL zone (24905&ndash;24960) within first 15 minutes. Engineers the liquidity grab below equal lows (24991). Finds demand at 1H OB / Asia Low, flips bullish (5M CHoCH), then drives through Asia High 25082.5 in London or NY. NY DIRECT_CONTINUATION_HIGHER toward 25325. DT-1 and ST-1 are the primary setups.</div>
     </div>
-    <div class="conclusion-box conc-alt">
-      <div class="conc-label">ALTERNATIVE SCENARIO (30%)</div>
-      <div class="conc-text">BOTH_SWEPT: London first sweeps Asia Low (24,905) at the open, then recovers and pushes above Asia High (25,082). Price remains above 25,082 into NY but NY reverses to continuation lower (50% of BOTH_SWEPT outcomes on BULLISH HTF). Trade: short NY from London high, target 24,905&ndash;24,761.</div>
+    <div class="cbox ca">
+      <div class="cl">ALTERNATIVE (35%) &mdash; HIGH_SWEEP_JUDAS</div>
+      <div class="ct2">London ignores 5M bear structure. Opens bullish at 10:00, drives directly through Asia High 25082.5 (HIGH_SWEEP_JUDAS). Pullback to 25010&ndash;25040 OB zone, then NY continuation higher toward 25325. This is the dominant Monday BULLISH pattern (55% of Mondays). DT-2 triggers instead of DT-1. Misses DT-1 entry but still bullish outcome.</div>
     </div>
-    <div class="conclusion-box conc-low">
-      <div class="conc-label">LOW PROBABILITY SCENARIO (15%)</div>
-      <div class="conc-text">Full gap fill: London breaks below Asia Low (24,905), fills the 1H FVG all the way to 24,671. Requires structural break of the entire gap OB. Triggers only on macro exogenous shock (news event). This would constitute a 1H CHoCH and require reassessment of entire bullish bias. Do not trade against this if it occurs.</div>
-    </div>
-  </div>
-
-  <div class="best-trade">
-    <div class="best-trade-label">&#x2605; BEST SINGLE TRADE IDEA</div>
-    <div class="best-trade-content">
-      <span>LONG &bull; DT-1 &bull; Entry 25,000&ndash;25,020 &bull; Stop &lt;24,895 &bull; Target 25,200&ndash;25,325</span><br><br>
-      Wait for London to sweep Asia High (25,082) between 10:00&ndash;10:15 EET. Once the sweep prints and 5M momentum shifts back down, watch for a 5M OB or CHoCH in the 25,000&ndash;25,020 zone. Enter long. Target first = 25,200, extend to 25,325 BSL. RR: 3.3R to 5.2R. This is the A+ setup supported by statistical model (BULLISH HTF + HIGH_SWEEP_JUDAS &rarr; DIRECT_CONTINUATION_HIGHER in 60% of recorded sessions). Invalidated if price falls below 24,895 (Asia Low sweep without recovery).
+    <div class="cbox clo">
+      <div class="cl">LOW PROBABILITY (20%) &mdash; BOTH_SWEPT BEAR</div>
+      <div class="ct2">London sweeps Asia High 25082, then reverses and sweeps Asia Low 24905 (BOTH_SWEPT). NY continues lower toward 24761. This occurs in 38% of BULLISH HTF sessions but BOTH_SWEPT on Monday has only happened 3 times (33%) with mixed NY outcomes. Counter-trend. Do NOT trade unless DT-3 confirmation is pristine.</div>
     </div>
   </div>
 
-  <div class="update-notice">
-    <strong>INTRADAY BEHAVIOR FILE UPDATED</strong> &mdash; Added 2 missing sessions: <strong>Jun 12 (Fri)</strong> [BULLISH | BOTH_SWEPT | London BEAR | NY JUDAS_LOW_THEN_BUY] and <strong>Jun 15 (Mon, PARTIAL)</strong> [BULLISH | Asia H: 25,082.5 | Asia L: 24,905.0 | London/NY: PENDING]. Updated file: GER40_Intraday_Behavior_UPDATED.csv &mdash; 47 total sessions. London + NY columns for Jun 15 should be populated after today's sessions complete.
+  <div class="best">
+    <div class="bl">&#9733; BEST SINGLE TRADE IDEA &mdash; GER40</div>
+    <div class="bc">
+      <span>LONG &bull; DT-1 / ST-1 &bull; Entry 24,905&ndash;24,960 &bull; Stop &lt;24,855 &bull; T1: 25,082 / T2: 25,325</span><br><br>
+      Wait for London to push <span class="r">below 24,991 (equal lows)</span> between 10:00&ndash;10:15 EET, sweep the SSL zone toward <span>24,905&ndash;24,940</span> (Asia Low + 1H Bull OB base). Once price sweeps and a <span>5M bullish CHoCH prints</span> (first candle closing above prior 5M high), enter long. Partial exit at T1 = 25,082 (Asia High, ~3.5R). Hold remainder for T2 = 25,325 BSL (full swing, ~8R from 24920 entry).<br><br>
+      This is statistically backed by: (1) IB model: BULLISH Monday + LOW_SWEEP_JUDAS = DIRECT_CONTINUATION_HIGHER (Apr 20 exact analog), (2) 4H Bull OB base at 24905 area, (3) Institutional SSL engineering: 5h of distribution + equal lows breakdown = classic pre-London trap. <span>Invalidated</span> if price breaks and holds below <span class="r">24,855</span> on a 5M close.
+    </div>
   </div>
 
 </div>
 
 <div class="footer">
-  <span>GER40 &bull; FOREXCOM &bull; 5M / 1H / 4H</span>
-  <span>ANALYSIS DATE: 2026-06-15 05:00 EET &bull; PRE-LONDON PREPARATION</span>
-  <span>ASIA ACTIVE &bull; LONDON IN 5H &bull; MODEL: 47 SESSIONS</span>
+  <span>GER40 &bull; SMC ANALYSIS &bull; 5M + 1H + 4H &bull; IB MODEL 47 SESSIONS</span>
+  <span>2026-06-15 09:10 EET &bull; T-50 MIN LONDON &bull; BULLISH HTF / BEARISH 5M CONFLICT</span>
+  <span>ASIA HIGH 25,082.5 (BSL) &bull; ASIA LOW 24,905.0 (SSL) &bull; EQ. LOWS BROKEN</span>
 </div>
 
 </body>
