@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EURUSD — Pre-NY Report | 15 Jun 2026 | 14:00 EET</title>
+<style>
+  :root {
+    --bg: #0a0c10; --panel: #111318; --border: #1e2330;
+    --accent: #1e88e5; --gold: #f4b942; --green: #26a69a;
+    --red: #ef5350; --purple: #7e57c2; --orange: #ff7043;
+    --teal: #00acc1; --text: #c8cdd8; --muted: #5a6070; --tag: #161b26;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.5; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 14px; }
+  .h-left h1 { font-size: 21px; font-weight: 700; color: #fff; }
+  .h-left p { color: var(--muted); font-size: 11px; margin-top: 4px; }
+  .h-badges { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 8px; }
+  .badge-pill { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; }
+  .p-green { background: var(--green); color: #fff; }
+  .p-teal { background: rgba(0,172,193,0.2); color: var(--teal); border: 1px solid rgba(0,172,193,0.4); }
+  .p-gold { background: rgba(244,185,66,0.18); color: var(--gold); border: 1px solid rgba(244,185,66,0.4); }
+  .p-orange { background: rgba(255,112,67,0.18); color: var(--orange); border: 1px solid rgba(255,112,67,0.4); }
+  .h-right .cur { font-size: 28px; font-weight: 800; color: #fff; font-family: 'Courier New', monospace; text-align: right; }
+  .h-right .sub { font-size: 11px; color: var(--muted); text-align: right; margin-top: 3px; }
+
+  .section { margin-bottom: 18px; }
+  .stitle { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 7px; margin-bottom: 11px; }
+
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .g5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 13px; }
+  .plabel { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+  .pval { font-size: 16px; font-weight: 700; color: #fff; }
+  .psub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+  td { padding: 7px 10px; border-bottom: 1px solid #13161e; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #12151d; }
+
+  .b { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+  .bull { background: rgba(38,166,154,0.15); color: var(--green); border: 1px solid rgba(38,166,154,0.3); }
+  .bear { background: rgba(239,83,80,0.15); color: var(--red); border: 1px solid rgba(239,83,80,0.3); }
+  .neutral { background: rgba(90,96,112,0.2); color: var(--muted); border: 1px solid var(--border); }
+  .warn { background: rgba(255,112,67,0.15); color: var(--orange); border: 1px solid rgba(255,112,67,0.3); }
+  .info { background: rgba(0,172,193,0.15); color: var(--teal); border: 1px solid rgba(0,172,193,0.3); }
+
+  .g-ap { background: rgba(38,166,154,0.2); color: var(--green); border: 1px solid rgba(38,166,154,0.4); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 800; }
+  .g-a  { background: rgba(30,136,229,0.2); color: #64b5f6; border: 1px solid rgba(30,136,229,0.4); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 700; }
+  .g-b  { background: rgba(244,185,66,0.15); color: var(--gold); border: 1px solid rgba(244,185,66,0.3); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 700; }
+  .g-c  { background: rgba(126,87,194,0.15); color: #b39ddb; border: 1px solid rgba(126,87,194,0.3); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 600; }
+
+  .p  { font-family: 'Courier New', monospace; font-size: 13px; color: #fff; }
+  .pg { font-family: 'Courier New', monospace; font-size: 12px; color: var(--green); }
+  .pr { font-family: 'Courier New', monospace; font-size: 12px; color: var(--red); }
+  .po { font-family: 'Courier New', monospace; font-size: 12px; color: var(--orange); }
+  .py { font-family: 'Courier New', monospace; font-size: 12px; color: var(--gold); }
+  .pt { font-family: 'Courier New', monospace; font-size: 12px; color: var(--teal); }
+
+  .zbar { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 11px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dg { background: var(--green); } .dr { background: var(--red); }
+  .do { background: var(--orange); } .dy { background: var(--gold); }
+  .dt { background: var(--teal); } .db { background: var(--accent); }
+
+  .sc { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+  .sc.prime { border-color: rgba(38,166,154,0.4); background: linear-gradient(135deg, #111318, rgba(38,166,154,0.04)); }
+  .sc-hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 9px; }
+  .sc-id { font-size: 11px; font-weight: 700; color: var(--muted); }
+  .sc-name { font-size: 13px; font-weight: 700; color: #fff; margin-top: 3px; }
+  .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
+  .sc-row { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; border-bottom: 1px solid #13161e; }
+  .sk { color: var(--muted); } .sv { font-family: 'Courier New', monospace; color: #fff; font-size: 11px; }
+  .sc-rat { font-size: 11px; color: var(--muted); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 7px; }
+
+  .scenario { border-left: 3px solid; padding: 10px 14px; background: var(--panel); border-radius: 0 6px 6px 0; margin-bottom: 10px; }
+  .sp { border-color: var(--green); } .sa { border-color: var(--gold); } .sl { border-color: var(--red); }
+  .slbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+
+  .best { background: linear-gradient(135deg, rgba(38,166,154,0.08), rgba(30,136,229,0.06)); border: 1px solid rgba(38,166,154,0.35); border-radius: 8px; padding: 16px 20px; margin-top: 14px; }
+  .best-t { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .best-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .bi { text-align: center; }
+  .bilbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .bival { font-size: 14px; font-weight: 700; color: #fff; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  /* Day summary strip */
+  .day-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 10px 0; border-radius: 6px; overflow: hidden; }
+  .ds-cell { padding: 10px 12px; }
+  .ds-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .ds-val { font-size: 13px; font-weight: 700; color: #fff; }
+  .ds-sub { font-size: 10px; margin-top: 2px; }
+
+  .stat-bar { height: 4px; border-radius: 2px; margin-top: 5px; }
+  .hp { color: var(--green); font-weight: 600; }
+  .mp { color: var(--gold); font-weight: 600; }
+  .lp { color: var(--muted); font-weight: 500; }
+
+  .fvg-box { background: rgba(0,172,193,0.08); border: 1px solid rgba(0,172,193,0.25); border-radius: 4px; padding: 8px 12px; font-size: 11px; }
+
+  .hlbox { font-size: 20px; font-weight: 800; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-left">
+    <h1>EURUSD — Pre-New York Report</h1>
+    <p>Monday 15 June 2026 &bull; 14:00 EET &bull; NY session opens in 2 hours (16:00 EET)</p>
+    <div class="h-badges">
+      <span class="badge-pill p-green">BULLISH 4H BIAS</span>
+      <span class="badge-pill p-teal">LONDON: INSIDE RANGE ✓</span>
+      <span class="badge-pill p-gold">PRIMARY DRAW: 1.16221</span>
+      <span class="badge-pill p-orange">NY JUDAS LOW EXPECTED</span>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="cur">1.16111</div>
+    <div class="sub">Last M5 14:05 &bull; London H: 1.16146 &bull; London L: 1.15972</div>
+  </div>
+</div>
+
+<!-- DAY NARRATIVE STRIP -->
+<div class="day-strip">
+  <div class="ds-cell" style="background:rgba(30,136,229,0.12)">
+    <div class="ds-label">Overnight</div>
+    <div class="ds-val" style="color:var(--green)">+49.9 pips ↑</div>
+    <div class="ds-sub" style="color:var(--green)">1.15677 → 1.16176 &bull; BOS</div>
+  </div>
+  <div class="ds-cell" style="background:rgba(38,166,154,0.1)">
+    <div class="ds-label">Asia Session</div>
+    <div class="ds-val" style="color:var(--green)">LOW_SWEEP_JUDAS</div>
+    <div class="ds-sub" style="color:var(--muted)">L:1.15943 → HOD:1.16221 (27.8p)</div>
+  </div>
+  <div class="ds-cell" style="background:rgba(0,172,193,0.1)">
+    <div class="ds-label">London Session</div>
+    <div class="ds-val" style="color:var(--teal)">INSIDE RANGE</div>
+    <div class="ds-sub" style="color:var(--muted)">L:1.15972 H:1.16146 &bull; BULL close</div>
+  </div>
+  <div class="ds-cell" style="background:rgba(255,112,67,0.12)">
+    <div class="ds-label">New York (16:00→)</div>
+    <div class="ds-val" style="color:var(--orange)">PENDING</div>
+    <div class="ds-sub" style="color:var(--orange)">Primary draw: 1.16221 (unswept)</div>
+  </div>
+</div>
+
+<!-- EXEC SUMMARY PANELS -->
+<div class="section">
+  <div class="stitle">Executive Summary — Session Recap &amp; NY Setup</div>
+  <div class="g5">
+    <div class="panel">
+      <div class="plabel">Session HOD</div>
+      <div class="pval" style="color:var(--orange)">1.16221</div>
+      <div class="psub">08:15 EET &bull; Asia HOD &bull; Unswept by London</div>
+    </div>
+    <div class="panel">
+      <div class="plabel">London H / L</div>
+      <div class="pval">1.16146 / 1.15972</div>
+      <div class="psub">Range 17.4p &bull; INSIDE Asia range</div>
+    </div>
+    <div class="panel">
+      <div class="plabel">Current Price</div>
+      <div class="pval">1.16111</div>
+      <div class="psub">3.5p below London H &bull; Pre-NY compression</div>
+    </div>
+    <div class="panel">
+      <div class="plabel">Pre-NY Range</div>
+      <div class="pval">11.2 pips</div>
+      <div class="psub">13:00–14:05 &bull; 1.16034–1.16146</div>
+    </div>
+    <div class="panel">
+      <div class="plabel">4H Bias</div>
+      <div class="pval" style="color:var(--green)">BULLISH</div>
+      <div class="psub">BOS confirmed &bull; OB demand at 1.15677</div>
+    </div>
+  </div>
+</div>
+
+<!-- LONDON COMPLETE + 4H/1H -->
+<div class="section">
+  <div class="stitle">London Session Complete — Structure &amp; 4H State</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;">1H London Candles — Today</div>
+      <table>
+        <tr><th>Hour (EET)</th><th>High</th><th>Low</th><th>Close</th><th>Range</th><th>Note</th></tr>
+        <tr>
+          <td style="color:var(--muted)">10:00</td>
+          <td class="p" style="font-size:11px">1.16180</td><td class="p" style="font-size:11px">1.16008</td><td class="p" style="font-size:11px">1.16063</td><td style="color:var(--muted);font-size:10px">17.2p</td>
+          <td style="font-size:10px;color:var(--muted)">Tight open, held demand</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted)">11:00</td>
+          <td class="p" style="font-size:11px">1.16106</td><td class="p" style="font-size:11px">1.16015</td><td class="p" style="font-size:11px">1.16063</td><td style="color:var(--muted);font-size:10px">9.1p</td>
+          <td style="font-size:10px;color:var(--muted)">Range compression</td>
+        </tr>
+        <tr style="background:rgba(239,83,80,0.06)">
+          <td style="color:var(--red)">12:00</td>
+          <td class="p" style="font-size:11px">1.16104</td><td class="pr" style="font-size:11px;font-weight:700">1.15972</td><td class="p" style="font-size:11px">1.16017</td><td style="color:var(--muted);font-size:10px">13.2p</td>
+          <td style="font-size:10px;color:var(--red)">&#9660; London Low printed</td>
+        </tr>
+        <tr style="background:rgba(38,166,154,0.04)">
+          <td style="color:var(--green)">13:00</td>
+          <td class="p" style="font-size:11px">1.16107</td><td class="p" style="font-size:11px">1.16007</td><td class="p" style="font-size:11px">1.16069</td><td style="color:var(--muted);font-size:10px">10.0p</td>
+          <td style="font-size:10px;color:var(--green)">Recovery &amp; grind up</td>
+        </tr>
+        <tr style="background:rgba(38,166,154,0.06)">
+          <td style="color:var(--green)">14:00 ▶</td>
+          <td class="pg" style="font-size:11px;font-weight:700">1.16146</td><td class="p" style="font-size:11px">1.16034</td><td class="py" style="font-size:11px">1.16106</td><td style="color:var(--muted);font-size:10px">11.2p</td>
+          <td style="font-size:10px;color:var(--orange)">LIVE — London High ▶</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:12px;">
+        <table>
+          <tr><th>London Parameter</th><th>Value</th><th>Implication for NY</th></tr>
+          <tr><td>London High</td><td class="po">1.16146</td><td style="font-size:11px;color:var(--muted)">BSL — NY sweep target, stops above</td></tr>
+          <tr><td>London Low</td><td class="pt">1.15972</td><td style="font-size:11px;color:var(--muted)">SSL — NY Judas sweep target (70% hist.)</td></tr>
+          <tr><td>London Judas</td><td><span class="b info">INSIDE_RANGE</span></td><td style="font-size:11px;color:var(--muted)">Stayed within Asia 1.15943–1.16221</td></tr>
+          <tr><td>Asia HOD swept?</td><td><span class="b warn">NO — 1.16221</span></td><td style="font-size:11px;color:var(--orange)">Primary NY draw — unswept BSL</td></tr>
+          <tr><td>Asia LOD swept?</td><td><span class="b neutral">NO — 1.15943</span></td><td style="font-size:11px;color:var(--muted)">Double SSL below (1.15972 + 1.15943)</td></tr>
+          <tr><td>London Direction</td><td><span class="b bull">BULL</span></td><td style="font-size:11px;color:var(--muted)">Close (1.16111) &gt; Open (1.16070)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel" style="margin-bottom:10px;">
+        <div class="plabel">4H Candles — Today</div>
+        <table style="margin-top:8px;">
+          <tr><th>4H (EET)</th><th>O</th><th>H</th><th>L</th><th>C</th><th>Status</th></tr>
+          <tr>
+            <td style="color:var(--muted);font-size:11px">04:00</td>
+            <td class="p" style="font-size:11px">1.15677</td><td class="p" style="font-size:11px">1.16176</td><td class="p" style="font-size:11px">1.15677</td><td class="p" style="font-size:11px">1.15990</td>
+            <td><span class="b bull" style="font-size:9px">CLOSED BULL</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-size:11px">08:00</td>
+            <td class="p" style="font-size:11px">1.15990</td><td class="po" style="font-size:11px">1.16221</td><td class="p" style="font-size:11px">1.15943</td><td class="p" style="font-size:11px">1.16127</td>
+            <td><span class="b bull" style="font-size:9px">CLOSED BULL</span></td>
+          </tr>
+          <tr style="background:rgba(244,185,66,0.05)">
+            <td style="color:var(--gold);font-size:11px">12:00 ▶</td>
+            <td class="p" style="font-size:11px">1.16127</td><td class="po" style="font-size:11px">1.16221</td><td class="pr" style="font-size:11px">1.15972</td><td class="py" style="font-size:11px">1.16017</td>
+            <td><span class="b warn" style="font-size:9px">LIVE — BEAR wick</span></td>
+          </tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.7;">
+          The live 12:00 4H candle (covers 12:00–15:59 EET) opened at <span class="p" style="font-size:11px">1.16127</span>, printed the session HOD (<span style="color:var(--orange)">1.16221</span>) and the London Low (<span style="color:var(--red)">1.15972</span>), currently closing toward <span style="color:var(--gold)">1.16017</span>. Wide wicks above and below indicate institutional accumulation in this range. The 16:00 4H candle (NY open) will be the <strong style="color:#fff">expansion candle</strong> — expected bullish if bias holds.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="plabel">5M London Low Structure — Key OB for NY</div>
+        <table style="margin-top:8px;" class="m5-t">
+          <tr><th>Time</th><th>H</th><th>L</th><th>Close</th><th>Label</th></tr>
+          <tr style="background:rgba(239,83,80,0.06)"><td style="color:var(--muted);font-size:10px">11:50</td><td class="p" style="font-size:11px">1.16019</td><td class="pr" style="font-size:11px;font-weight:700">1.15972</td><td class="p" style="font-size:11px">1.15973</td><td style="color:var(--red);font-size:10px">LONDON LOW</td></tr>
+          <tr><td style="color:var(--muted);font-size:10px">11:55</td><td class="p" style="font-size:11px">1.15993</td><td class="p" style="font-size:11px">1.15972</td><td class="p" style="font-size:11px">1.15993</td><td style="color:var(--muted);font-size:10px">Wick recovery</td></tr>
+          <tr style="background:rgba(38,166,154,0.06)"><td style="color:var(--green);font-size:10px">12:05</td><td class="pg" style="font-size:11px">1.16079</td><td class="p" style="font-size:11px">1.16007</td><td class="pg" style="font-size:11px">1.16079</td><td style="color:var(--green);font-size:10px">IMPULSE UP</td></tr>
+        </table>
+        <div class="fvg-box" style="margin-top:8px;">
+          <span style="color:var(--teal);font-weight:700;">5M Bullish FVG:</span> 1.15993–1.16007 — 11:55 H (1.15993) vs 12:05 L (1.16007). 1.4 pip gap. Demand confirmation zone for NY dips.
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted);">
+          1H Demand OB: <span class="p" style="font-size:11px">1.15972–1.16017</span> — the London Low reversal candles. If NY sweeps this, expect JUDAS_LOW_THEN_BUY.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIQUIDITY MAP -->
+<div class="section">
+  <div class="stitle">Liquidity Map — NY Focus</div>
+  <table>
+    <tr><th>Level</th><th>Type</th><th>Description</th><th>NY Probability</th><th>Action</th></tr>
+    <tr>
+      <td class="p">1.16557</td>
+      <td><span class="b bear">BSL</span></td>
+      <td>Jun 2 HOD — macro buy-side pool</td>
+      <td class="hp">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">Multi-session swing target</td>
+    </tr>
+    <tr>
+      <td class="p">1.16350</td>
+      <td><span class="b bear">BSL</span></td>
+      <td>Extension above HOD — unprinted</td>
+      <td class="mp">MEDIUM</td>
+      <td style="font-size:11px;color:var(--muted)">NY expansion target post-HOD sweep</td>
+    </tr>
+    <tr style="background:rgba(255,112,67,0.04)">
+      <td><span style="font-family:'Courier New',monospace;font-size:13px;font-weight:800;color:var(--orange)">1.16221</span></td>
+      <td><span class="b warn">BSL/HOD</span></td>
+      <td>Asia HOD — UNSWEPT by London &bull; Primary draw</td>
+      <td class="hp">HIGH &#9650;</td>
+      <td style="font-size:11px;color:var(--orange);font-weight:600">Primary NY target — stops resting above</td>
+    </tr>
+    <tr style="background:rgba(255,112,67,0.03)">
+      <td class="p">1.16146</td>
+      <td><span class="b warn">BSL</span></td>
+      <td>London High — stops resting above equal highs</td>
+      <td class="hp">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">NY first BSL target / break confirms bull</td>
+    </tr>
+    <tr>
+      <td class="py">1.16111</td>
+      <td><span class="b neutral">SPOT</span></td>
+      <td>Current price — pre-NY compression zone</td>
+      <td>—</td>
+      <td style="font-size:11px;color:var(--gold)">← NOW 14:05</td>
+    </tr>
+    <tr>
+      <td class="p">1.16034</td>
+      <td><span class="b bull">OB</span></td>
+      <td>Pre-NY consolidation low — 13:10–13:15 demand</td>
+      <td class="mp">MEDIUM</td>
+      <td style="font-size:11px;color:var(--muted)">NY open support — hold = bullish</td>
+    </tr>
+    <tr style="background:rgba(0,172,193,0.04)">
+      <td class="pt">1.15972</td>
+      <td><span class="b info">SSL</span></td>
+      <td>London Low — stops below &bull; 70% hist. NY sweeps London Low</td>
+      <td class="hp">HIGH</td>
+      <td style="font-size:11px;color:var(--teal);font-weight:600">Primary NY Judas target → long entry zone</td>
+    </tr>
+    <tr>
+      <td class="pt">1.15943</td>
+      <td><span class="b info">SSL</span></td>
+      <td>Asia Low — double SSL below London Low</td>
+      <td class="mp">MEDIUM</td>
+      <td style="font-size:11px;color:var(--muted)">If London Low swept, extension target before reversal</td>
+    </tr>
+    <tr>
+      <td class="p">1.15677</td>
+      <td><span class="b bull">OB/SSL</span></td>
+      <td>Session absolute low — 4H demand OB</td>
+      <td class="lp">LOW</td>
+      <td style="font-size:11px;color:var(--muted)">4H structural floor / invalidation</td>
+    </tr>
+  </table>
+</div>
+
+<!-- BEHAVIORAL MODEL -->
+<div class="section">
+  <div class="stitle">Intraday Behavior Model — NY Context (11 Sessions)</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;">NY Historical Statistics</div>
+      <table>
+        <tr><th>NY Metric</th><th>Count</th><th>Rate</th><th>Today Relevance</th></tr>
+        <tr>
+          <td>Swept London LOW</td><td>7/10</td><td class="hp">70%</td>
+          <td style="font-size:11px;color:var(--orange)">London L = 1.15972 — HIGH probability NY target</td>
+        </tr>
+        <tr>
+          <td>Swept London HIGH</td><td>4/10</td><td class="mp">40%</td>
+          <td style="font-size:11px;color:var(--muted)">London H = 1.16146 — also BSL target</td>
+        </tr>
+        <tr>
+          <td>DIRECT_CONTINUATION_LOWER</td><td>4/10</td><td class="mp">40%</td>
+          <td style="font-size:11px;color:var(--muted)">Bearish HTF only — NOT today</td>
+        </tr>
+        <tr>
+          <td>JUDAS_HIGH_THEN_SELL</td><td>3/10</td><td class="mp">30%</td>
+          <td style="font-size:11px;color:var(--muted)">Bearish HTF only — NOT today</td>
+        </tr>
+        <tr>
+          <td>JUDAS_LOW_THEN_BUY</td><td>1/10</td><td class="lp">10%</td>
+          <td style="font-size:11px;color:var(--green)">Jun 11 bullish precedent — EXPECTED today</td>
+        </tr>
+        <tr>
+          <td>INSIDE_RANGE</td><td>1/10</td><td class="lp">10%</td>
+          <td style="font-size:11px;color:var(--muted)">Jun 12 precedent (BOTH_SWEEP London)</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:10px;background:rgba(0,172,193,0.07);border:1px solid rgba(0,172,193,0.25);border-radius:6px;padding:10px;font-size:11px;line-height:1.7;">
+        <span style="color:var(--teal);font-weight:700;">KEY STAT:</span> NY swept London Low in <strong style="color:#fff">7 out of 10 sessions (70%)</strong>. Today's London Low (1.15972) is the most statistically likely NY sweep target. In the only bullish HTF precedent with a similar NY sweep (Jun 11 JUDAS_LOW_THEN_BUY), the market rallied strongly after sweeping the London Low — returning to sweep the London High and beyond.
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:8px;">Bullish HTF Precedent Comparison</div>
+      <table>
+        <tr><th>Date</th><th>London Judas</th><th>NY Pattern</th><th>NY Swept L-High</th><th>NY Swept L-Low</th></tr>
+        <tr style="background:rgba(38,166,154,0.05)">
+          <td style="font-size:11px">Jun 11</td>
+          <td><span class="b bull" style="font-size:9px">LOW_SWEEP</span></td>
+          <td><span class="b bull" style="font-size:9px">JUDAS_LOW_BUY</span></td>
+          <td style="color:var(--green)">YES (20:30)</td>
+          <td style="color:var(--green)">YES (17:35)</td>
+        </tr>
+        <tr style="background:rgba(38,166,154,0.03)">
+          <td style="font-size:11px">Jun 12</td>
+          <td><span class="b warn" style="font-size:9px">BOTH_SWEEP</span></td>
+          <td><span class="b neutral" style="font-size:9px">INSIDE_RANGE</span></td>
+          <td style="color:var(--muted)">NO</td>
+          <td style="color:var(--muted)">NO</td>
+        </tr>
+        <tr style="background:rgba(255,112,67,0.05)">
+          <td style="color:var(--orange);font-size:11px"><strong>Jun 15 (today)</strong></td>
+          <td><span class="b info" style="font-size:9px">INSIDE_RANGE</span></td>
+          <td><span class="b warn" style="font-size:9px">PENDING</span></td>
+          <td style="color:var(--orange)">EXPECTED</td>
+          <td style="color:var(--orange)">LIKELY FIRST</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:10px;background:rgba(255,112,67,0.07);border:1px solid rgba(255,112,67,0.25);border-radius:6px;padding:10px;font-size:11px;line-height:1.7;">
+        <span style="color:var(--orange);font-weight:700;">TODAY'S CRITICAL FACTOR:</span> London INSIDE_RANGE = Asia HOD (1.16221) was <strong style="color:#fff">never swept</strong>. This is the institutional draw that NY must price toward. The compression pre-NY (1.16034–1.16146) with price holding near London High is a <strong style="color:var(--gold)">coil before the expansion</strong>. NY will load up on liquidity below (London Low 1.15972) before the true move to 1.16221 begins.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRE-NY STRUCTURE -->
+<div class="section">
+  <div class="stitle">Pre-NY Compression Zone (13:00–14:05 EET)</div>
+  <div class="g2">
+    <div class="panel">
+      <div class="plabel">5M Consolidation — Last 90 Minutes</div>
+      <table style="margin-top:8px;">
+        <tr><th>Time</th><th>High</th><th>Low</th><th>Close</th><th>Range</th></tr>
+        <tr><td style="color:var(--muted);font-size:10px">13:00–13:10</td><td class="p" style="font-size:11px">1.16079</td><td class="p" style="font-size:11px">1.16034</td><td class="p" style="font-size:11px">1.16039</td><td style="font-size:10px;color:var(--muted)">Pullback base</td></tr>
+        <tr style="background:rgba(38,166,154,0.04)"><td style="color:var(--green);font-size:10px">13:15–13:30</td><td class="p" style="font-size:11px">1.16116</td><td class="p" style="font-size:11px">1.16034</td><td class="pg" style="font-size:11px">1.16105</td><td style="font-size:10px;color:var(--green)">Grind up</td></tr>
+        <tr style="background:rgba(255,112,67,0.04)"><td style="color:var(--orange);font-size:10px">13:35–13:40</td><td class="po" style="font-size:11px;font-weight:700">1.16146</td><td class="p" style="font-size:11px">1.16103</td><td class="p" style="font-size:11px">1.16137</td><td style="font-size:10px;color:var(--orange)">&#9650; LONDON HIGH</td></tr>
+        <tr><td style="color:var(--muted);font-size:10px">13:45–14:05</td><td class="p" style="font-size:11px">1.16140</td><td class="p" style="font-size:11px">1.16101</td><td class="p" style="font-size:11px">1.16111</td><td style="font-size:10px;color:var(--muted)">Micro-pullback</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="plabel">Pre-NY Read</div>
+      <div style="margin-top:8px;font-size:12px;line-height:1.8;color:var(--text);">
+        London High printed at <span class="po">1.16146</span> (13:40) — currently being tested. The micro-pullback to <span class="p">1.16101–1.16111</span> is a standard <strong style="color:#fff">liquidity rebalance</strong> before NY.
+        <br><br>
+        Two key SSL clusters now below current price acting as NY Judas targets:
+        <br>
+        &bull; <span class="pt">1.16034</span> — pre-NY consolidation low (stops below this)<br>
+        &bull; <span class="pt">1.15972</span> — London Low (major stop pool, 70% stat)
+        <br><br>
+        The tightening of bars (1.4–3.2 pip range) over last 45 min = <strong style="color:var(--gold)">maximum compression = maximum upcoming expansion.</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY TRADES -->
+<div class="section">
+  <div class="stitle">Day Trade Setups — New York Session</div>
+  <div class="g2">
+
+    <!-- DT-01 -->
+    <div class="sc prime">
+      <div class="sc-hdr">
+        <div>
+          <div class="sc-id">DT-01 &bull; NY &bull; <span class="b bull">LONG</span></div>
+          <div class="sc-name">NY Judas Low → London Low Sweep → Rally</div>
+        </div>
+        <div style="text-align:right"><span class="g-ap">A+</span><div style="font-size:19px;font-weight:800;color:var(--green);margin-top:4px;">72%</div></div>
+      </div>
+      <div class="sc-grid">
+        <div class="sc-row"><span class="sk">Entry Zone</span><span class="sv">1.15980 – 1.16020</span></div>
+        <div class="sc-row"><span class="sk">Trigger</span><span class="sv">M5 BOS after sweep</span></div>
+        <div class="sc-row"><span class="sk">Stop</span><span class="sv" style="color:var(--red)">1.15810</span></div>
+        <div class="sc-row"><span class="sk">Risk</span><span class="sv">~19 pips</span></div>
+        <div class="sc-row"><span class="sk">Target 1</span><span class="sv" style="color:var(--green)">1.16146</span></div>
+        <div class="sc-row"><span class="sk">RR T1</span><span class="sv" style="color:var(--gold)">1 : 0.7</span></div>
+        <div class="sc-row"><span class="sk">Target 2</span><span class="sv" style="color:var(--green)">1.16221</span></div>
+        <div class="sc-row"><span class="sk">RR T2</span><span class="sv" style="color:var(--green)">1 : 2.3</span></div>
+        <div class="sc-row"><span class="sk">Target 3 (swing)</span><span class="sv" style="color:var(--green)">1.16557</span></div>
+        <div class="sc-row"><span class="sk">RR T3</span><span class="sv" style="color:var(--green)">1 : 4.1</span></div>
+        <div class="sc-row"><span class="sk">Session</span><span class="sv">NY 16:00–17:30</span></div>
+        <div class="sc-row"><span class="sk">Window</span><span class="sv">First 30–60 min</span></div>
+      </div>
+      <div class="sc-rat">Statistical edge: NY swept London Low 70% of sessions. London Low (1.15972) + 5M FVG demand (1.15993–1.16007) = confluence zone. Jun 11 bullish precedent: JUDAS_LOW_THEN_BUY. After sweep, expect acceleration to 1.16221 (Asia HOD never touched by London).</div>
+    </div>
+
+    <!-- DT-02 -->
+    <div class="sc">
+      <div class="sc-hdr">
+        <div>
+          <div class="sc-id">DT-02 &bull; NY &bull; <span class="b bull">LONG</span></div>
+          <div class="sc-name">London High Break → Asia HOD Run</div>
+        </div>
+        <div style="text-align:right"><span class="g-a">A</span><div style="font-size:19px;font-weight:800;color:#64b5f6;margin-top:4px;">62%</div></div>
+      </div>
+      <div class="sc-grid">
+        <div class="sc-row"><span class="sk">Entry Zone</span><span class="sv">1.16148 – 1.16165</span></div>
+        <div class="sc-row"><span class="sk">Trigger</span><span class="sv">M5 close above 1.16146</span></div>
+        <div class="sc-row"><span class="sk">Stop</span><span class="sv" style="color:var(--red)">1.16010</span></div>
+        <div class="sc-row"><span class="sk">Risk</span><span class="sv">~15 pips</span></div>
+        <div class="sc-row"><span class="sk">Target 1</span><span class="sv" style="color:var(--green)">1.16221</span></div>
+        <div class="sc-row"><span class="sk">RR T1</span><span class="sv" style="color:var(--gold)">1 : 0.5</span></div>
+        <div class="sc-row"><span class="sk">Target 2</span><span class="sv" style="color:var(--green)">1.16350</span></div>
+        <div class="sc-row"><span class="sk">RR T2</span><span class="sv" style="color:var(--green)">1 : 1.3</span></div>
+        <div class="sc-row"><span class="sk">Target 3</span><span class="sv" style="color:var(--green)">1.16557</span></div>
+        <div class="sc-row"><span class="sk">RR T3</span><span class="sv" style="color:var(--green)">1 : 2.7</span></div>
+        <div class="sc-row"><span class="sk">Session</span><span class="sv">NY 16:00–17:00</span></div>
+        <div class="sc-row"><span class="sk">Window</span><span class="sv">Immediate NY open</span></div>
+      </div>
+      <div class="sc-rat">If NY opens directly bullish and immediately breaks London High (1.16146), enter on retest. Lower RR to T1 but extension to 1.16557 is very favorable. Only valid if 1.16034 (pre-NY low) holds at open.</div>
+    </div>
+
+    <!-- DT-03 -->
+    <div class="sc">
+      <div class="sc-hdr">
+        <div>
+          <div class="sc-id">DT-03 &bull; NY &bull; <span class="b bull">LONG</span></div>
+          <div class="sc-name">Deep NY Judas — Asia Low Zone</div>
+        </div>
+        <div style="text-align:right"><span class="g-a">A</span><div style="font-size:19px;font-weight:800;color:#64b5f6;margin-top:4px;">58%</div></div>
+      </div>
+      <div class="sc-grid">
+        <div class="sc-row"><span class="sk">Entry Zone</span><span class="sv">1.15930 – 1.15970</span></div>
+        <div class="sc-row"><span class="sk">Trigger</span><span class="sv">Sweep 1.15943 + M5 BOS</span></div>
+        <div class="sc-row"><span class="sk">Stop</span><span class="sv" style="color:var(--red)">1.15750</span></div>
+        <div class="sc-row"><span class="sk">Risk</span><span class="sv">~22 pips</span></div>
+        <div class="sc-row"><span class="sk">Target 1</span><span class="sv" style="color:var(--green)">1.16221</span></div>
+        <div class="sc-row"><span class="sk">RR T1</span><span class="sv" style="color:var(--green)">1 : 2.7</span></div>
+        <div class="sc-row"><span class="sk">Target 2</span><span class="sv" style="color:var(--green)">1.16557</span></div>
+        <div class="sc-row"><span class="sk">RR T2</span><span class="sv" style="color:var(--green)">1 : 5.0</span></div>
+        <div class="sc-row"><span class="sk">Session</span><span class="sv">NY 16:00–17:30</span></div>
+        <div class="sc-row"><span class="sk">Window</span><span class="sv">Early NY only</span></div>
+      </div>
+      <div class="sc-rat">If London Low (1.15972) doesn't hold, price extends to sweep Asia Low (1.15943). Double SSL = double stop pool. Entry on M5 BOS confirmation only. Best RR setup on the board — highest risk:reward if triggered. 4H OB at 1.15677 as ultimate floor.</div>
+    </div>
+
+    <!-- DT-04 -->
+    <div class="sc">
+      <div class="sc-hdr">
+        <div>
+          <div class="sc-id">DT-04 &bull; NY &bull; <span class="b bull">LONG</span></div>
+          <div class="sc-name">Pre-NY Range Support Hold</div>
+        </div>
+        <div style="text-align:right"><span class="g-b">B</span><div style="font-size:19px;font-weight:800;color:var(--gold);margin-top:4px;">50%</div></div>
+      </div>
+      <div class="sc-grid">
+        <div class="sc-row"><span class="sk">Entry Zone</span><span class="sv">1.16034 – 1.16060</span></div>
+        <div class="sc-row"><span class="sk">Trigger</span><span class="sv">Hold above pre-NY low</span></div>
+        <div class="sc-row"><span class="sk">Stop</span><span class="sv" style="color:var(--red)">1.15870</span></div>
+        <div class="sc-row"><span class="sk">Risk</span><span class="sv">~18 pips</span></div>
+        <div class="sc-row"><span class="sk">Target 1</span><span class="sv" style="color:var(--green)">1.16146</span></div>
+        <div class="sc-row"><span class="sk">RR T1</span><span class="sv" style="color:var(--gold)">1 : 0.6</span></div>
+        <div class="sc-row"><span class="sk">Target 2</span><span class="sv" style="color:var(--green)">1.16221</span></div>
+        <div class="sc-row"><span class="sk">RR T2</span><span class="sv" style="color:var(--green)">1 : 1.1</span></div>
+        <div class="sc-row"><span class="sk">Session</span><span class="sv">15:30–16:30</span></div>
+        <div class="sc-row"><span class="sk">Window</span><span class="sv">Pre/early NY</span></div>
+      </div>
+      <div class="sc-rat">Only if NY opens holding above 1.16034 (13:10 pre-NY low). Aggressive early entry — lower conviction because NY often gives a dip first. Low RR to T1, acceptable to T2.</div>
+    </div>
+
+    <!-- DT-05 -->
+    <div class="sc">
+      <div class="sc-hdr">
+        <div>
+          <div class="sc-id">DT-05 &bull; NY/LATE &bull; <span class="b bear">SHORT</span></div>
+          <div class="sc-name">Asia HOD Sweep Exhaustion Fade</div>
+        </div>
+        <div style="text-align:right"><span class="g-c">C</span><div style="font-size:19px;font-weight:800;color:#b39ddb;margin-top:4px;">28%</div></div>
+      </div>
+      <div class="sc-grid">
+        <div class="sc-row"><span class="sk">Entry Zone</span><span class="sv">1.16225 – 1.16260</span></div>
+        <div class="sc-row"><span class="sk">Trigger</span><span class="sv">M5 CHoCH at HOD zone</span></div>
+        <div class="sc-row"><span class="sk">Stop</span><span class="sv" style="color:var(--red)">1.16360</span></div>
+        <div class="sc-row"><span class="sk">Risk</span><span class="sv">~11 pips</span></div>
+        <div class="sc-row"><span class="sk">Target 1</span><span class="sv" style="color:var(--green)">1.16071</span></div>
+        <div class="sc-row"><span class="sk">RR T1</span><span class="sv" style="color:var(--gold)">1 : 1.6</span></div>
+        <div class="sc-row"><span class="sk">Target 2</span><span class="sv" style="color:var(--green)">1.15972</span></div>
+        <div class="sc-row"><span class="sk">RR T2</span><span class="sv" style="color:var(--gold)">1 : 2.6</span></div>
+        <div class="sc-row"><span class="sk">Session</span><span class="sv">NY late / 18:00+</span></div>
+        <div class="sc-row"><span class="sk">Window</span><span class="sv">Only after 1.16221 swept</span></div>
+      </div>
+      <div class="sc-rat">Counter-trend — ONLY if 1.16221 sweeps with clear M5 CHoCH (lower low + lower high on 5M). Fights 4H bullish bias — valid as late-session intraday scalp only. Low conviction. Do NOT anticipate before HOD is reached.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SWING TRADES -->
+<div class="section">
+  <div class="stitle">Swing Trades — Macro Continuation</div>
+  <table>
+    <tr><th>ID</th><th>Dir</th><th>Grade</th><th>%</th><th>Entry Zone</th><th>Stop</th><th>T1</th><th>T2</th><th>RR T2</th><th>Rationale</th></tr>
+    <tr>
+      <td><strong>SW-01</strong></td><td><span class="b bull">LONG</span></td><td><span class="g-ap">A+</span></td>
+      <td class="hp">80%</td><td class="pg">1.15980 – 1.16020</td><td class="pr">1.15580</td>
+      <td class="pg">1.16221</td><td class="pg">1.16557</td>
+      <td class="pg">1 : 4.3</td>
+      <td style="font-size:11px;color:var(--muted)">Same entry as DT-01. Swing size stop. Full macro BSL target. Best swing RR available.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-02</strong></td><td><span class="b bull">LONG</span></td><td><span class="g-a">A</span></td>
+      <td style="color:#64b5f6;font-weight:600">70%</td><td class="pg">1.15930 – 1.15970</td><td class="pr">1.15500</td>
+      <td class="pg">1.16221</td><td class="pg">1.16557</td>
+      <td class="pg">1 : 5.2</td>
+      <td style="font-size:11px;color:var(--muted)">DT-03 deep sweep entry. Double SSL zone (London + Asia). Outstanding RR. Wait patiently.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-03</strong></td><td><span class="b bull">LONG</span></td><td><span class="g-a">A</span></td>
+      <td style="color:#64b5f6;font-weight:600">65%</td><td class="pg">1.16146 – 1.16165</td><td class="pr">1.15700</td>
+      <td class="pg">1.16557</td><td class="py">1.17000</td>
+      <td class="pg">1 : 1.9</td>
+      <td style="font-size:11px;color:var(--muted)">London High breakout entry. Lower RR but confirms bullish continuation. Target macro BSL cluster.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-04</strong></td><td><span class="b bull">LONG</span></td><td><span class="g-b">B</span></td>
+      <td class="mp">55%</td><td class="pg">1.16221 – 1.16260</td><td class="pr">1.15900</td>
+      <td class="pg">1.16557</td><td class="py">1.17200</td>
+      <td class="pg">1 : 1.0</td>
+      <td style="font-size:11px;color:var(--muted)">Buy above HOD sweep on M15 pullback. Only after confirmation. Targeting fresh macro BSL highs.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-05</strong></td><td><span class="b bear">SHORT</span></td><td><span class="g-c">C</span></td>
+      <td class="lp">20%</td><td class="pr">1.16500 – 1.16557</td><td class="pr">1.16750</td>
+      <td class="pg">1.15800</td><td class="pr">1.15029</td>
+      <td class="py">1 : 3.7</td>
+      <td style="font-size:11px;color:var(--muted)">Only if 4H CHoCH confirmed at Jun 2 macro BSL. Requires structural reversal. Very low priority.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- CONCLUSION -->
+<div class="section">
+  <div class="stitle">Conclusion — NY Scenarios</div>
+
+  <div class="scenario sp">
+    <div class="slbl" style="color:var(--green)">&#9679; Most Likely — NY JUDAS_LOW_THEN_BUY (60%)</div>
+    <div style="font-size:12px;color:var(--text);margin-top:4px;line-height:1.7;">NY opens at 16:00, gives an engineered drop sweeping London Low (1.15972) — consistent with the 70% historical stat. The sweep triggers stops below, creating a liquidity grab in the 1.15943–1.15980 zone (London Low + Asia Low cluster). Price then prints M5 BOS to the upside, confirming the Judas. Aggressive rally follows: breaks London High (1.16146), sweeps Asia HOD (1.16221) — completing the institutional target unfinished by London. Extended run toward 1.16350–1.16557. Pattern: NY sweeps London Low first (17:00–17:30), then London High (18:30–20:00), then expands. Consistent with Jun 11 JUDAS_LOW_THEN_BUY precedent.</div>
+  </div>
+
+  <div class="scenario sa">
+    <div class="slbl" style="color:var(--gold)">&#9679; Alternative — NY DIRECT_CONTINUATION_HIGHER (28%)</div>
+    <div style="font-size:12px;color:var(--text);margin-top:4px;line-height:1.7;">NY opens and immediately expands higher, holding above pre-NY consolidation low (1.16034). Price breaks London High (1.16146) in the first 15 minutes, sweeps Asia HOD (1.16221), and continues to 1.16350+. No London Low sweep. Possible if the NY open is driven by strong institutional order flow (e.g. US macro catalyst). Less setup time but equally valid under 4H bullish bias. Entry: London High break (DT-02).</div>
+  </div>
+
+  <div class="scenario sl">
+    <div class="slbl" style="color:var(--red)">&#9679; Low Probability — BEARISH EXPANSION (12%)</div>
+    <div style="font-size:12px;color:var(--text);margin-top:4px;line-height:1.7;">NY opens and sells through London Low (1.15972), continues below Asia Low (1.15943), targeting 1.15800–1.15677 4H demand. Bullish thesis temporarily challenged — however, 4H structure remains intact above 1.15677. If this scenario triggers, wait for deep demand OB confirmation before re-entering long. 4H CHoCH only below 1.15029 — not expected.</div>
+  </div>
+
+  <div class="best">
+    <div class="best-t">&#11088; Best Single Trade — DT-01 / SW-01</div>
+    <div class="best-grid">
+      <div class="bi"><div class="bilbl">Direction</div><div class="bival" style="color:var(--green)">LONG</div></div>
+      <div class="bi"><div class="bilbl">Entry Zone</div><div class="bival">1.15980<br><span style="font-size:11px">– 1.16020</span></div></div>
+      <div class="bi"><div class="bilbl">Stop</div><div class="bival" style="color:var(--red)">1.15810</div></div>
+      <div class="bi"><div class="bilbl">Target 1</div><div class="bival" style="color:var(--green)">1.16221</div></div>
+      <div class="bi"><div class="bilbl">Target 2</div><div class="bival" style="color:var(--green)">1.16557</div></div>
+      <div class="bi"><div class="bilbl">R:R</div><div class="bival" style="color:var(--green)">1:2.3 / 1:4.1</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;line-height:1.7;">
+      <span style="color:var(--green);font-weight:700;">Execution:</span> At NY open (16:00 EET), do NOT enter immediately. Watch price action. If NY dips toward <span class="pt">1.15972–1.16000</span> (London Low sweep zone), wait for a <strong style="color:#fff">M5 bullish candle close above 1.16010</strong> (confirmation of demand absorption). Enter long at 1.15980–1.16020. Hard stop: <span class="pr">1.15810</span>. Take 50% at <span class="pg">1.16146</span> (London High); trail stop to breakeven; run remainder to <span class="po">1.16221</span>. Swing size position: hold for <span class="pg">1.16557</span>. If NY does NOT give the dip and opens directly bullish, step to DT-02 (London High break entry). If NY gives deep sweep to <span class="pt">1.15943</span>, that's DT-03 — best RR of the day (1:5).
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+  <span>EURUSD &bull; SMC/ICT &bull; 15 Jun 2026 &bull; Pre-NY Update 14:00 EET &bull; Behavior model: 11 sessions</span>
+  <span>London complete: INSIDE_RANGE &bull; Asia HOD 1.16221 unswept &bull; NY primary draw confirmed</span>
+</div>
+
+</div>
+</body>
+</html>
