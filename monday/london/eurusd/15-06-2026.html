@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EURUSD — Pre-London Report | 15 Jun 2026</title>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --panel: #111318;
+    --border: #1e2330;
+    --accent: #1e88e5;
+    --gold: #f4b942;
+    --green: #26a69a;
+    --red: #ef5350;
+    --purple: #7e57c2;
+    --text: #c8cdd8;
+    --muted: #5a6070;
+    --tag-bg: #161b26;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.5; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px; }
+  .header-left h1 { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+  .header-left p { color: var(--muted); font-size: 11px; margin-top: 4px; }
+  .header-right { text-align: right; }
+  .bias-badge { display: inline-block; background: var(--green); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 1px; padding: 6px 16px; border-radius: 4px; }
+  .time-badge { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* Section */
+  .section { margin-bottom: 20px; }
+  .section-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+  /* Panel */
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+  .panel-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .panel-value { font-size: 15px; font-weight: 700; color: #fff; }
+  .panel-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+  td { padding: 9px 10px; border-bottom: 1px solid #15181f; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #13161e; }
+
+  /* Tags & Badges */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+  .bull { background: rgba(38,166,154,0.15); color: var(--green); border: 1px solid rgba(38,166,154,0.3); }
+  .bear { background: rgba(239,83,80,0.15); color: var(--red); border: 1px solid rgba(239,83,80,0.3); }
+  .neutral { background: rgba(90,96,112,0.2); color: var(--muted); border: 1px solid var(--border); }
+  .high-prob { color: var(--green); font-weight: 600; }
+  .med-prob { color: var(--gold); font-weight: 600; }
+  .low-prob { color: var(--muted); font-weight: 500; }
+
+  .grade-aplus { background: rgba(38,166,154,0.2); color: var(--green); border: 1px solid rgba(38,166,154,0.4); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 800; }
+  .grade-a { background: rgba(30,136,229,0.2); color: #64b5f6; border: 1px solid rgba(30,136,229,0.4); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 700; }
+  .grade-b { background: rgba(244,185,66,0.15); color: var(--gold); border: 1px solid rgba(244,185,66,0.3); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 700; }
+  .grade-c { background: rgba(126,87,194,0.15); color: #b39ddb; border: 1px solid rgba(126,87,194,0.3); border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 600; }
+
+  .price { font-family: 'Courier New', monospace; font-size: 13px; color: #fff; }
+  .price-green { font-family: 'Courier New', monospace; font-size: 12px; color: var(--green); }
+  .price-red { font-family: 'Courier New', monospace; font-size: 12px; color: var(--red); }
+  .price-gold { font-family: 'Courier New', monospace; font-size: 12px; color: var(--gold); }
+
+  /* Zone bar */
+  .zone-bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 11px; }
+  .zone-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--red); }
+  .dot-gold { background: var(--gold); }
+  .dot-blue { background: var(--accent); }
+
+  /* Setup cards */
+  .setup-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+  .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .setup-id { font-size: 11px; font-weight: 700; color: var(--muted); }
+  .setup-prob { font-size: 16px; font-weight: 800; color: #fff; }
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+  .setup-row { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; }
+  .setup-key { color: var(--muted); }
+  .setup-val { font-family: 'Courier New', monospace; color: #fff; }
+  .setup-rationale { font-size: 11px; color: var(--muted); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; font-style: italic; }
+
+  /* Conclusion boxes */
+  .scenario { border-left: 3px solid; padding: 10px 14px; background: var(--panel); border-radius: 0 6px 6px 0; margin-bottom: 10px; }
+  .scenario-primary { border-color: var(--green); }
+  .scenario-alt { border-color: var(--gold); }
+  .scenario-low { border-color: var(--red); }
+  .scenario-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .s-green { color: var(--green); }
+  .s-gold { color: var(--gold); }
+  .s-red { color: var(--red); }
+  .scenario-text { font-size: 12px; color: var(--text); }
+
+  .best-trade { background: linear-gradient(135deg, rgba(38,166,154,0.08), rgba(30,136,229,0.06)); border: 1px solid rgba(38,166,154,0.3); border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
+  .best-trade-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+  .best-trade-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .bt-item { text-align: center; }
+  .bt-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .bt-val { font-size: 14px; font-weight: 700; color: #fff; font-family: 'Courier New', monospace; margin-top: 2px; }
+
+  /* Stat pills */
+  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .stat-pill { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11px; }
+  .stat-pill span { color: var(--gold); font-weight: 700; }
+
+  .sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* Alert bar */
+  .alert { background: rgba(244,185,66,0.08); border: 1px solid rgba(244,185,66,0.25); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--gold); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .alert-icon { font-size: 16px; }
+
+  /* Range visual */
+  .range-visual { position: relative; height: 6px; background: var(--border); border-radius: 3px; margin: 10px 0; }
+  .range-fill { position: absolute; top: 0; height: 100%; background: var(--accent); border-radius: 3px; }
+  .range-price { position: absolute; top: -18px; transform: translateX(-50%); font-size: 10px; color: var(--gold); white-space: nowrap; }
+  .range-marker { position: absolute; top: -4px; width: 3px; height: 14px; border-radius: 2px; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>EURUSD &mdash; Pre-London Institutional Report</h1>
+    <p>Monday 15 June 2026 &bull; 05:30 EET &bull; Asia session ongoing &bull; London open in ~4h 30m</p>
+  </div>
+  <div class="header-right">
+    <div class="bias-badge">BULLISH 4H BIAS</div>
+    <div class="time-badge">Last price: 1.15980 &bull; HOD: 1.16176</div>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="alert">
+  <span class="alert-icon">&#9888;</span>
+  <div>Asia session building tight range (H: 1.16119 / L: 1.15944). Primary expectation: London Judas LOW sweep in first 30–60 min, then bullish expansion. Price currently at PREMIUM on 4H dealing range. Monitor 1.15944 for London entry trigger.</div>
+</div>
+
+<!-- ===== EXECUTIVE SUMMARY ===== -->
+<div class="section">
+  <div class="section-title">Executive Summary</div>
+  <div class="grid-4">
+    <div class="panel">
+      <div class="panel-label">4H Structure</div>
+      <div class="panel-value" style="color:var(--green)">BULLISH</div>
+      <div class="panel-sub">CHoCH Jun 11 NY &bull; BOS Jun 15 overnight</div>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Dealing Range</div>
+      <div class="panel-value">1.15029 – 1.16176</div>
+      <div class="panel-sub">Range: 114.7 pips &bull; 50% EQ: 1.15603</div>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Current Position</div>
+      <div class="panel-value" style="color:var(--gold)">PREMIUM</div>
+      <div class="panel-sub">1.15980 (above 70% of range) &bull; Pullback active</div>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Asia Range (so far)</div>
+      <div class="panel-value">17.5 pips</div>
+      <div class="panel-sub">H: 1.16119 &bull; L: 1.15944 &bull; Still building</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4H BIAS ===== -->
+<div class="section">
+  <div class="section-title">4H Macro Bias</div>
+  <div class="grid-2">
+    <div>
+      <table>
+        <tr><th>Parameter</th><th>Value</th><th>Note</th></tr>
+        <tr>
+          <td>Bias</td>
+          <td><span class="badge bull">BULLISH</span></td>
+          <td style="color:var(--muted);font-size:11px">Confirmed CHoCH + BOS</td>
+        </tr>
+        <tr>
+          <td>CHoCH Event</td>
+          <td class="price-green">1.15029 → 1.15899</td>
+          <td style="color:var(--muted);font-size:11px">Jun 11 NY &bull; 87-pip reversal</td>
+        </tr>
+        <tr>
+          <td>BOS Confirmation</td>
+          <td class="price-green">→ 1.16176</td>
+          <td style="color:var(--muted);font-size:11px">Jun 15 00:00 EET overnight surge</td>
+        </tr>
+        <tr>
+          <td>Range High (BSL)</td>
+          <td class="price">1.16176</td>
+          <td style="color:var(--muted);font-size:11px">Current HOD &bull; Primary target</td>
+        </tr>
+        <tr>
+          <td>Range Low (SSL)</td>
+          <td class="price">1.15029</td>
+          <td style="color:var(--muted);font-size:11px">Jun 11 absolute macro low</td>
+        </tr>
+        <tr>
+          <td>50% Equilibrium</td>
+          <td class="price-gold">1.15603</td>
+          <td style="color:var(--muted);font-size:11px">Current price above = premium</td>
+        </tr>
+        <tr>
+          <td>Macro BSL Target</td>
+          <td class="price-green">1.16557</td>
+          <td style="color:var(--muted);font-size:11px">Jun 2 HOD &bull; Extended target</td>
+        </tr>
+      </table>
+
+      <div style="margin-top:12px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">4H Dealing Range Position</div>
+        <div style="position:relative;padding-top:24px;">
+          <div class="range-visual">
+            <!-- Current price at ~82% of range -->
+            <div class="range-fill" style="width:82%;"></div>
+            <div class="range-marker" style="left:82%;background:var(--gold);"></div>
+            <div class="range-price" style="left:82%;">1.15980</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px;">
+            <span>SSL 1.15029</span>
+            <span style="color:var(--accent);">50% 1.15603</span>
+            <span>BSL 1.16176</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Key 4H Zones</div>
+      <div class="zone-bar"><div class="zone-dot dot-red"></div><span class="price-gold" style="min-width:75px">1.16557</span><span>Macro BSL — Jun 2 HOD — EXTENDED TARGET</span></div>
+      <div class="zone-bar"><div class="zone-dot dot-green"></div><span class="price-green" style="min-width:75px">1.16176</span><span>Overnight HOD — Primary BSL draw</span></div>
+      <div class="zone-bar"><div class="zone-dot dot-blue"></div><span class="price-gold" style="min-width:75px">1.16119</span><span>Asia session high — immediate BSL</span></div>
+      <div style="border-top:1px dashed var(--border);margin:8px 0;"></div>
+      <div class="zone-bar"><div class="zone-dot" style="background:var(--gold)"></div><span class="price" style="min-width:75px">1.15980</span><span style="color:var(--gold)">&#8592; CURRENT PRICE</span></div>
+      <div style="border-top:1px dashed var(--border);margin:8px 0;"></div>
+      <div class="zone-bar"><div class="zone-dot dot-red"></div><span class="price-red" style="min-width:75px">1.15944</span><span>Asia session low — London sweep target (HIGH)</span></div>
+      <div class="zone-bar"><div class="zone-dot dot-green"></div><span class="price-green" style="min-width:75px">1.15800</span><span>4H OB demand base — entry zone</span></div>
+      <div class="zone-bar"><div class="zone-dot dot-green"></div><span class="price-green" style="min-width:75px">1.15677</span><span>Today's session low — 4H demand / key SSL floor</span></div>
+      <div class="zone-bar"><div class="zone-dot dot-red"></div><span class="price-red" style="min-width:75px">1.15029</span><span>Macro SSL — Jun 11 absolute low</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1H EXECUTION ===== -->
+<div class="section">
+  <div class="section-title">1H Execution Framework</div>
+  <div class="grid-2">
+    <table>
+      <tr><th>Structure Element</th><th>Level</th><th>Status</th></tr>
+      <tr>
+        <td>1H Swing High (HOD)</td>
+        <td class="price">1.16176</td>
+        <td><span class="badge" style="background:rgba(38,166,154,0.1);color:var(--green);border:1px solid rgba(38,166,154,0.3)">BSL — Primary Draw</span></td>
+      </tr>
+      <tr>
+        <td>1H Swing High 2</td>
+        <td class="price">1.16119</td>
+        <td><span class="badge neutral">Asia H — Secondary</span></td>
+      </tr>
+      <tr>
+        <td>Current 1H swing low</td>
+        <td class="price">1.15944</td>
+        <td><span class="badge" style="background:rgba(244,185,66,0.1);color:var(--gold);border:1px solid rgba(244,185,66,0.3)">Asia Low (forming)</span></td>
+      </tr>
+      <tr>
+        <td>1H Demand OB</td>
+        <td class="price-green">1.15677 – 1.15800</td>
+        <td><span class="badge bull">Active Demand</span></td>
+      </tr>
+      <tr>
+        <td>1H Supply OB</td>
+        <td class="price-red">1.16050 – 1.16120</td>
+        <td><span class="badge bear">Pullback candles 02–04h</span></td>
+      </tr>
+      <tr>
+        <td>Invalidation Level</td>
+        <td class="price-red">1.15677</td>
+        <td><span class="badge bear">1H Structural low</span></td>
+      </tr>
+      <tr>
+        <td>Draw on Liquidity</td>
+        <td class="price-green">1.16176 → 1.16557</td>
+        <td><span class="badge bull">Primary → Macro</span></td>
+      </tr>
+    </table>
+
+    <div class="panel">
+      <div class="panel-label">1H Narrative — Jun 15</div>
+      <div style="margin-top:6px;font-size:12px;line-height:1.8;color:var(--text);">
+        Overnight session (00:00–02:00 EET): Explosive impulse from <span style="color:var(--red)">1.15677</span> → <span style="color:var(--green)">1.16176</span> (+49.9 pips). Confirmed 4H BOS above Jun 12 high.
+        <br><br>
+        Asia session (02:00 EET → now): Orderly pullback from 1.16176 HOD. Price drifting lower, compressing toward 1.15944 area. 1H candles show declining highs: <span class="price" style="font-size:11px;">1.16176 → 1.16095 → 1.16017</span>. Classic Asia accumulation / dealing range compression pre-London.
+        <br><br>
+        1H structure remains intact <span style="color:var(--green)">bullish</span>. No 1H CHoCH. Price in controlled premium distribution.
+        <br><br>
+        <span style="color:var(--gold)">Watch:</span> Any dip into 1.15800–1.15880 with M5 BOS above a local swing = premium long entry.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LIQUIDITY MAP ===== -->
+<div class="section">
+  <div class="section-title">Liquidity Map</div>
+  <table>
+    <tr>
+      <th>Level</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Probability</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td class="price">1.16557</td>
+      <td><span class="badge bear">BSL</span></td>
+      <td>Jun 2 HOD — macro buy-side pool</td>
+      <td class="high-prob">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">Multi-day swing target</td>
+    </tr>
+    <tr>
+      <td class="price">1.16176</td>
+      <td><span class="badge bear">BSL</span></td>
+      <td>Jun 15 overnight HOD — resting stops above</td>
+      <td class="high-prob">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">Primary London draw</td>
+    </tr>
+    <tr>
+      <td class="price">1.16119</td>
+      <td><span class="badge bear">BSL</span></td>
+      <td>Asia session high today — stops above equal highs</td>
+      <td class="med-prob">MEDIUM</td>
+      <td style="font-size:11px;color:var(--muted)">London may sweep after Judas low</td>
+    </tr>
+    <tr>
+      <td class="price" style="color:var(--gold)">1.15980</td>
+      <td><span class="badge neutral">SPOT</span></td>
+      <td>Current price — mid Asia range</td>
+      <td>—</td>
+      <td style="font-size:11px;color:var(--gold)">← NOW</td>
+    </tr>
+    <tr>
+      <td class="price">1.15944</td>
+      <td><span class="badge bull">SSL</span></td>
+      <td>Asia session low today — stops below</td>
+      <td class="high-prob">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">Primary London sweep target (Judas)</td>
+    </tr>
+    <tr>
+      <td class="price">1.15800</td>
+      <td><span class="badge bull">OB</span></td>
+      <td>4H demand OB base — 50% entry level</td>
+      <td class="high-prob">HIGH</td>
+      <td style="font-size:11px;color:var(--muted)">London entry zone after sweep</td>
+    </tr>
+    <tr>
+      <td class="price">1.15677</td>
+      <td><span class="badge bull">SSL</span></td>
+      <td>Today's session low — 4H structural floor</td>
+      <td class="med-prob">MEDIUM</td>
+      <td style="font-size:11px;color:var(--muted)">Hard stop level &bull; Invalidation</td>
+    </tr>
+    <tr>
+      <td class="price">1.15029</td>
+      <td><span class="badge bull">SSL</span></td>
+      <td>Jun 11 macro swing low — protected</td>
+      <td class="low-prob">LOW</td>
+      <td style="font-size:11px;color:var(--muted)">Extreme scenario only</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ===== INTRADAY BEHAVIOR ===== -->
+<div class="section">
+  <div class="section-title">Intraday Institutional Behavior (10 Sessions)</div>
+  <div class="grid-2">
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:10px;">London Session Tendencies</div>
+      <div class="stat-row">
+        <div class="stat-pill">Asia High Swept: <span>70%</span> (7/10)</div>
+        <div class="stat-pill">Asia Low Swept: <span>60%</span> (6/10)</div>
+      </div>
+      <div style="margin-top:12px;">
+        <table>
+          <tr><th>Judas Pattern</th><th>Count</th><th>Rate</th></tr>
+          <tr><td>BOTH_SWEEP</td><td>4</td><td class="med-prob">40%</td></tr>
+          <tr><td>HIGH_SWEEP_JUDAS</td><td>3</td><td class="med-prob">30%</td></tr>
+          <tr><td>LOW_SWEEP_JUDAS</td><td>2</td><td class="low-prob">20%</td></tr>
+          <tr><td>INSIDE_RANGE</td><td>1</td><td class="low-prob">10%</td></tr>
+        </table>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);">
+        Sweep timing (Asia LOW by London): 10:35 – 13:10 EET. Centre ~11:00 EET.<br>
+        Sweep timing (Asia HIGH by London): 10:00 – 14:20 EET. Centre ~12:00 EET.
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:10px;">Bullish HTF Environment (2 sessions)</div>
+      <table>
+        <tr><th>Date</th><th>London Judas</th><th>NY Pattern</th></tr>
+        <tr>
+          <td>Jun 12 (Fri)</td>
+          <td><span class="badge" style="background:rgba(126,87,194,0.15);color:#b39ddb;border:1px solid rgba(126,87,194,0.3)">BOTH_SWEEP</span></td>
+          <td><span class="badge neutral">INSIDE_RANGE</span></td>
+        </tr>
+        <tr>
+          <td>Jun 11 (Thu) NY</td>
+          <td><span class="badge bull">LOW_SWEEP first</span></td>
+          <td><span class="badge bull">JUDAS_LOW_THEN_BUY</span></td>
+        </tr>
+      </table>
+      <div style="margin-top:10px;background:rgba(38,166,154,0.06);border:1px solid rgba(38,166,154,0.2);border-radius:6px;padding:10px;font-size:11px;line-height:1.7;">
+        <span style="color:var(--green);font-weight:700;">PATTERN SIGNAL:</span> Both bullish HTF sessions involved a London sweep of Asia LOW first, followed by bullish expansion. Jun 12 swept Asia low at <span style="color:var(--gold)">10:40</span>, then Asia high at <span style="color:var(--gold)">12:25</span>. Expect same behavior today: Asia low (~1.15944) swept early London, then drive toward 1.16176.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;background:rgba(30,136,229,0.06);border:1px solid rgba(30,136,229,0.2);border-radius:6px;padding:12px;">
+    <div style="font-size:10px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Today's Asia Development Observation</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.7;">
+      Asia opened at 02:00 EET (1.16088). Price has been in controlled distribution, drifting lower from 1.16119 (Asia H) toward 1.15944 (Asia L so far). This is classic institutional compression pre-London: narrow range building, price gravitating toward the SSL below. The Asia range of ~17.5 pips (still developing) is abnormally tight following a 50-pip overnight surge — consistent with institutional accumulation at current levels ahead of the London expansion move.
+    </div>
+  </div>
+</div>
+
+<!-- ===== DAY TRADES ===== -->
+<div class="section">
+  <div class="section-title">Day Trade Setups</div>
+  <div class="grid-2" style="grid-template-columns:1fr 1fr;">
+
+    <!-- DT-01 -->
+    <div class="setup-card" style="border-color:rgba(38,166,154,0.35);">
+      <div class="setup-header">
+        <div>
+          <div class="setup-id">DT-01 &bull; LONDON &bull; <span class="badge bull">LONG</span></div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">London Judas Low Sweep Entry</div>
+        </div>
+        <div style="text-align:right">
+          <span class="grade-aplus">A+</span>
+          <div class="setup-prob" style="color:var(--green)">82%</div>
+        </div>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-row"><span class="setup-key">Entry Zone</span><span class="setup-val">1.15800 – 1.15880</span></div>
+        <div class="setup-row"><span class="setup-key">Trigger</span><span class="setup-val">M5 BOS after sweep</span></div>
+        <div class="setup-row"><span class="setup-key">Stop</span><span class="setup-val" style="color:var(--red)">1.15630</span></div>
+        <div class="setup-row"><span class="setup-key">Risk</span><span class="setup-val">~22 pips</span></div>
+        <div class="setup-row"><span class="setup-key">Target 1</span><span class="setup-val" style="color:var(--green)">1.16119</span></div>
+        <div class="setup-row"><span class="setup-key">RR T1</span><span class="setup-val" style="color:var(--green)">1 : 1.6</span></div>
+        <div class="setup-row"><span class="setup-key">Target 2</span><span class="setup-val" style="color:var(--green)">1.16176</span></div>
+        <div class="setup-row"><span class="setup-key">RR T2</span><span class="setup-val" style="color:var(--green)">1 : 2.2</span></div>
+        <div class="setup-row"><span class="setup-key">Session</span><span class="setup-val">London 10:00–11:30</span></div>
+        <div class="setup-row"><span class="setup-key">Probability</span><span class="setup-val" style="color:var(--green)">82%</span></div>
+      </div>
+      <div class="setup-rationale">HTF bullish + Asia low natural London sweep target. Both bullish precedent sessions swept Asia low first. 4H demand OB at 1.15677–1.15800 provides structural support. Highest conviction setup.</div>
+    </div>
+
+    <!-- DT-02 -->
+    <div class="setup-card">
+      <div class="setup-header">
+        <div>
+          <div class="setup-id">DT-02 &bull; LONDON &bull; <span class="badge bull">LONG</span></div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">1H OB Retest — No Judas</div>
+        </div>
+        <div style="text-align:right">
+          <span class="grade-a">A</span>
+          <div class="setup-prob" style="color:#64b5f6">72%</div>
+        </div>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-row"><span class="setup-key">Entry Zone</span><span class="setup-val">1.15960 – 1.16000</span></div>
+        <div class="setup-row"><span class="setup-key">Trigger</span><span class="setup-val">Hold above Asia low</span></div>
+        <div class="setup-row"><span class="setup-key">Stop</span><span class="setup-val" style="color:var(--red)">1.15820</span></div>
+        <div class="setup-row"><span class="setup-key">Risk</span><span class="setup-val">~16 pips</span></div>
+        <div class="setup-row"><span class="setup-key">Target 1</span><span class="setup-val" style="color:var(--green)">1.16119</span></div>
+        <div class="setup-row"><span class="setup-key">RR T1</span><span class="setup-val" style="color:var(--green)">1 : 0.8</span></div>
+        <div class="setup-row"><span class="setup-key">Target 2</span><span class="setup-val" style="color:var(--green)">1.16176</span></div>
+        <div class="setup-row"><span class="setup-key">RR T2</span><span class="setup-val" style="color:var(--green)">1 : 1.2</span></div>
+        <div class="setup-row"><span class="setup-key">Session</span><span class="setup-val">London 10:00–11:00</span></div>
+        <div class="setup-row"><span class="setup-key">Probability</span><span class="setup-val" style="color:#64b5f6">72%</span></div>
+      </div>
+      <div class="setup-rationale">Alternate scenario where London opens directly bullish without sweeping Asia low. Entry at current levels if price bounces at Asia low (1.15944) pre-London. Lower RR than DT-01.</div>
+    </div>
+
+    <!-- DT-03 -->
+    <div class="setup-card">
+      <div class="setup-header">
+        <div>
+          <div class="setup-id">DT-03 &bull; LONDON &bull; <span class="badge bull">LONG</span></div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">Asia High Sweep Continuation</div>
+        </div>
+        <div style="text-align:right">
+          <span class="grade-b">B</span>
+          <div class="setup-prob" style="color:var(--gold)">62%</div>
+        </div>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-row"><span class="setup-key">Entry Zone</span><span class="setup-val">1.16050 – 1.16080</span></div>
+        <div class="setup-row"><span class="setup-key">Trigger</span><span class="setup-val">Pullback after 1.16119 sweep</span></div>
+        <div class="setup-row"><span class="setup-key">Stop</span><span class="setup-val" style="color:var(--red)">1.15900</span></div>
+        <div class="setup-row"><span class="setup-key">Risk</span><span class="setup-val">~17 pips</span></div>
+        <div class="setup-row"><span class="setup-key">Target</span><span class="setup-val" style="color:var(--green)">1.16176</span></div>
+        <div class="setup-row"><span class="setup-key">RR</span><span class="setup-val" style="color:var(--gold)">1 : 0.7</span></div>
+        <div class="setup-row"><span class="setup-key">Session</span><span class="setup-val">London 11:00–13:00</span></div>
+        <div class="setup-row"><span class="setup-key">Probability</span><span class="setup-val" style="color:var(--gold)">62%</span></div>
+      </div>
+      <div class="setup-rationale">Continuation long after post-Judas rally sweeps Asia high. Pullback into the M15 supply flip zone at 1.16050. Low RR — only valid with tight execution.</div>
+    </div>
+
+    <!-- DT-04 -->
+    <div class="setup-card">
+      <div class="setup-header">
+        <div>
+          <div class="setup-id">DT-04 &bull; LONDON/NY &bull; <span class="badge bear">SHORT</span></div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">HOD Exhaustion Fade</div>
+        </div>
+        <div style="text-align:right">
+          <span class="grade-c">C</span>
+          <div class="setup-prob" style="color:#b39ddb">38%</div>
+        </div>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-row"><span class="setup-key">Entry Zone</span><span class="setup-val">1.16176 – 1.16200</span></div>
+        <div class="setup-row"><span class="setup-key">Trigger</span><span class="setup-val">M5 CHoCH at HOD</span></div>
+        <div class="setup-row"><span class="setup-key">Stop</span><span class="setup-val" style="color:var(--red)">1.16280</span></div>
+        <div class="setup-row"><span class="setup-key">Risk</span><span class="setup-val">~9 pips</span></div>
+        <div class="setup-row"><span class="setup-key">Target 1</span><span class="setup-val" style="color:var(--green)">1.16050</span></div>
+        <div class="setup-row"><span class="setup-key">RR T1</span><span class="setup-val" style="color:var(--gold)">1 : 1.7</span></div>
+        <div class="setup-row"><span class="setup-key">Target 2</span><span class="setup-val" style="color:var(--green)">1.15900</span></div>
+        <div class="setup-row"><span class="setup-key">RR T2</span><span class="setup-val" style="color:var(--gold)">1 : 3.1</span></div>
+        <div class="setup-row"><span class="setup-key">Session</span><span class="setup-val">London / NY open</span></div>
+        <div class="setup-row"><span class="setup-key">Probability</span><span class="setup-val" style="color:#b39ddb">38%</span></div>
+      </div>
+      <div class="setup-rationale">Counter-trend fade at HOD only if strong 5M rejection + CHoCH at 1.16176. Fights 4H bias — valid only as scalp. Conflicts with macro direction. LOW conviction.</div>
+    </div>
+
+    <!-- DT-05 -->
+    <div class="setup-card">
+      <div class="setup-header">
+        <div>
+          <div class="setup-id">DT-05 &bull; NEW YORK &bull; <span class="badge bull">LONG</span></div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">NY Continuation — London Low Retest</div>
+        </div>
+        <div style="text-align:right">
+          <span class="grade-b">B</span>
+          <div class="setup-prob" style="color:var(--gold)">58%</div>
+        </div>
+      </div>
+      <div class="setup-grid">
+        <div class="setup-row"><span class="setup-key">Entry Zone</span><span class="setup-val">1.15850 – 1.15950</span></div>
+        <div class="setup-row"><span class="setup-key">Trigger</span><span class="setup-val">NY open sweep of London low</span></div>
+        <div class="setup-row"><span class="setup-key">Stop</span><span class="setup-val" style="color:var(--red)">1.15650</span></div>
+        <div class="setup-row"><span class="setup-key">Risk</span><span class="setup-val">~20 pips</span></div>
+        <div class="setup-row"><span class="setup-key">Target</span><span class="setup-val" style="color:var(--green)">1.16176</span></div>
+        <div class="setup-row"><span class="setup-key">RR</span><span class="setup-val" style="color:var(--green)">1 : 1.6</span></div>
+        <div class="setup-row"><span class="setup-key">Session</span><span class="setup-val">NY 16:00–17:30 EET</span></div>
+        <div class="setup-row"><span class="setup-key">Probability</span><span class="setup-val" style="color:var(--gold)">58%</span></div>
+      </div>
+      <div class="setup-rationale">If London stalls near 1.16176, NY may give secondary entry via London low sweep at open. Consistent with INSIDE_RANGE / JUDAS_LOW_THEN_BUY NY patterns seen in bullish environment.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SWING TRADES ===== -->
+<div class="section">
+  <div class="section-title">Swing Trade Setups</div>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Direction</th>
+      <th>Grade</th>
+      <th>%</th>
+      <th>Entry Zone</th>
+      <th>Stop</th>
+      <th>Target 1</th>
+      <th>Target 2</th>
+      <th>RR</th>
+      <th>Rationale</th>
+    </tr>
+    <tr>
+      <td><strong>SW-01</strong></td>
+      <td><span class="badge bull">LONG</span></td>
+      <td><span class="grade-aplus">A+</span></td>
+      <td class="high-prob">78%</td>
+      <td class="price-green">1.15677 – 1.15800</td>
+      <td class="price-red">1.15380</td>
+      <td class="price-green">1.16176</td>
+      <td class="price-green">1.16557</td>
+      <td class="price-green">1 : 2.8</td>
+      <td style="font-size:11px;color:var(--muted)">4H demand OB base. Best swing entry via DT-01 setup. Multi-day target BSL at 1.16557.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-02</strong></td>
+      <td><span class="badge bull">LONG</span></td>
+      <td><span class="grade-a">A</span></td>
+      <td style="color:#64b5f6;font-weight:600">68%</td>
+      <td class="price-green">1.15400 – 1.15600</td>
+      <td class="price-red">1.14950</td>
+      <td class="price-green">1.16176</td>
+      <td class="price-green">1.16557</td>
+      <td class="price-green">1 : 2.5</td>
+      <td style="font-size:11px;color:var(--muted)">Deep 4H OB retest if 1.15677 breaks. Only valid if 1.15029 macro SSL protected. Higher size opportunity.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-03</strong></td>
+      <td><span class="badge bull">LONG</span></td>
+      <td><span class="grade-a">A</span></td>
+      <td style="color:#64b5f6;font-weight:600">65%</td>
+      <td class="price-green">1.15677 – 1.15900</td>
+      <td class="price-red">1.15200</td>
+      <td class="price-green">1.16557</td>
+      <td class="price-gold">1.17000</td>
+      <td class="price-green">1 : 3.6</td>
+      <td style="font-size:11px;color:var(--muted)">Weekly BSL run thesis. Macro bullish continuation targets prior range highs from early 2026.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-04</strong></td>
+      <td><span class="badge bull">LONG</span></td>
+      <td><span class="grade-b">B</span></td>
+      <td class="med-prob">60%</td>
+      <td class="price-green">1.16050 – 1.16120</td>
+      <td class="price-red">1.15700</td>
+      <td class="price-green">1.16557</td>
+      <td class="price-gold">1.17000+</td>
+      <td class="price-green">1 : 1.5</td>
+      <td style="font-size:11px;color:var(--muted)">Post-1.16176 extension trade. Entry on 1H pullback after HOD is taken. 4H structure must confirm bullish continuation.</td>
+    </tr>
+    <tr>
+      <td><strong>SW-05</strong></td>
+      <td><span class="badge bear">SHORT</span></td>
+      <td><span class="grade-c">C</span></td>
+      <td class="low-prob">25%</td>
+      <td class="price-red">1.16500 – 1.16557</td>
+      <td class="price-red">1.16750</td>
+      <td class="price-green">1.15800</td>
+      <td class="price-red">1.15029</td>
+      <td class="price-gold">1 : 3.0</td>
+      <td style="font-size:11px;color:var(--muted)">Counter-trend only if 4H CHoCH confirmed at Jun 2 BSL (1.16557). Requires 4H structure flip. Very low priority — DO NOT anticipate.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ===== CONCLUSION ===== -->
+<div class="section">
+  <div class="section-title">Conclusion &amp; Scenarios</div>
+
+  <div class="scenario scenario-primary">
+    <div class="scenario-label s-green">&#9679; Most Likely Scenario (70%)</div>
+    <div class="scenario-text">London opens (10:00 EET) and engineers a sweep below Asia low (1.15944) within the first 30–60 minutes, targeting the 4H demand OB at 1.15800–1.15880. Stops triggered below Asia low create the liquidity grab. Price then reverses aggressively, sweeps Asia high (1.16119), breaks 1.16176 HOD, running buy-side liquidity toward 1.16300+. NY session continues or consolidates. Consistent with BOTH_SWEEP Judas pattern observed on June 12 (bullish HTF precedent).</div>
+  </div>
+
+  <div class="scenario scenario-alt">
+    <div class="scenario-label s-gold">&#9679; Alternative Scenario (22%)</div>
+    <div class="scenario-text">London opens directly bullish without significant Asia low sweep. Price holds 1.15960–1.16000 at open, sweeps Asia high (1.16119) immediately, then extends to 1.16176 HOD and beyond without major pullback. Entry opportunities more aggressive and require faster execution at Asian range boundary. Still fully aligned with 4H bullish bias.</div>
+  </div>
+
+  <div class="scenario scenario-low">
+    <div class="scenario-label s-red">&#9679; Low Probability Scenario (8%)</div>
+    <div class="scenario-text">London rejects from current area, breaks 1.15677 (today's session low). This would signal a deeper 4H retest of the demand OB at 1.15400–1.15600. If 1.15029 is tested and protected, the bullish thesis remains intact (deeper accumulation). Only becomes bearish invalidation if 1.15029 breaks on 4H close — currently no evidence supporting this outcome.</div>
+  </div>
+
+  <!-- BEST TRADE -->
+  <div class="best-trade">
+    <div class="best-trade-title">&#11088; Best Single Trade Idea — DT-01</div>
+    <div class="best-trade-grid">
+      <div class="bt-item">
+        <div class="bt-label">Direction</div>
+        <div class="bt-val" style="color:var(--green)">LONG</div>
+      </div>
+      <div class="bt-item">
+        <div class="bt-label">Entry Zone</div>
+        <div class="bt-val">1.15800<br><span style="font-size:11px;">– 1.15880</span></div>
+      </div>
+      <div class="bt-item">
+        <div class="bt-label">Stop</div>
+        <div class="bt-val" style="color:var(--red)">1.15630</div>
+      </div>
+      <div class="bt-item">
+        <div class="bt-label">Target</div>
+        <div class="bt-val" style="color:var(--green)">1.16176</div>
+      </div>
+      <div class="bt-item">
+        <div class="bt-label">R:R</div>
+        <div class="bt-val" style="color:var(--green)">1 : 2.2</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
+      <span style="color:var(--green);font-weight:700;">Execution:</span> Wait for London to sweep below 1.15944 (Asia low). Do NOT enter before the sweep. Confirmation: 5M BOS to the upside after the sweep wick. Scale full position 1.15800–1.15880. Take partial at 1.16119, run remainder to 1.16176. Invalidated on 4H close below 1.15677. Session window: 10:00–11:30 EET.
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="margin-top:24px;border-top:1px solid var(--border);padding-top:14px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+  <span>EURUSD &bull; SMC / ICT Analysis &bull; 15 Jun 2026 &bull; Generated 05:30 EET</span>
+  <span>Timeframes: 4H &#8594; 1H &#8594; 5M &bull; Sessions: EET timezone</span>
+</div>
+
+</div>
+</body>
+</html>
